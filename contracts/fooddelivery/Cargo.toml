@@ -1,0 +1,46 @@
+[package]
+name = "fooddelivery"
+version = "0.1.0"
+authors = ["Alan Boyd"]
+edition = "2021"
+
+[dependencies]
+ink = { version = "4.0.1", default-features = false }
+
+scale = { package = "parity-scale-codec", version = "3", default-features = false, features = [
+    "derive",
+] }
+scale-info = { version = "2.3", default-features = false, features = [
+    "derive",
+], optional = true }
+
+logics = { path = "logics", default-features = false, features = [
+    "ink-as-dependency",
+] }
+
+# Include brush as a dependency and enable default implementation for PSP22 via brush feature
+openbrush = { tag = "3.0.0", git = "https://github.com/727-Ventures/openbrush-contracts", default-features = false, features = [
+    "psp22",
+] }
+
+
+[dev-dependencies]
+ink_e2e = "4.0.1"
+
+[lib]
+name = "fooddelivery"
+path = "src/lib.rs"
+crate-type = [
+    # Used for normal contract Wasm blobs.
+    "cdylib",
+]
+
+[features]
+default = ["std"]
+std = ["ink/std", "scale/std", "scale-info/std", "openbrush/std", "logics/std"]
+ink-as-dependency = []
+e2e-tests = []
+
+[profile.release] 
+overflow-checks = false
+

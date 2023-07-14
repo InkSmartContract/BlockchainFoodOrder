@@ -1,0 +1,67 @@
+{
+  "node": {
+    "localPath": "/home/ubuntu/OpenSmartcontract/opensmartcontract-food-delivery/bin/swanky-node",
+    "polkadotPalletVersions": "polkadot-v0.9.39",
+    "supportedInk": "v4.2.0"
+  },
+  "accounts": [
+    {
+      "alias": "alice",
+      "mnemonic": "//Alice",
+      "isDev": true,
+      "address": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY"
+    },
+    {
+      "alias": "bob",
+      "mnemonic": "//Bob",
+      "isDev": true,
+      "address": "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty"
+    },
+    {
+      "mnemonic": "//Charlie",
+      "isDev": true,
+      "alias": "charlie",
+      "address": "5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y"
+    },
+    {
+      "mnemonic": "artefact lend simple frame wire decline custom exile gadget sunny equip flee",
+      "isDev": true,
+      "alias": "deploy",
+      "address": "5G3ZuYMm8qeZfffqnmYX69E5zcRnPZ49WqxRgpqsxpgcHQdx"
+    }
+  ],
+  "networks": {
+    "local": {
+      "url": "ws://127.0.0.1:9944"
+    },
+    "astar": {
+      "url": "wss://rpc.astar.network"
+    },
+    "shiden": {
+      "url": "wss://rpc.shiden.astar.network"
+    },
+    "shibuya": {
+      "url": "wss://rpc.shibuya.astar.network"
+    }
+  },
+  "contracts": {
+    "fooddelivery": {
+      "name": "fooddelivery",
+      "moduleName": "fooddelivery",
+      "deployments": [
+        {
+          "timestamp": 1689332770703,
+          "address": "5FCTXJGJtcnKGwg9XGoPeXT9F81gsbiKW1EfFaaDJYR9ByTA",
+          "networkUrl": "ws://127.0.0.1:9944",
+          "deployerAlias": "alice"
+        },
+        {
+          "timestamp": 1689333182324,
+          "address": "WDc2X4oaDNnviKYqfhNToP1yWm162Zaadd73s5FcyiLrpzU",
+          "networkUrl": "wss://rpc.shibuya.astar.network",
+          "deployerAlias": "deploy"
+        }
+      ]
+    }
+  }
+}
