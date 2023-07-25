@@ -20,6 +20,9 @@ pub use crate::{
     },
     traits::restaurant_service::*,
     traits::payment_service::*,
+    // macros::{
+    //     add_foods,
+    // },
 };
 use ink::prelude::{string::String, vec::Vec};
 use openbrush::{
@@ -137,6 +140,12 @@ where
         Ok(food_id)
     }
 
+    // #[add_foods]
+    // #[modifiers(is_restaurant_user)]
+    // pub struct AddFoodsInput {
+    //     pub foods: Vec<Food>,
+    // }
+
     // Restaurant's function.
     // Function that update the food inforamtion using food_id.
     #[modifiers(is_restaurant_user)]
@@ -207,7 +216,7 @@ where
             order_id,
             eta,
         );
-
+        
         // Request delivery
         // Create a new delivery data and insert it into storage
         let delivery_id = self.data::<Data>().delivery_id;

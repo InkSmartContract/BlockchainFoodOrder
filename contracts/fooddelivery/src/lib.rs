@@ -139,7 +139,7 @@ mod inksmartcontract {
 
     // data initialization
     impl FoodDelivery {
-        #[ink(constructor, payable)]
+        #[ink(constructor)]
         pub fn new() -> Self {
             let mut instance = Self::default();
             instance._init_with_owner(Self::env().caller());

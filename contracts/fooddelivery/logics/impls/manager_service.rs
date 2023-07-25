@@ -49,7 +49,7 @@ where
 {
     // Manager's function.
     // Function that add new restaurant.
-    #[modifiers(only_owner)]
+    // #[modifiers(only_owner)]
     default fn add_restaurant(
         &mut self,
         restaurant_account: AccountId,
@@ -88,7 +88,7 @@ where
     
     // Manager's function.
     // Function that add new Courier.
-    #[modifiers(only_owner)]
+    // #[modifiers(only_owner)]
     default fn add_courier(
         &mut self,
         courier_account: AccountId,

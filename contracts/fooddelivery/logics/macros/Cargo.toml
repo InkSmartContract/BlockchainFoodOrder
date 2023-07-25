@@ -1,0 +1,17 @@
+[package]
+name = "macros"
+version = "0.1.0"
+
+[dependencies]
+
+syn = { version = "*", features = ["extra-traits"] }
+quote = "*"
+proc-macro2 = "*"
+
+[lib]
+name = "macros"
+path = "lib.rs"
+proc-macro = true
+
+[features]
+
