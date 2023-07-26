@@ -7,7 +7,7 @@ WORKDIR /app
 
 # Copy everthing that is not dockerignored to the image
 COPY . .
-RUN ll
+
 # Prepare Rust
 
 RUN apt update
@@ -21,12 +21,12 @@ RUN curl -L https://github.com/AstarNetwork/swanky-cli/releases/download/v3.0.4/
 # Install Rustup and Rust, additional components, packages, and verify the installations
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && \
   /bin/bash -c "source /usr/local/cargo/env && \
-  rustup toolchain install nightly-2023-02-07 && \
-  rustup default nightly-2023-02-07 && \
-  rustup component add rust-src --toolchain nightly-2023-02-07 && \
-  rustup target add wasm32-unknown-unknown --toolchain nightly-2023-02-07 && \
+  rustup toolchain install nightly-2023-01-01 && \
+  rustup default nightly-2023-01-01 && \
+  rustup component add rust-src --toolchain nightly-2023-01-01 && \
+  rustup target add wasm32-unknown-unknown --toolchain nightly-2023-01-01 && \
   cargo install cargo-dylint dylint-link && \
-  cargo install cargo-contract --force --version 2.2.1 && \
+  cargo install cargo-contract --force --version 2.0.2 && \
   rustc --version"
 
 # Install Node.js
