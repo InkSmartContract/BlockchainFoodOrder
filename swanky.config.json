@@ -45,23 +45,15 @@
     }
   },
   "contracts": {
-    "fooddelivery": {
-      "name": "fooddelivery",
-      "moduleName": "fooddelivery",
-      "deployments": [
-        {
-          "timestamp": 1689332770703,
-          "address": "5FCTXJGJtcnKGwg9XGoPeXT9F81gsbiKW1EfFaaDJYR9ByTA",
-          "networkUrl": "ws://127.0.0.1:9944",
-          "deployerAlias": "alice"
-        },
-        {
-          "timestamp": 1689333182324,
-          "address": "WDc2X4oaDNnviKYqfhNToP1yWm162Zaadd73s5FcyiLrpzU",
-          "networkUrl": "wss://rpc.shibuya.astar.network",
-          "deployerAlias": "deploy"
-        }
-      ]
+    "foodorder": {
+      "name": "foodorder",
+      "moduleName": "foodorder",
+      "deployments": []
+    },
+    "flipper": {
+      "name": "flipper",
+      "moduleName": "flipper",
+      "deployments": []
     }
   }
 }
