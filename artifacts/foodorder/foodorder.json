@@ -1,6 +1,6 @@
 {
   "source": {
-    "hash": "0xe8c004882081c20b025d7ce26bc58e95dd5393a9dd97155b7fd4cb0649cccfc1",
+    "hash": "0xbb7913a9e880f93838f12d39ebc8e9bb1e896faafdf17b34fdd38630be9110bd",
     "language": "ink! 4.0.1",
     "compiler": "rustc 1.68.0-nightly",
     "build_info": {
@@ -14,8 +14,8 @@
     }
   },
   "contract": {
-    "name": "fooddelivery",
-    "version": "0.1.0",
+    "name": "foodorder",
+    "version": "1.0.0",
     "authors": [
       "Alan Boyd"
     ]
@@ -568,32 +568,6 @@
       {
         "args": [
           {
-            "label": "delivery_id",
-            "type": {
-              "displayName": [
-                "customerservice_external",
-                "AcceptDeliveryInput1"
-              ],
-              "type": 5
-            }
-          }
-        ],
-        "docs": [],
-        "label": "CustomerService::accept_delivery",
-        "mutates": true,
-        "payable": false,
-        "returnType": {
-          "displayName": [
-            "ink",
-            "MessageResult"
-          ],
-          "type": 11
-        },
-        "selector": "0xca42a704"
-      },
-      {
-        "args": [
-          {
             "label": "customer_name",
             "type": {
               "displayName": [
@@ -672,6 +646,32 @@
           "type": 11
         },
         "selector": "0x28d32a14"
+      },
+      {
+        "args": [
+          {
+            "label": "delivery_id",
+            "type": {
+              "displayName": [
+                "customerservice_external",
+                "AcceptDeliveryInput1"
+              ],
+              "type": 5
+            }
+          }
+        ],
+        "docs": [],
+        "label": "CustomerService::accept_delivery",
+        "mutates": true,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 11
+        },
+        "selector": "0xca42a704"
       },
       {
         "args": [
@@ -794,6 +794,32 @@
       {
         "args": [
           {
+            "label": "order_id",
+            "type": {
+              "displayName": [
+                "restaurantservice_external",
+                "DeliverOrderInput1"
+              ],
+              "type": 5
+            }
+          }
+        ],
+        "docs": [],
+        "label": "RestaurantService::deliver_order",
+        "mutates": true,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 11
+        },
+        "selector": "0x2ac2c58a"
+      },
+      {
+        "args": [
+          {
             "label": "food_name",
             "type": {
               "displayName": [
@@ -846,32 +872,6 @@
           "type": 11
         },
         "selector": "0x7db1086a"
-      },
-      {
-        "args": [
-          {
-            "label": "order_id",
-            "type": {
-              "displayName": [
-                "restaurantservice_external",
-                "DeliverOrderInput1"
-              ],
-              "type": 5
-            }
-          }
-        ],
-        "docs": [],
-        "label": "RestaurantService::deliver_order",
-        "mutates": true,
-        "payable": false,
-        "returnType": {
-          "displayName": [
-            "ink",
-            "MessageResult"
-          ],
-          "type": 11
-        },
-        "selector": "0x2ac2c58a"
       },
       {
         "args": [
@@ -968,32 +968,6 @@
       {
         "args": [
           {
-            "label": "new_account",
-            "type": {
-              "displayName": [
-                "managerservice_external",
-                "ChangeManagerInput1"
-              ],
-              "type": 0
-            }
-          }
-        ],
-        "docs": [],
-        "label": "ManagerService::change_manager",
-        "mutates": true,
-        "payable": false,
-        "returnType": {
-          "displayName": [
-            "ink",
-            "MessageResult"
-          ],
-          "type": 15
-        },
-        "selector": "0x6a328ba1"
-      },
-      {
-        "args": [
-          {
             "label": "rate",
             "type": {
               "displayName": [
@@ -1076,6 +1050,32 @@
       {
         "args": [
           {
+            "label": "new_account",
+            "type": {
+              "displayName": [
+                "managerservice_external",
+                "ChangeManagerInput1"
+              ],
+              "type": 0
+            }
+          }
+        ],
+        "docs": [],
+        "label": "ManagerService::change_manager",
+        "mutates": true,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 15
+        },
+        "selector": "0x6a328ba1"
+      },
+      {
+        "args": [
+          {
             "label": "restaurant_id",
             "type": {
               "displayName": [
@@ -1100,195 +1100,9 @@
         "selector": "0x5cb19728"
       },
       {
-        "args": [
-          {
-            "label": "from",
-            "type": {
-              "displayName": [
-                "getservice_external",
-                "GetOrderAllInput1"
-              ],
-              "type": 5
-            }
-          },
-          {
-            "label": "to",
-            "type": {
-              "displayName": [
-                "getservice_external",
-                "GetOrderAllInput2"
-              ],
-              "type": 5
-            }
-          }
-        ],
-        "docs": [],
-        "label": "GetService::get_order_all",
-        "mutates": false,
-        "payable": false,
-        "returnType": {
-          "displayName": [
-            "ink",
-            "MessageResult"
-          ],
-          "type": 21
-        },
-        "selector": "0xe8c1c1af"
-      },
-      {
-        "args": [
-          {
-            "label": "from",
-            "type": {
-              "displayName": [
-                "getservice_external",
-                "GetRestaurantAllInput1"
-              ],
-              "type": 5
-            }
-          },
-          {
-            "label": "to",
-            "type": {
-              "displayName": [
-                "getservice_external",
-                "GetRestaurantAllInput2"
-              ],
-              "type": 5
-            }
-          }
-        ],
-        "docs": [],
-        "label": "GetService::get_restaurant_all",
-        "mutates": false,
-        "payable": false,
-        "returnType": {
-          "displayName": [
-            "ink",
-            "MessageResult"
-          ],
-          "type": 26
-        },
-        "selector": "0xcd440937"
-      },
-      {
-        "args": [
-          {
-            "label": "courier_id",
-            "type": {
-              "displayName": [
-                "getservice_external",
-                "GetDeliveryFromCourierInput1"
-              ],
-              "type": 5
-            }
-          }
-        ],
-        "docs": [],
-        "label": "GetService::get_delivery_from_courier",
-        "mutates": false,
-        "payable": false,
-        "returnType": {
-          "displayName": [
-            "ink",
-            "MessageResult"
-          ],
-          "type": 30
-        },
-        "selector": "0xc4c7d7a0"
-      },
-      {
         "args": [],
         "docs": [],
-        "label": "GetService::get_fee_rate",
-        "mutates": false,
-        "payable": false,
-        "returnType": {
-          "displayName": [
-            "ink",
-            "MessageResult"
-          ],
-          "type": 35
-        },
-        "selector": "0x80106622"
-      },
-      {
-        "args": [
-          {
-            "label": "customer_id",
-            "type": {
-              "displayName": [
-                "getservice_external",
-                "GetDeliveryFromCustomerInput1"
-              ],
-              "type": 5
-            }
-          }
-        ],
-        "docs": [],
-        "label": "GetService::get_delivery_from_customer",
-        "mutates": false,
-        "payable": false,
-        "returnType": {
-          "displayName": [
-            "ink",
-            "MessageResult"
-          ],
-          "type": 30
-        },
-        "selector": "0x10df888c"
-      },
-      {
-        "args": [
-          {
-            "label": "from",
-            "type": {
-              "displayName": [
-                "getservice_external",
-                "GetCourierAllInput1"
-              ],
-              "type": 5
-            }
-          },
-          {
-            "label": "to",
-            "type": {
-              "displayName": [
-                "getservice_external",
-                "GetCourierAllInput2"
-              ],
-              "type": 5
-            }
-          }
-        ],
-        "docs": [],
-        "label": "GetService::get_courier_all",
-        "mutates": false,
-        "payable": false,
-        "returnType": {
-          "displayName": [
-            "ink",
-            "MessageResult"
-          ],
-          "type": 36
-        },
-        "selector": "0x9f9d503b"
-      },
-      {
-        "args": [
-          {
-            "label": "restaurant_id",
-            "type": {
-              "displayName": [
-                "getservice_external",
-                "GetOrderFromRestaurantInput1"
-              ],
-              "type": 5
-            }
-          }
-        ],
-        "docs": [],
-        "label": "GetService::get_order_from_restaurant",
+        "label": "GetService::get_owner",
         "mutates": false,
         "payable": false,
         "returnType": {
@@ -1298,23 +1112,23 @@
           ],
           "type": 21
         },
-        "selector": "0x6332e03a"
+        "selector": "0x5c5d746e"
       },
       {
         "args": [
           {
-            "label": "order_id",
+            "label": "food_id",
             "type": {
               "displayName": [
                 "getservice_external",
-                "GetOrderFromIdInput1"
+                "GetFoodFromIdInput1"
               ],
               "type": 5
             }
           }
         ],
         "docs": [],
-        "label": "GetService::get_order_from_id",
+        "label": "GetService::get_food_from_id",
         "mutates": false,
         "payable": false,
         "returnType": {
@@ -1322,9 +1136,9 @@
             "ink",
             "MessageResult"
           ],
-          "type": 40
+          "type": 22
         },
-        "selector": "0xd527d407"
+        "selector": "0xb15337f4"
       },
       {
         "args": [
@@ -1358,86 +1172,9 @@
             "ink",
             "MessageResult"
           ],
-          "type": 42
+          "type": 24
         },
         "selector": "0x503e79f3"
-      },
-      {
-        "args": [
-          {
-            "label": "from",
-            "type": {
-              "displayName": [
-                "getservice_external",
-                "GetDeliveryAllInput1"
-              ],
-              "type": 5
-            }
-          },
-          {
-            "label": "to",
-            "type": {
-              "displayName": [
-                "getservice_external",
-                "GetDeliveryAllInput2"
-              ],
-              "type": 5
-            }
-          }
-        ],
-        "docs": [],
-        "label": "GetService::get_delivery_all",
-        "mutates": false,
-        "payable": false,
-        "returnType": {
-          "displayName": [
-            "ink",
-            "MessageResult"
-          ],
-          "type": 30
-        },
-        "selector": "0x0dc6d7e7"
-      },
-      {
-        "args": [],
-        "docs": [],
-        "label": "GetService::get_owner",
-        "mutates": false,
-        "payable": false,
-        "returnType": {
-          "displayName": [
-            "ink",
-            "MessageResult"
-          ],
-          "type": 46
-        },
-        "selector": "0x5c5d746e"
-      },
-      {
-        "args": [
-          {
-            "label": "order_id",
-            "type": {
-              "displayName": [
-                "getservice_external",
-                "GetEtaInput1"
-              ],
-              "type": 5
-            }
-          }
-        ],
-        "docs": [],
-        "label": "GetService::get_eta",
-        "mutates": false,
-        "payable": false,
-        "returnType": {
-          "displayName": [
-            "ink",
-            "MessageResult"
-          ],
-          "type": 11
-        },
-        "selector": "0xe945787a"
       },
       {
         "args": [
@@ -1461,25 +1198,35 @@
             "ink",
             "MessageResult"
           ],
-          "type": 30
+          "type": 28
         },
         "selector": "0x81320954"
       },
       {
         "args": [
           {
-            "label": "customer_id",
+            "label": "from",
             "type": {
               "displayName": [
                 "getservice_external",
-                "GetOrderFromCustomerInput1"
+                "GetCourierAllInput1"
+              ],
+              "type": 5
+            }
+          },
+          {
+            "label": "to",
+            "type": {
+              "displayName": [
+                "getservice_external",
+                "GetCourierAllInput2"
               ],
               "type": 5
             }
           }
         ],
         "docs": [],
-        "label": "GetService::get_order_from_customer",
+        "label": "GetService::get_courier_all",
         "mutates": false,
         "payable": false,
         "returnType": {
@@ -1487,9 +1234,9 @@
             "ink",
             "MessageResult"
           ],
-          "type": 21
+          "type": 33
         },
-        "selector": "0xffcafa8d"
+        "selector": "0x9f9d503b"
       },
       {
         "args": [
@@ -1513,25 +1260,35 @@
             "ink",
             "MessageResult"
           ],
-          "type": 47
+          "type": 37
         },
         "selector": "0x4f61d83b"
       },
       {
         "args": [
           {
-            "label": "food_id",
+            "label": "from",
             "type": {
               "displayName": [
                 "getservice_external",
-                "GetFoodFromIdInput1"
+                "GetOrderAllInput1"
+              ],
+              "type": 5
+            }
+          },
+          {
+            "label": "to",
+            "type": {
+              "displayName": [
+                "getservice_external",
+                "GetOrderAllInput2"
               ],
               "type": 5
             }
           }
         ],
         "docs": [],
-        "label": "GetService::get_food_from_id",
+        "label": "GetService::get_order_all",
         "mutates": false,
         "payable": false,
         "returnType": {
@@ -1539,9 +1296,61 @@
             "ink",
             "MessageResult"
           ],
-          "type": 49
+          "type": 39
         },
-        "selector": "0xb15337f4"
+        "selector": "0xe8c1c1af"
+      },
+      {
+        "args": [
+          {
+            "label": "customer_id",
+            "type": {
+              "displayName": [
+                "getservice_external",
+                "GetDeliveryFromCustomerInput1"
+              ],
+              "type": 5
+            }
+          }
+        ],
+        "docs": [],
+        "label": "GetService::get_delivery_from_customer",
+        "mutates": false,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 28
+        },
+        "selector": "0x10df888c"
+      },
+      {
+        "args": [
+          {
+            "label": "courier_id",
+            "type": {
+              "displayName": [
+                "getservice_external",
+                "GetDeliveryFromCourierInput1"
+              ],
+              "type": 5
+            }
+          }
+        ],
+        "docs": [],
+        "label": "GetService::get_delivery_from_courier",
+        "mutates": false,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 28
+        },
+        "selector": "0xc4c7d7a0"
       },
       {
         "args": [
@@ -1578,6 +1387,197 @@
           "type": 17
         },
         "selector": "0xd03a3f78"
+      },
+      {
+        "args": [
+          {
+            "label": "from",
+            "type": {
+              "displayName": [
+                "getservice_external",
+                "GetDeliveryAllInput1"
+              ],
+              "type": 5
+            }
+          },
+          {
+            "label": "to",
+            "type": {
+              "displayName": [
+                "getservice_external",
+                "GetDeliveryAllInput2"
+              ],
+              "type": 5
+            }
+          }
+        ],
+        "docs": [],
+        "label": "GetService::get_delivery_all",
+        "mutates": false,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 28
+        },
+        "selector": "0x0dc6d7e7"
+      },
+      {
+        "args": [
+          {
+            "label": "from",
+            "type": {
+              "displayName": [
+                "getservice_external",
+                "GetRestaurantAllInput1"
+              ],
+              "type": 5
+            }
+          },
+          {
+            "label": "to",
+            "type": {
+              "displayName": [
+                "getservice_external",
+                "GetRestaurantAllInput2"
+              ],
+              "type": 5
+            }
+          }
+        ],
+        "docs": [],
+        "label": "GetService::get_restaurant_all",
+        "mutates": false,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 44
+        },
+        "selector": "0xcd440937"
+      },
+      {
+        "args": [],
+        "docs": [],
+        "label": "GetService::get_fee_rate",
+        "mutates": false,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 48
+        },
+        "selector": "0x80106622"
+      },
+      {
+        "args": [
+          {
+            "label": "customer_id",
+            "type": {
+              "displayName": [
+                "getservice_external",
+                "GetOrderFromCustomerInput1"
+              ],
+              "type": 5
+            }
+          }
+        ],
+        "docs": [],
+        "label": "GetService::get_order_from_customer",
+        "mutates": false,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 39
+        },
+        "selector": "0xffcafa8d"
+      },
+      {
+        "args": [
+          {
+            "label": "order_id",
+            "type": {
+              "displayName": [
+                "getservice_external",
+                "GetEtaInput1"
+              ],
+              "type": 5
+            }
+          }
+        ],
+        "docs": [],
+        "label": "GetService::get_eta",
+        "mutates": false,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 11
+        },
+        "selector": "0xe945787a"
+      },
+      {
+        "args": [
+          {
+            "label": "order_id",
+            "type": {
+              "displayName": [
+                "getservice_external",
+                "GetOrderFromIdInput1"
+              ],
+              "type": 5
+            }
+          }
+        ],
+        "docs": [],
+        "label": "GetService::get_order_from_id",
+        "mutates": false,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 49
+        },
+        "selector": "0xd527d407"
+      },
+      {
+        "args": [
+          {
+            "label": "restaurant_id",
+            "type": {
+              "displayName": [
+                "getservice_external",
+                "GetOrderFromRestaurantInput1"
+              ],
+              "type": 5
+            }
+          }
+        ],
+        "docs": [],
+        "label": "GetService::get_order_from_restaurant",
+        "mutates": false,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 39
+        },
+        "selector": "0x6332e03a"
       }
     ]
   },
@@ -2104,11 +2104,11 @@
                                         },
                                         "1": {
                                           "fields": [],
-                                          "name": "PickUp"
+                                          "name": "PickedUp"
                                         },
                                         "2": {
                                           "fields": [],
-                                          "name": "Accept"
+                                          "name": "Accepted"
                                         }
                                       }
                                     }
@@ -2266,7 +2266,7 @@
               "name": "food_delivery_data"
             }
           ],
-          "name": "FoodDelivery"
+          "name": "FoodOrder"
         }
       },
       "root_key": "0x00000000"
@@ -2922,7 +2922,7 @@
               {
                 "fields": [
                   {
-                    "type": 22
+                    "type": 0
                   }
                 ],
                 "index": 0,
@@ -2943,7 +2943,7 @@
         "params": [
           {
             "name": "T",
-            "type": 22
+            "type": 0
           },
           {
             "name": "E",
@@ -2973,7 +2973,7 @@
               {
                 "fields": [
                   {
-                    "type": 13
+                    "type": 10
                   }
                 ],
                 "index": 1,
@@ -2989,7 +2989,7 @@
           },
           {
             "name": "E",
-            "type": 13
+            "type": 10
           }
         ],
         "path": [
@@ -3001,71 +3001,83 @@
       "id": 23,
       "type": {
         "def": {
-          "sequence": {
-            "type": 24
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 20
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 13
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
           }
-        }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 20
+          },
+          {
+            "name": "E",
+            "type": 13
+          }
+        ],
+        "path": [
+          "Result"
+        ]
       }
     },
     {
       "id": 24,
       "type": {
         "def": {
-          "composite": {
-            "fields": [
+          "variant": {
+            "variants": [
               {
-                "name": "food_id",
-                "type": 5,
-                "typeName": "FoodId"
+                "fields": [
+                  {
+                    "type": 25
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
               },
               {
-                "name": "restaurant_id",
-                "type": 5,
-                "typeName": "RestaurantId"
-              },
-              {
-                "name": "customer_id",
-                "type": 5,
-                "typeName": "CustomerId"
-              },
-              {
-                "name": "courier_id",
-                "type": 5,
-                "typeName": "DeliveryId"
-              },
-              {
-                "name": "delivery_address",
-                "type": 6,
-                "typeName": "String"
-              },
-              {
-                "name": "status",
-                "type": 25,
-                "typeName": "OrderStatus"
-              },
-              {
-                "name": "timestamp",
-                "type": 5,
-                "typeName": "Timestamp"
-              },
-              {
-                "name": "price",
-                "type": 7,
-                "typeName": "Balance"
-              },
-              {
-                "name": "eta",
-                "type": 5,
-                "typeName": "u64"
+                "fields": [
+                  {
+                    "type": 10
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
               }
             ]
           }
         },
+        "params": [
+          {
+            "name": "T",
+            "type": 25
+          },
+          {
+            "name": "E",
+            "type": 10
+          }
+        ],
         "path": [
-          "logics",
-          "impls",
-          "types",
-          "Order"
+          "Result"
         ]
       }
     },
@@ -3076,33 +3088,38 @@
           "variant": {
             "variants": [
               {
+                "fields": [
+                  {
+                    "type": 26
+                  }
+                ],
                 "index": 0,
-                "name": "OrderSubmitted"
+                "name": "Ok"
               },
               {
+                "fields": [
+                  {
+                    "type": 13
+                  }
+                ],
                 "index": 1,
-                "name": "OrderConfirmed"
-              },
-              {
-                "index": 2,
-                "name": "FoodPrepared"
-              },
-              {
-                "index": 3,
-                "name": "FoodDelivered"
-              },
-              {
-                "index": 4,
-                "name": "DeliveryAcceptted"
+                "name": "Err"
               }
             ]
           }
         },
+        "params": [
+          {
+            "name": "T",
+            "type": 26
+          },
+          {
+            "name": "E",
+            "type": 13
+          }
+        ],
         "path": [
-          "logics",
-          "impls",
-          "types",
-          "OrderStatus"
+          "Result"
         ]
       }
     },
@@ -3110,661 +3127,14 @@
       "id": 26,
       "type": {
         "def": {
-          "variant": {
-            "variants": [
-              {
-                "fields": [
-                  {
-                    "type": 27
-                  }
-                ],
-                "index": 0,
-                "name": "Ok"
-              },
-              {
-                "fields": [
-                  {
-                    "type": 10
-                  }
-                ],
-                "index": 1,
-                "name": "Err"
-              }
-            ]
-          }
-        },
-        "params": [
-          {
-            "name": "T",
+          "sequence": {
             "type": 27
-          },
-          {
-            "name": "E",
-            "type": 10
           }
-        ],
-        "path": [
-          "Result"
-        ]
+        }
       }
     },
     {
       "id": 27,
-      "type": {
-        "def": {
-          "variant": {
-            "variants": [
-              {
-                "fields": [
-                  {
-                    "type": 28
-                  }
-                ],
-                "index": 0,
-                "name": "Ok"
-              },
-              {
-                "fields": [
-                  {
-                    "type": 13
-                  }
-                ],
-                "index": 1,
-                "name": "Err"
-              }
-            ]
-          }
-        },
-        "params": [
-          {
-            "name": "T",
-            "type": 28
-          },
-          {
-            "name": "E",
-            "type": 13
-          }
-        ],
-        "path": [
-          "Result"
-        ]
-      }
-    },
-    {
-      "id": 28,
-      "type": {
-        "def": {
-          "sequence": {
-            "type": 29
-          }
-        }
-      }
-    },
-    {
-      "id": 29,
-      "type": {
-        "def": {
-          "composite": {
-            "fields": [
-              {
-                "name": "restaurant_account",
-                "type": 0,
-                "typeName": "AccountId"
-              },
-              {
-                "name": "restaurant_name",
-                "type": 6,
-                "typeName": "String"
-              },
-              {
-                "name": "restaurant_address",
-                "type": 6,
-                "typeName": "String"
-              },
-              {
-                "name": "phone_number",
-                "type": 6,
-                "typeName": "String"
-              }
-            ]
-          }
-        },
-        "path": [
-          "logics",
-          "impls",
-          "types",
-          "Restaurant"
-        ]
-      }
-    },
-    {
-      "id": 30,
-      "type": {
-        "def": {
-          "variant": {
-            "variants": [
-              {
-                "fields": [
-                  {
-                    "type": 31
-                  }
-                ],
-                "index": 0,
-                "name": "Ok"
-              },
-              {
-                "fields": [
-                  {
-                    "type": 10
-                  }
-                ],
-                "index": 1,
-                "name": "Err"
-              }
-            ]
-          }
-        },
-        "params": [
-          {
-            "name": "T",
-            "type": 31
-          },
-          {
-            "name": "E",
-            "type": 10
-          }
-        ],
-        "path": [
-          "Result"
-        ]
-      }
-    },
-    {
-      "id": 31,
-      "type": {
-        "def": {
-          "variant": {
-            "variants": [
-              {
-                "fields": [
-                  {
-                    "type": 32
-                  }
-                ],
-                "index": 0,
-                "name": "Ok"
-              },
-              {
-                "fields": [
-                  {
-                    "type": 13
-                  }
-                ],
-                "index": 1,
-                "name": "Err"
-              }
-            ]
-          }
-        },
-        "params": [
-          {
-            "name": "T",
-            "type": 32
-          },
-          {
-            "name": "E",
-            "type": 13
-          }
-        ],
-        "path": [
-          "Result"
-        ]
-      }
-    },
-    {
-      "id": 32,
-      "type": {
-        "def": {
-          "sequence": {
-            "type": 33
-          }
-        }
-      }
-    },
-    {
-      "id": 33,
-      "type": {
-        "def": {
-          "composite": {
-            "fields": [
-              {
-                "name": "order_id",
-                "type": 5,
-                "typeName": "OrderId"
-              },
-              {
-                "name": "restaurant_id",
-                "type": 5,
-                "typeName": "RestaurantId"
-              },
-              {
-                "name": "customer_id",
-                "type": 5,
-                "typeName": "CustomerId"
-              },
-              {
-                "name": "courier_id",
-                "type": 5,
-                "typeName": "CourierId"
-              },
-              {
-                "name": "delivery_address",
-                "type": 6,
-                "typeName": "String"
-              },
-              {
-                "name": "status",
-                "type": 34,
-                "typeName": "DeliveryStatus"
-              },
-              {
-                "name": "timestamp",
-                "type": 5,
-                "typeName": "Timestamp"
-              }
-            ]
-          }
-        },
-        "path": [
-          "logics",
-          "impls",
-          "types",
-          "Delivery"
-        ]
-      }
-    },
-    {
-      "id": 34,
-      "type": {
-        "def": {
-          "variant": {
-            "variants": [
-              {
-                "index": 0,
-                "name": "Waiting"
-              },
-              {
-                "index": 1,
-                "name": "PickUp"
-              },
-              {
-                "index": 2,
-                "name": "Accept"
-              }
-            ]
-          }
-        },
-        "path": [
-          "logics",
-          "impls",
-          "types",
-          "DeliveryStatus"
-        ]
-      }
-    },
-    {
-      "id": 35,
-      "type": {
-        "def": {
-          "variant": {
-            "variants": [
-              {
-                "fields": [
-                  {
-                    "type": 4
-                  }
-                ],
-                "index": 0,
-                "name": "Ok"
-              },
-              {
-                "fields": [
-                  {
-                    "type": 10
-                  }
-                ],
-                "index": 1,
-                "name": "Err"
-              }
-            ]
-          }
-        },
-        "params": [
-          {
-            "name": "T",
-            "type": 4
-          },
-          {
-            "name": "E",
-            "type": 10
-          }
-        ],
-        "path": [
-          "Result"
-        ]
-      }
-    },
-    {
-      "id": 36,
-      "type": {
-        "def": {
-          "variant": {
-            "variants": [
-              {
-                "fields": [
-                  {
-                    "type": 37
-                  }
-                ],
-                "index": 0,
-                "name": "Ok"
-              },
-              {
-                "fields": [
-                  {
-                    "type": 10
-                  }
-                ],
-                "index": 1,
-                "name": "Err"
-              }
-            ]
-          }
-        },
-        "params": [
-          {
-            "name": "T",
-            "type": 37
-          },
-          {
-            "name": "E",
-            "type": 10
-          }
-        ],
-        "path": [
-          "Result"
-        ]
-      }
-    },
-    {
-      "id": 37,
-      "type": {
-        "def": {
-          "variant": {
-            "variants": [
-              {
-                "fields": [
-                  {
-                    "type": 38
-                  }
-                ],
-                "index": 0,
-                "name": "Ok"
-              },
-              {
-                "fields": [
-                  {
-                    "type": 13
-                  }
-                ],
-                "index": 1,
-                "name": "Err"
-              }
-            ]
-          }
-        },
-        "params": [
-          {
-            "name": "T",
-            "type": 38
-          },
-          {
-            "name": "E",
-            "type": 13
-          }
-        ],
-        "path": [
-          "Result"
-        ]
-      }
-    },
-    {
-      "id": 38,
-      "type": {
-        "def": {
-          "sequence": {
-            "type": 39
-          }
-        }
-      }
-    },
-    {
-      "id": 39,
-      "type": {
-        "def": {
-          "composite": {
-            "fields": [
-              {
-                "name": "courier_account",
-                "type": 0,
-                "typeName": "AccountId"
-              },
-              {
-                "name": "courier_name",
-                "type": 6,
-                "typeName": "String"
-              },
-              {
-                "name": "courier_address",
-                "type": 6,
-                "typeName": "String"
-              },
-              {
-                "name": "phone_number",
-                "type": 6,
-                "typeName": "String"
-              }
-            ]
-          }
-        },
-        "path": [
-          "logics",
-          "impls",
-          "types",
-          "Courier"
-        ]
-      }
-    },
-    {
-      "id": 40,
-      "type": {
-        "def": {
-          "variant": {
-            "variants": [
-              {
-                "fields": [
-                  {
-                    "type": 41
-                  }
-                ],
-                "index": 0,
-                "name": "Ok"
-              },
-              {
-                "fields": [
-                  {
-                    "type": 10
-                  }
-                ],
-                "index": 1,
-                "name": "Err"
-              }
-            ]
-          }
-        },
-        "params": [
-          {
-            "name": "T",
-            "type": 41
-          },
-          {
-            "name": "E",
-            "type": 10
-          }
-        ],
-        "path": [
-          "Result"
-        ]
-      }
-    },
-    {
-      "id": 41,
-      "type": {
-        "def": {
-          "variant": {
-            "variants": [
-              {
-                "fields": [
-                  {
-                    "type": 24
-                  }
-                ],
-                "index": 0,
-                "name": "Ok"
-              },
-              {
-                "fields": [
-                  {
-                    "type": 13
-                  }
-                ],
-                "index": 1,
-                "name": "Err"
-              }
-            ]
-          }
-        },
-        "params": [
-          {
-            "name": "T",
-            "type": 24
-          },
-          {
-            "name": "E",
-            "type": 13
-          }
-        ],
-        "path": [
-          "Result"
-        ]
-      }
-    },
-    {
-      "id": 42,
-      "type": {
-        "def": {
-          "variant": {
-            "variants": [
-              {
-                "fields": [
-                  {
-                    "type": 43
-                  }
-                ],
-                "index": 0,
-                "name": "Ok"
-              },
-              {
-                "fields": [
-                  {
-                    "type": 10
-                  }
-                ],
-                "index": 1,
-                "name": "Err"
-              }
-            ]
-          }
-        },
-        "params": [
-          {
-            "name": "T",
-            "type": 43
-          },
-          {
-            "name": "E",
-            "type": 10
-          }
-        ],
-        "path": [
-          "Result"
-        ]
-      }
-    },
-    {
-      "id": 43,
-      "type": {
-        "def": {
-          "variant": {
-            "variants": [
-              {
-                "fields": [
-                  {
-                    "type": 44
-                  }
-                ],
-                "index": 0,
-                "name": "Ok"
-              },
-              {
-                "fields": [
-                  {
-                    "type": 13
-                  }
-                ],
-                "index": 1,
-                "name": "Err"
-              }
-            ]
-          }
-        },
-        "params": [
-          {
-            "name": "T",
-            "type": 44
-          },
-          {
-            "name": "E",
-            "type": 13
-          }
-        ],
-        "path": [
-          "Result"
-        ]
-      }
-    },
-    {
-      "id": 44,
-      "type": {
-        "def": {
-          "sequence": {
-            "type": 45
-          }
-        }
-      }
-    },
-    {
-      "id": 45,
       "type": {
         "def": {
           "composite": {
@@ -3801,7 +3171,7 @@
       }
     },
     {
-      "id": 46,
+      "id": 28,
       "type": {
         "def": {
           "variant": {
@@ -3809,7 +3179,7 @@
               {
                 "fields": [
                   {
-                    "type": 0
+                    "type": 29
                   }
                 ],
                 "index": 0,
@@ -3830,7 +3200,7 @@
         "params": [
           {
             "name": "T",
-            "type": 0
+            "type": 29
           },
           {
             "name": "E",
@@ -3843,7 +3213,7 @@
       }
     },
     {
-      "id": 47,
+      "id": 29,
       "type": {
         "def": {
           "variant": {
@@ -3851,49 +3221,7 @@
               {
                 "fields": [
                   {
-                    "type": 48
-                  }
-                ],
-                "index": 0,
-                "name": "Ok"
-              },
-              {
-                "fields": [
-                  {
-                    "type": 10
-                  }
-                ],
-                "index": 1,
-                "name": "Err"
-              }
-            ]
-          }
-        },
-        "params": [
-          {
-            "name": "T",
-            "type": 48
-          },
-          {
-            "name": "E",
-            "type": 10
-          }
-        ],
-        "path": [
-          "Result"
-        ]
-      }
-    },
-    {
-      "id": 48,
-      "type": {
-        "def": {
-          "variant": {
-            "variants": [
-              {
-                "fields": [
-                  {
-                    "type": 33
+                    "type": 30
                   }
                 ],
                 "index": 0,
@@ -3914,11 +3242,683 @@
         "params": [
           {
             "name": "T",
-            "type": 33
+            "type": 30
           },
           {
             "name": "E",
             "type": 13
+          }
+        ],
+        "path": [
+          "Result"
+        ]
+      }
+    },
+    {
+      "id": 30,
+      "type": {
+        "def": {
+          "sequence": {
+            "type": 31
+          }
+        }
+      }
+    },
+    {
+      "id": 31,
+      "type": {
+        "def": {
+          "composite": {
+            "fields": [
+              {
+                "name": "order_id",
+                "type": 5,
+                "typeName": "OrderId"
+              },
+              {
+                "name": "restaurant_id",
+                "type": 5,
+                "typeName": "RestaurantId"
+              },
+              {
+                "name": "customer_id",
+                "type": 5,
+                "typeName": "CustomerId"
+              },
+              {
+                "name": "courier_id",
+                "type": 5,
+                "typeName": "CourierId"
+              },
+              {
+                "name": "delivery_address",
+                "type": 6,
+                "typeName": "String"
+              },
+              {
+                "name": "status",
+                "type": 32,
+                "typeName": "DeliveryStatus"
+              },
+              {
+                "name": "timestamp",
+                "type": 5,
+                "typeName": "Timestamp"
+              }
+            ]
+          }
+        },
+        "path": [
+          "logics",
+          "impls",
+          "types",
+          "Delivery"
+        ]
+      }
+    },
+    {
+      "id": 32,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "index": 0,
+                "name": "Waiting"
+              },
+              {
+                "index": 1,
+                "name": "PickedUp"
+              },
+              {
+                "index": 2,
+                "name": "Accepted"
+              }
+            ]
+          }
+        },
+        "path": [
+          "logics",
+          "impls",
+          "types",
+          "DeliveryStatus"
+        ]
+      }
+    },
+    {
+      "id": 33,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 34
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 10
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 34
+          },
+          {
+            "name": "E",
+            "type": 10
+          }
+        ],
+        "path": [
+          "Result"
+        ]
+      }
+    },
+    {
+      "id": 34,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 35
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 13
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 35
+          },
+          {
+            "name": "E",
+            "type": 13
+          }
+        ],
+        "path": [
+          "Result"
+        ]
+      }
+    },
+    {
+      "id": 35,
+      "type": {
+        "def": {
+          "sequence": {
+            "type": 36
+          }
+        }
+      }
+    },
+    {
+      "id": 36,
+      "type": {
+        "def": {
+          "composite": {
+            "fields": [
+              {
+                "name": "courier_account",
+                "type": 0,
+                "typeName": "AccountId"
+              },
+              {
+                "name": "courier_name",
+                "type": 6,
+                "typeName": "String"
+              },
+              {
+                "name": "courier_address",
+                "type": 6,
+                "typeName": "String"
+              },
+              {
+                "name": "phone_number",
+                "type": 6,
+                "typeName": "String"
+              }
+            ]
+          }
+        },
+        "path": [
+          "logics",
+          "impls",
+          "types",
+          "Courier"
+        ]
+      }
+    },
+    {
+      "id": 37,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 38
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 10
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 38
+          },
+          {
+            "name": "E",
+            "type": 10
+          }
+        ],
+        "path": [
+          "Result"
+        ]
+      }
+    },
+    {
+      "id": 38,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 31
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 13
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 31
+          },
+          {
+            "name": "E",
+            "type": 13
+          }
+        ],
+        "path": [
+          "Result"
+        ]
+      }
+    },
+    {
+      "id": 39,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 40
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 10
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 40
+          },
+          {
+            "name": "E",
+            "type": 10
+          }
+        ],
+        "path": [
+          "Result"
+        ]
+      }
+    },
+    {
+      "id": 40,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 41
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 13
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 41
+          },
+          {
+            "name": "E",
+            "type": 13
+          }
+        ],
+        "path": [
+          "Result"
+        ]
+      }
+    },
+    {
+      "id": 41,
+      "type": {
+        "def": {
+          "sequence": {
+            "type": 42
+          }
+        }
+      }
+    },
+    {
+      "id": 42,
+      "type": {
+        "def": {
+          "composite": {
+            "fields": [
+              {
+                "name": "food_id",
+                "type": 5,
+                "typeName": "FoodId"
+              },
+              {
+                "name": "restaurant_id",
+                "type": 5,
+                "typeName": "RestaurantId"
+              },
+              {
+                "name": "customer_id",
+                "type": 5,
+                "typeName": "CustomerId"
+              },
+              {
+                "name": "courier_id",
+                "type": 5,
+                "typeName": "DeliveryId"
+              },
+              {
+                "name": "delivery_address",
+                "type": 6,
+                "typeName": "String"
+              },
+              {
+                "name": "status",
+                "type": 43,
+                "typeName": "OrderStatus"
+              },
+              {
+                "name": "timestamp",
+                "type": 5,
+                "typeName": "Timestamp"
+              },
+              {
+                "name": "price",
+                "type": 7,
+                "typeName": "Balance"
+              },
+              {
+                "name": "eta",
+                "type": 5,
+                "typeName": "u64"
+              }
+            ]
+          }
+        },
+        "path": [
+          "logics",
+          "impls",
+          "types",
+          "Order"
+        ]
+      }
+    },
+    {
+      "id": 43,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "index": 0,
+                "name": "OrderSubmitted"
+              },
+              {
+                "index": 1,
+                "name": "OrderConfirmed"
+              },
+              {
+                "index": 2,
+                "name": "FoodPrepared"
+              },
+              {
+                "index": 3,
+                "name": "FoodDelivered"
+              },
+              {
+                "index": 4,
+                "name": "DeliveryAcceptted"
+              }
+            ]
+          }
+        },
+        "path": [
+          "logics",
+          "impls",
+          "types",
+          "OrderStatus"
+        ]
+      }
+    },
+    {
+      "id": 44,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 45
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 10
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 45
+          },
+          {
+            "name": "E",
+            "type": 10
+          }
+        ],
+        "path": [
+          "Result"
+        ]
+      }
+    },
+    {
+      "id": 45,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 46
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 13
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 46
+          },
+          {
+            "name": "E",
+            "type": 13
+          }
+        ],
+        "path": [
+          "Result"
+        ]
+      }
+    },
+    {
+      "id": 46,
+      "type": {
+        "def": {
+          "sequence": {
+            "type": 47
+          }
+        }
+      }
+    },
+    {
+      "id": 47,
+      "type": {
+        "def": {
+          "composite": {
+            "fields": [
+              {
+                "name": "restaurant_account",
+                "type": 0,
+                "typeName": "AccountId"
+              },
+              {
+                "name": "restaurant_name",
+                "type": 6,
+                "typeName": "String"
+              },
+              {
+                "name": "restaurant_address",
+                "type": 6,
+                "typeName": "String"
+              },
+              {
+                "name": "phone_number",
+                "type": 6,
+                "typeName": "String"
+              }
+            ]
+          }
+        },
+        "path": [
+          "logics",
+          "impls",
+          "types",
+          "Restaurant"
+        ]
+      }
+    },
+    {
+      "id": 48,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 4
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 10
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 4
+          },
+          {
+            "name": "E",
+            "type": 10
           }
         ],
         "path": [
@@ -3977,7 +3977,7 @@
               {
                 "fields": [
                   {
-                    "type": 20
+                    "type": 42
                   }
                 ],
                 "index": 0,
@@ -3998,7 +3998,7 @@
         "params": [
           {
             "name": "T",
-            "type": 20
+            "type": 42
           },
           {
             "name": "E",
