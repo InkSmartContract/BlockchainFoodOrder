@@ -282,6 +282,7 @@ Cargo.lock
 
 _-debug.log
 _-error.log
+build.log
 /.nyc_output
 /dist
 /lib

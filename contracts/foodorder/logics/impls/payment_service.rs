@@ -1,6 +1,6 @@
 pub use crate::{
     ensure,
-    transfer_from_contract_to_account,
+    // transfer_from_contract_to_account,
     impls::types::{
         OrderId,
         DeliveryId,
@@ -35,12 +35,12 @@ where
         let courier_amount = _price / (self.data::<Data>().fee_rate as u128);
         let restaurant_amount = _price - courier_amount;
         
-        // if T::env().transfer(restaurant_account, restaurant_amount).is_err() {
-        //     return core::prelude::v1::Err(FoodOrderError::NotTransfered)
-        // } else {
-        //     Ok(order_id)
-        // }
-        transfer_from_contract_to_account!(restaurant_account, restaurant_amount, order_id)
+        if T::env().transfer(restaurant_account, restaurant_amount).is_err() {
+            return core::prelude::v1::Err(FoodOrderError::NotTransfered)
+        } else {
+            Ok(order_id)
+        }
+        // transfer_from_contract_to_account!(restaurant_account, restaurant_amount, order_id)
     }
 
     // Function that transfer money to courier.
@@ -54,11 +54,11 @@ where
         let courier_id = self.data::<Data>().delivery_data.get(&delivery_id).unwrap().courier_id;
         let courier_account = self.data::<Data>().couriers.get(&courier_id).unwrap().courier_account;
 
-        // if T::env().transfer(courier_account, courier_amount).is_err() {
-        //     return core::prelude::v1::Err(FoodOrderError::NotTransfered)
-        // } else {
-        //     Ok(delivery_id)
-        // }
-        transfer_from_contract_to_account!(courier_account, courier_amount, delivery_id)
+        if T::env().transfer(courier_account, courier_amount).is_err() {
+            return core::prelude::v1::Err(FoodOrderError::NotTransfered)
+        } else {
+            Ok(delivery_id)
+        }
+        // transfer_from_contract_to_account!(courier_account, courier_amount, delivery_id)
     }
 }
