@@ -20,9 +20,6 @@ pub use crate::{
     },
     traits::restaurant_service::*,
     traits::payment_service::*,
-    // macros::{
-    //     add_foods,
-    // },
 };
 use ink::prelude::{string::String, vec::Vec};
 use openbrush::{
