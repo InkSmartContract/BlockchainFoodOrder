@@ -215,10 +215,10 @@ export enum OwnableError {
 	newOwnerIsZero = 'NewOwnerIsZero'
 }
 
-export type Courier = {
-	courierAccount: AccountId,
-	courierName: string,
-	courierAddress: string,
+export type Customer = {
+	customerAccount: AccountId,
+	customerName: string,
+	customerAddress: string,
 	phoneNumber: string
 }
 
@@ -267,10 +267,10 @@ export enum OrderStatus {
 	deliveryAcceptted = 'DeliveryAcceptted'
 }
 
-export type Customer = {
-	customerAccount: AccountId,
-	customerName: string,
-	customerAddress: string,
+export type Courier = {
+	courierAccount: AccountId,
+	courierName: string,
+	courierAddress: string,
 	phoneNumber: string
 }
 
