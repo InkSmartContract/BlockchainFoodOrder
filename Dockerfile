@@ -3,13 +3,12 @@
 FROM rust:1.70.0 as base
 
 # Set the current directory
-WORKDIR /app
+WORKDIR /OpenSmartContract
 
 # Copy everthing that is not dockerignored to the image
 COPY . .
 
 # Prepare Rust
-
 RUN apt update
 
 RUN apt-get install -y binaryen pkg-config git clang curl libssl-dev protobuf-compiler build-essential
@@ -26,7 +25,7 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && \
   rustup component add rust-src --toolchain nightly-2023-01-01 && \
   rustup target add wasm32-unknown-unknown --toolchain nightly-2023-01-01 && \
   cargo install cargo-dylint dylint-link && \
-  cargo install cargo-contract --force --version 2.0.2 && \
+  cargo install cargo-contract --force --version 2.0.2 && \   
   rustc --version"
 
 # Install Node.js
@@ -46,4 +45,4 @@ RUN node --version && \
 # Clean up the package lists to reduce image size
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN swanky contract compile fooddelivery
+RUN swanky contract compile foodorder
