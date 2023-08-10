@@ -10,15 +10,6 @@ macro_rules! ensure {
     }};
 }
 
-// #[macro_export]
-// macro_rules! transfer {
-//     ( $x:expr, $y:expr $(,)? ) => {{
-//         if !$x {
-//             return Err($y.into())
-//         }
-//     }};
-// }
-
 #[macro_export]
 macro_rules! transfer_from_contract_to_account {
     ($account:expr, $amount:expr, $id:expr) => {

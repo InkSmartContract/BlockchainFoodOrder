@@ -23,7 +23,7 @@ use super::types::{
     ManagerResult,
 };
 
-// Manager Events Definition
+/// Manager Events Definition
 pub trait ManagerServiceEvents {
     fn emit_add_courier_event (
         &self,
@@ -42,13 +42,13 @@ pub trait ManagerServiceEvents {
     );
 }
 
-// Implementation of Manager Service 
+/// Implementation of Manager Service 
 impl<T> ManagerService for T
 where
     T: Storage<Data> + Storage<ownable::Data>,
 {
-    // Manager's function.
-    // Function that add new restaurant.
+    /// Manager's function.
+    /// Function that add new restaurant.
     // #[modifiers(only_owner)]
     default fn add_restaurant(
         &mut self,
@@ -86,8 +86,8 @@ where
         Ok(restaurant_id)
     }
     
-    // Manager's function.
-    // Function that add new Courier.
+    /// Manager's function.
+    /// Function that add new Courier.
     // #[modifiers(only_owner)]
     default fn add_courier(
         &mut self,
@@ -125,8 +125,8 @@ where
         Ok(courier_id)
     }
 
-    // Manager's function.
-    // Function that change manager's account.
+    /// Manager's function.
+    /// Function that change manager's account.
     #[modifiers(only_owner)]
     default fn change_manager(
         &mut self,
@@ -137,8 +137,8 @@ where
         Ok("Change Manager".to_string())
     }
 
-    // Manager's function.
-    // Function that change payment rate.
+    /// Manager's function.
+    /// Function that change payment rate.
     #[modifiers(only_owner)]
     default fn change_fee_rate(
         &mut self,
@@ -152,7 +152,7 @@ where
     }
 }
 
-// Manager Event Initation
+/// Manager Event Initation
 impl<T> ManagerServiceEvents for T
 where
     T: Storage<Data>,

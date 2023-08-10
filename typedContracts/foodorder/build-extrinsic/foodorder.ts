@@ -21,19 +21,15 @@ export default class Methods {
 		this.__apiPromise = apiPromise;
 	}
 	/**
-	 * addCustomer
+	 * acceptDelivery
 	 *
-	 * @param { string } customerName,
-	 * @param { string } customerAddress,
-	 * @param { string } phoneNumber,
+	 * @param { (number | string | BN) } deliveryId,
 	*/
-	"addCustomer" (
-		customerName: string,
-		customerAddress: string,
-		phoneNumber: string,
+	"acceptDelivery" (
+		deliveryId: (number | string | BN),
 		__options: GasLimit,
 	){
-		return buildSubmittableExtrinsic( this.__apiPromise, this.__nativeContract, "customerService::addCustomer", [customerName, customerAddress, phoneNumber], __options);
+		return buildSubmittableExtrinsic( this.__apiPromise, this.__nativeContract, "customerService::acceptDelivery", [deliveryId], __options);
 	}
 
 	/**
@@ -51,15 +47,19 @@ export default class Methods {
 	}
 
 	/**
-	 * acceptDelivery
+	 * addCustomer
 	 *
-	 * @param { (number | string | BN) } deliveryId,
+	 * @param { string } customerName,
+	 * @param { string } customerAddress,
+	 * @param { string } phoneNumber,
 	*/
-	"acceptDelivery" (
-		deliveryId: (number | string | BN),
+	"addCustomer" (
+		customerName: string,
+		customerAddress: string,
+		phoneNumber: string,
 		__options: GasLimit,
 	){
-		return buildSubmittableExtrinsic( this.__apiPromise, this.__nativeContract, "customerService::acceptDelivery", [deliveryId], __options);
+		return buildSubmittableExtrinsic( this.__apiPromise, this.__nativeContract, "customerService::addCustomer", [customerName, customerAddress, phoneNumber], __options);
 	}
 
 	/**
@@ -72,6 +72,50 @@ export default class Methods {
 		__options: GasLimit,
 	){
 		return buildSubmittableExtrinsic( this.__apiPromise, this.__nativeContract, "courierService::pickupDelivery", [deliveryId], __options);
+	}
+
+	/**
+	 * confirmOrder
+	 *
+	 * @param { (number | string | BN) } orderId,
+	 * @param { (number | string | BN) } eta,
+	*/
+	"confirmOrder" (
+		orderId: (number | string | BN),
+		eta: (number | string | BN),
+		__options: GasLimit,
+	){
+		return buildSubmittableExtrinsic( this.__apiPromise, this.__nativeContract, "restaurantService::confirmOrder", [orderId, eta], __options);
+	}
+
+	/**
+	 * addFood
+	 *
+	 * @param { string } foodName,
+	 * @param { string } description,
+	 * @param { (string | number | BN) } price,
+	 * @param { (number | string | BN) } eta,
+	*/
+	"addFood" (
+		foodName: string,
+		description: string,
+		price: (string | number | BN),
+		eta: (number | string | BN),
+		__options: GasLimit,
+	){
+		return buildSubmittableExtrinsic( this.__apiPromise, this.__nativeContract, "restaurantService::addFood", [foodName, description, price, eta], __options);
+	}
+
+	/**
+	 * finishCook
+	 *
+	 * @param { (number | string | BN) } orderId,
+	*/
+	"finishCook" (
+		orderId: (number | string | BN),
+		__options: GasLimit,
+	){
+		return buildSubmittableExtrinsic( this.__apiPromise, this.__nativeContract, "restaurantService::finishCook", [orderId], __options);
 	}
 
 	/**
@@ -92,50 +136,6 @@ export default class Methods {
 		__options: GasLimit,
 	){
 		return buildSubmittableExtrinsic( this.__apiPromise, this.__nativeContract, "restaurantService::updateFood", [foodId, foodName, description, price, eta], __options);
-	}
-
-	/**
-	 * confirmOrder
-	 *
-	 * @param { (number | string | BN) } orderId,
-	 * @param { (number | string | BN) } eta,
-	*/
-	"confirmOrder" (
-		orderId: (number | string | BN),
-		eta: (number | string | BN),
-		__options: GasLimit,
-	){
-		return buildSubmittableExtrinsic( this.__apiPromise, this.__nativeContract, "restaurantService::confirmOrder", [orderId, eta], __options);
-	}
-
-	/**
-	 * finishCook
-	 *
-	 * @param { (number | string | BN) } orderId,
-	*/
-	"finishCook" (
-		orderId: (number | string | BN),
-		__options: GasLimit,
-	){
-		return buildSubmittableExtrinsic( this.__apiPromise, this.__nativeContract, "restaurantService::finishCook", [orderId], __options);
-	}
-
-	/**
-	 * addFood
-	 *
-	 * @param { string } foodName,
-	 * @param { string } description,
-	 * @param { (string | number | BN) } price,
-	 * @param { (number | string | BN) } eta,
-	*/
-	"addFood" (
-		foodName: string,
-		description: string,
-		price: (string | number | BN),
-		eta: (number | string | BN),
-		__options: GasLimit,
-	){
-		return buildSubmittableExtrinsic( this.__apiPromise, this.__nativeContract, "restaurantService::addFood", [foodName, description, price, eta], __options);
 	}
 
 	/**
@@ -160,6 +160,24 @@ export default class Methods {
 		__options: GasLimit,
 	){
 		return buildSubmittableExtrinsic( this.__apiPromise, this.__nativeContract, "managerService::changeManager", [newAccount], __options);
+	}
+
+	/**
+	 * addCourier
+	 *
+	 * @param { ArgumentTypes.AccountId } courierAccount,
+	 * @param { string } courierName,
+	 * @param { string } courierAddress,
+	 * @param { string } phoneNumber,
+	*/
+	"addCourier" (
+		courierAccount: ArgumentTypes.AccountId,
+		courierName: string,
+		courierAddress: string,
+		phoneNumber: string,
+		__options: GasLimit,
+	){
+		return buildSubmittableExtrinsic( this.__apiPromise, this.__nativeContract, "managerService::addCourier", [courierAccount, courierName, courierAddress, phoneNumber], __options);
 	}
 
 	/**
@@ -193,21 +211,27 @@ export default class Methods {
 	}
 
 	/**
-	 * addCourier
+	 * getFoodFromId
 	 *
-	 * @param { ArgumentTypes.AccountId } courierAccount,
-	 * @param { string } courierName,
-	 * @param { string } courierAddress,
-	 * @param { string } phoneNumber,
+	 * @param { (number | string | BN) } foodId,
 	*/
-	"addCourier" (
-		courierAccount: ArgumentTypes.AccountId,
-		courierName: string,
-		courierAddress: string,
-		phoneNumber: string,
+	"getFoodFromId" (
+		foodId: (number | string | BN),
 		__options: GasLimit,
 	){
-		return buildSubmittableExtrinsic( this.__apiPromise, this.__nativeContract, "managerService::addCourier", [courierAccount, courierName, courierAddress, phoneNumber], __options);
+		return buildSubmittableExtrinsic( this.__apiPromise, this.__nativeContract, "getService::getFoodFromId", [foodId], __options);
+	}
+
+	/**
+	 * getEta
+	 *
+	 * @param { (number | string | BN) } orderId,
+	*/
+	"getEta" (
+		orderId: (number | string | BN),
+		__options: GasLimit,
+	){
+		return buildSubmittableExtrinsic( this.__apiPromise, this.__nativeContract, "getService::getEta", [orderId], __options);
 	}
 
 	/**
@@ -239,15 +263,27 @@ export default class Methods {
 	}
 
 	/**
-	 * getFoodFromId
+	 * getOrderFromId
 	 *
-	 * @param { (number | string | BN) } foodId,
+	 * @param { (number | string | BN) } orderId,
 	*/
-	"getFoodFromId" (
-		foodId: (number | string | BN),
+	"getOrderFromId" (
+		orderId: (number | string | BN),
 		__options: GasLimit,
 	){
-		return buildSubmittableExtrinsic( this.__apiPromise, this.__nativeContract, "getService::getFoodFromId", [foodId], __options);
+		return buildSubmittableExtrinsic( this.__apiPromise, this.__nativeContract, "getService::getOrderFromId", [orderId], __options);
+	}
+
+	/**
+	 * getOrderFromCustomer
+	 *
+	 * @param { (number | string | BN) } customerId,
+	*/
+	"getOrderFromCustomer" (
+		customerId: (number | string | BN),
+		__options: GasLimit,
+	){
+		return buildSubmittableExtrinsic( this.__apiPromise, this.__nativeContract, "getService::getOrderFromCustomer", [customerId], __options);
 	}
 
 	/**
@@ -260,6 +296,30 @@ export default class Methods {
 		__options: GasLimit,
 	){
 		return buildSubmittableExtrinsic( this.__apiPromise, this.__nativeContract, "getService::getDeliveryFromId", [deliveryId], __options);
+	}
+
+	/**
+	 * getFoodFromRestaurant
+	 *
+	 * @param { (number | string | BN) } restaurantId,
+	*/
+	"getFoodFromRestaurant" (
+		restaurantId: (number | string | BN),
+		__options: GasLimit,
+	){
+		return buildSubmittableExtrinsic( this.__apiPromise, this.__nativeContract, "getService::getFoodFromRestaurant", [restaurantId], __options);
+	}
+
+	/**
+	 * getDeliveryFromCourier
+	 *
+	 * @param { (number | string | BN) } courierId,
+	*/
+	"getDeliveryFromCourier" (
+		courierId: (number | string | BN),
+		__options: GasLimit,
+	){
+		return buildSubmittableExtrinsic( this.__apiPromise, this.__nativeContract, "getService::getDeliveryFromCourier", [courierId], __options);
 	}
 
 	/**
@@ -277,42 +337,6 @@ export default class Methods {
 	}
 
 	/**
-	 * getDeliveryFromCustomer
-	 *
-	 * @param { (number | string | BN) } customerId,
-	*/
-	"getDeliveryFromCustomer" (
-		customerId: (number | string | BN),
-		__options: GasLimit,
-	){
-		return buildSubmittableExtrinsic( this.__apiPromise, this.__nativeContract, "getService::getDeliveryFromCustomer", [customerId], __options);
-	}
-
-	/**
-	 * getDeliveryFromCourier
-	 *
-	 * @param { (number | string | BN) } courierId,
-	*/
-	"getDeliveryFromCourier" (
-		courierId: (number | string | BN),
-		__options: GasLimit,
-	){
-		return buildSubmittableExtrinsic( this.__apiPromise, this.__nativeContract, "getService::getDeliveryFromCourier", [courierId], __options);
-	}
-
-	/**
-	 * getFoodFromRestaurant
-	 *
-	 * @param { (number | string | BN) } restaurantId,
-	*/
-	"getFoodFromRestaurant" (
-		restaurantId: (number | string | BN),
-		__options: GasLimit,
-	){
-		return buildSubmittableExtrinsic( this.__apiPromise, this.__nativeContract, "getService::getFoodFromRestaurant", [restaurantId], __options);
-	}
-
-	/**
 	 * getFeeRate
 	 *
 	*/
@@ -320,68 +344,6 @@ export default class Methods {
 		__options: GasLimit,
 	){
 		return buildSubmittableExtrinsic( this.__apiPromise, this.__nativeContract, "getService::getFeeRate", [], __options);
-	}
-
-	/**
-	 * getOrderFromCustomer
-	 *
-	 * @param { (number | string | BN) } customerId,
-	*/
-	"getOrderFromCustomer" (
-		customerId: (number | string | BN),
-		__options: GasLimit,
-	){
-		return buildSubmittableExtrinsic( this.__apiPromise, this.__nativeContract, "getService::getOrderFromCustomer", [customerId], __options);
-	}
-
-	/**
-	 * getOrderFromRestaurant
-	 *
-	 * @param { (number | string | BN) } restaurantId,
-	*/
-	"getOrderFromRestaurant" (
-		restaurantId: (number | string | BN),
-		__options: GasLimit,
-	){
-		return buildSubmittableExtrinsic( this.__apiPromise, this.__nativeContract, "getService::getOrderFromRestaurant", [restaurantId], __options);
-	}
-
-	/**
-	 * getEta
-	 *
-	 * @param { (number | string | BN) } orderId,
-	*/
-	"getEta" (
-		orderId: (number | string | BN),
-		__options: GasLimit,
-	){
-		return buildSubmittableExtrinsic( this.__apiPromise, this.__nativeContract, "getService::getEta", [orderId], __options);
-	}
-
-	/**
-	 * getOrderFromId
-	 *
-	 * @param { (number | string | BN) } orderId,
-	*/
-	"getOrderFromId" (
-		orderId: (number | string | BN),
-		__options: GasLimit,
-	){
-		return buildSubmittableExtrinsic( this.__apiPromise, this.__nativeContract, "getService::getOrderFromId", [orderId], __options);
-	}
-
-	/**
-	 * getOrderAll
-	 *
-	 * @param { (number | string | BN) } from,
-	 * @param { (number | string | BN) } to,
-	*/
-	"getOrderAll" (
-		from: (number | string | BN),
-		to: (number | string | BN),
-		__options: GasLimit,
-	){
-		return buildSubmittableExtrinsic( this.__apiPromise, this.__nativeContract, "getService::getOrderAll", [from, to], __options);
 	}
 
 	/**
@@ -399,6 +361,42 @@ export default class Methods {
 	}
 
 	/**
+	 * getDeliveryFromRestaurant
+	 *
+	 * @param { (number | string | BN) } restaurantId,
+	*/
+	"getDeliveryFromRestaurant" (
+		restaurantId: (number | string | BN),
+		__options: GasLimit,
+	){
+		return buildSubmittableExtrinsic( this.__apiPromise, this.__nativeContract, "getService::getDeliveryFromRestaurant", [restaurantId], __options);
+	}
+
+	/**
+	 * getDeliveryFromCustomer
+	 *
+	 * @param { (number | string | BN) } customerId,
+	*/
+	"getDeliveryFromCustomer" (
+		customerId: (number | string | BN),
+		__options: GasLimit,
+	){
+		return buildSubmittableExtrinsic( this.__apiPromise, this.__nativeContract, "getService::getDeliveryFromCustomer", [customerId], __options);
+	}
+
+	/**
+	 * getOrderFromRestaurant
+	 *
+	 * @param { (number | string | BN) } restaurantId,
+	*/
+	"getOrderFromRestaurant" (
+		restaurantId: (number | string | BN),
+		__options: GasLimit,
+	){
+		return buildSubmittableExtrinsic( this.__apiPromise, this.__nativeContract, "getService::getOrderFromRestaurant", [restaurantId], __options);
+	}
+
+	/**
 	 * getRestaurantAll
 	 *
 	 * @param { (number | string | BN) } from,
@@ -413,18 +411,6 @@ export default class Methods {
 	}
 
 	/**
-	 * getDeliveryFromRestaurant
-	 *
-	 * @param { (number | string | BN) } restaurantId,
-	*/
-	"getDeliveryFromRestaurant" (
-		restaurantId: (number | string | BN),
-		__options: GasLimit,
-	){
-		return buildSubmittableExtrinsic( this.__apiPromise, this.__nativeContract, "getService::getDeliveryFromRestaurant", [restaurantId], __options);
-	}
-
-	/**
 	 * getOwner
 	 *
 	*/
@@ -432,6 +418,20 @@ export default class Methods {
 		__options: GasLimit,
 	){
 		return buildSubmittableExtrinsic( this.__apiPromise, this.__nativeContract, "getService::getOwner", [], __options);
+	}
+
+	/**
+	 * getOrderAll
+	 *
+	 * @param { (number | string | BN) } from,
+	 * @param { (number | string | BN) } to,
+	*/
+	"getOrderAll" (
+		from: (number | string | BN),
+		to: (number | string | BN),
+		__options: GasLimit,
+	){
+		return buildSubmittableExtrinsic( this.__apiPromise, this.__nativeContract, "getService::getOrderAll", [from, to], __options);
 	}
 
 }

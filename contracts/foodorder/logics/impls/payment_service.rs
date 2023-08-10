@@ -19,12 +19,12 @@ use super::types::{
     DeliveryResult,
 };
 
-// Implementation of Payment Service 
+/// Implementation of Payment Service 
 impl<T> PaymentService for T
 where
     T: Storage<Data> + Storage<ownable::Data>,
 {
-    // Function that transfer money to restaurant.
+    /// Function that transfer money to restaurant.
     default fn transfer_restaurant(
         &self,
         order_id: OrderId,
@@ -43,7 +43,7 @@ where
         transfer_from_contract_to_account!(restaurant_account, restaurant_amount, order_id)
     }
 
-    // Function that transfer money to courier.
+    /// Function that transfer money to courier.
     default fn transfer_courier(
         &self,
         delivery_id: DeliveryId,

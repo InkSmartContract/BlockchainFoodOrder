@@ -25,7 +25,7 @@ mod inksmartcontract {
     };
     use openbrush::{contracts::ownable::*, traits::Storage};
 
-    // data declaration
+    /// data declaration
     #[ink(storage)]
     #[derive(Storage, Default)]
     pub struct FoodOrder {
@@ -41,7 +41,7 @@ mod inksmartcontract {
     impl ManagerService for FoodOrder {}
     impl GetService for FoodOrder {}
 
-    // Event when a customer orders food.
+    /// Event when a customer orders food.
     #[ink(event)]
     pub struct SubmitOrderEvent {
         order_id: OrderId, 
@@ -52,14 +52,14 @@ mod inksmartcontract {
         phone_number: String,
     }
 
-    // Event when a customer confirms delivery.
+    /// Event when a customer confirms delivery.
     #[ink(event)]
     pub struct AcceptDeliveryEvent {
         delivery_id: DeliveryId,
         order_id: OrderId,
     }
 
-    // Event when a restaurant adds food.
+    /// Event when a restaurant adds food.
     #[ink(event)]
     pub struct AddFoodEvent {
         food_id: FoodId,
@@ -70,7 +70,7 @@ mod inksmartcontract {
         eta: u64,
     }
 
-    // Event when a restaurant updates food information.
+    /// Event when a restaurant updates food information.
     #[ink(event)]
     pub struct UpdateFoodEvent {
         food_id: FoodId,
@@ -80,14 +80,14 @@ mod inksmartcontract {
         eta: u64,
     }
     
-    // Event when a restaurant confirms order repuested customer.
+    /// Event when a restaurant confirms order repuested customer.
     #[ink(event)]
     pub struct ConfirmOrderEvent {
         order_id: OrderId,
         eta: u64,
     }
 
-    // Event when a restaurant requests the delivery.
+    /// Event when a restaurant requests the delivery.
     #[ink(event)]
     pub struct RequestDeliveryEvent {
         order_id: OrderId,
@@ -97,13 +97,13 @@ mod inksmartcontract {
         eta: u64,
     }
 
-    // Event when a restaurant finishes cooking.
+    /// Event when a restaurant finishes cooking.
     #[ink(event)]
     pub struct FinishCookEvent {
         order_id: OrderId,
     }
 
-    // Event when a restaurant deliver food.
+    /// Event when a restaurant deliver food.
     #[ink(event)]
     pub struct DeliverFoodEvent {
         order_id: OrderId,
@@ -112,14 +112,14 @@ mod inksmartcontract {
         courier_id: CourierId,
     }
 
-    // Event when a courier picks up the delivery.
+    /// Event when a courier picks up the delivery.
     #[ink(event)]
     pub struct PickUpDeliveryEvent {
         delivery_id: DeliveryId, 
         courier_id: CourierId,
     }
 
-    // Event when a manager add new courier.
+    /// Event when a manager add new courier.
     #[ink(event)]
     pub struct AddCourierEvent {
         courier_id: CourierId,
@@ -128,7 +128,7 @@ mod inksmartcontract {
         phone_number: String,
     }
 
-    // Event when a manager add new restaurant.
+    /// Event when a manager add new restaurant.
     #[ink(event)]
     pub struct AddRestaurantEvent {
         restaurant_id: RestaurantId,
@@ -137,7 +137,7 @@ mod inksmartcontract {
         phone_number: String,
     }
 
-    // data initialization
+    /// data initialization
     impl FoodOrder {
         #[ink(constructor)]
         pub fn new() -> Self {
@@ -147,7 +147,7 @@ mod inksmartcontract {
         }
     }
 
-    // Implementation of Events caused by customer
+    /// Implementation of Events caused by customer
     impl CustomerServiceEvents for FoodOrder {
         fn emit_submit_order_event(
             &self, 
@@ -180,7 +180,7 @@ mod inksmartcontract {
         }
     }
 
-    // Implementation of Events caused by courier
+    /// Implementation of Events caused by courier
     impl CourierServiceEvents for FoodOrder {
         fn emit_pickup_delivery_event(
             &self,
@@ -194,7 +194,7 @@ mod inksmartcontract {
         }
     }
 
-    // Implementation of Events caused by restaurant
+    /// Implementation of Events caused by restaurant
     impl RestaurantServiceEvents for FoodOrder {
         fn emit_add_food_event(
             &self,
@@ -285,7 +285,7 @@ mod inksmartcontract {
         }
     }
 
-    // Implementation of Events caused by manager
+    /// Implementation of Events caused by manager
     impl ManagerServiceEvents for FoodOrder {
         fn emit_add_courier_event(
             &self,
@@ -341,7 +341,7 @@ mod inksmartcontract {
 
         #[ink_e2e::test]
         async fn new_works(mut client: ink_e2e::Client<C, E>) -> E2EResult<()> {
-            // given
+            /// given
             let constructor = FoodOrderRef::new();
             let contract_acc_id = client
                 .instantiate("inksmartcontract", &ink_e2e::alice(), constructor, 0, None)
@@ -349,14 +349,14 @@ mod inksmartcontract {
                 .expect("failed to instantiate")
                 .account_id;
 
-            // when
+            /// when
             let get_owner = build_message::<FoodOrderRef>(contract_acc_id.clone())
                 .call(|_fooddelivery| _fooddelivery.get_owner());
             let get_owner_res = client
                 .call_dry_run(&ink_e2e::alice(), &get_owner, 0, None)
                 .await;
 
-            // check owner
+            /// check owner
             assert_eq!(
                 get_owner_res.return_value(),
                 ink_e2e::account_id(ink_e2e::AccountKeyring::Alice)
@@ -366,7 +366,7 @@ mod inksmartcontract {
 
         #[ink_e2e::test]
         async fn change_manager_works(mut client: ink_e2e::Client<C,E>) -> E2EResult<()> {
-            // given
+            /// given
             let constructor = FoodOrderRef::new();
             let contract_acc_id = client
                 .instantiate("inksmartcontract", &ink_e2e::alice(), constructor, 0, None)
@@ -376,7 +376,7 @@ mod inksmartcontract {
             
             let account = ZERO_ADDRESS.into();
 
-            // change manager_account
+            /// change manager_account
             let change_manager = build_message::<FoodOrderRef>(contract_acc_id.clone()).call(|foodorder| {
                 foodorder.change_manager(
                     account,
@@ -388,7 +388,7 @@ mod inksmartcontract {
                 .await
                 .expect("calling change_manager failed");
             
-            // get the owner
+            /// get the owner
             let get_owner = 
                 build_message::<FoodOrderRef>(contract_acc_id.clone()).call(|foodorder| foodorder.get_owner());
             
@@ -396,7 +396,7 @@ mod inksmartcontract {
                 .call_dry_run(&ink_e2e::alice(), &get_owner, 0, None)
                 .await;
             
-            // check manager change successfully
+            /// check manager change successfully
             assert_eq!(
                 get_owner_result.return_value(),
                 account
@@ -407,7 +407,7 @@ mod inksmartcontract {
 
         #[ink_e2e::test]
         async fn change_fee_rate_works(mut client: ink_e2e::Client<C,E>) -> E2EResult<()> {
-            // given
+            /// given
             let constructor = FoodOrderRef::new();
             let contract_acc_id = client
                 .instantiate("inksmartcontract", &ink_e2e::alice(), constructor, 1000, None)
@@ -417,7 +417,7 @@ mod inksmartcontract {
 
             let rate = 20;
 
-            // change fee rate
+            /// change fee rate
             let change_fee_rate = build_message::<FoodOrderRef>(contract_acc_id.clone()).call(|foodorder| {
                 foodorder.change_fee_rate(
                     rate,
@@ -429,14 +429,14 @@ mod inksmartcontract {
                 .await
                 .expect("calling change_fee_rate failed");
             
-            // get the fee rate
+            /// get the fee rate
             let get_fee_rate = build_message::<FoodOrderRef>(contract_acc_id.clone()).call(|foodorder| foodorder.get_fee_rate());
             
             let get_fee_rate_result = client
                 .call_dry_run(&ink_e2e::alice(), &get_fee_rate, 0, None)
                 .await;
             
-            // check fee rate change successfully
+            /// check fee rate change successfully
             assert_eq!(
                 get_fee_rate_result.return_value(),
                 rate,
@@ -447,7 +447,7 @@ mod inksmartcontract {
         
         #[ink_e2e::test]
         async fn main_works(mut client: ink_e2e::Client<C,E>) -> E2EResult<()> {
-            // given
+            /// given
             let constructor = FoodOrderRef::new();
             let contract_acc_id = client
                 .instantiate("inksmartcontract", &ink_e2e::alice(), constructor, 1000, None)
@@ -455,7 +455,7 @@ mod inksmartcontract {
                 .expect("failed to instantiate")
                 .account_id;
             
-            // given restaurant information
+            /// given restaurant information
             let alice = ink_e2e::alice::<ink_e2e::PolkadotConfig>();
             let alice_account_id_32 = alice.account_id();
             let restaurant_account = AccountId::try_from(alice_account_id_32.as_ref()).unwrap();
@@ -463,7 +463,7 @@ mod inksmartcontract {
             let restaurant_address = String::from("restaurant address");
             let phone_number = String::from("123456789");
 
-            // Add restaurant
+            /// Add restaurant
             let add_restaurant = build_message::<FoodOrderRef>(contract_acc_id.clone()).call(|foodorder| {
                 foodorder.add_restaurant(
                     restaurant_account,
@@ -478,7 +478,7 @@ mod inksmartcontract {
                 .await
                 .expect("calling add_restaurant failed");
             
-            // check event message
+            /// check event message
             let contract_emitted_event = add_restaurant
                 .events
                 .iter()
@@ -493,17 +493,17 @@ mod inksmartcontract {
                 .expect("Expect ContractEmitted event")
                 .unwrap();
             
-            // Decode the expected event type
+            /// Decode the expected event type
             let event = contract_emitted_event.field_bytes();
             let decoded_event = 
                 <AddRestaurantEvent as scale::Decode>::decode(&mut &event[34..]).expect("Invalid data");
             
             let AddRestaurantEvent { restaurant_id, restaurant_name, restaurant_address, phone_number} = decoded_event;
 
-            // assert with expected value
+            /// assert with expected value
             assert_eq!(restaurant_id, 1);
 
-            // get the restaurant
+            /// get the restaurant
             let get_restaurant_all = 
                 build_message::<FoodOrderRef>(contract_acc_id.clone()).call(|foodorder| foodorder.get_restaurant_all(1, 2));
 
@@ -511,7 +511,7 @@ mod inksmartcontract {
                 .call_dry_run(&ink_e2e::alice(), &get_restaurant_all, 0, None)
                 .await;
             
-            // check restaurant add seccessfully
+            /// check restaurant add seccessfully
             assert_eq!(
                 get_restaurant_all_result.return_value().unwrap(),
                 vec![Restaurant {
@@ -522,7 +522,7 @@ mod inksmartcontract {
                 }]
             );
 
-            // given courier information
+            /// given courier information
             let bob = ink_e2e::bob::<ink_e2e::PolkadotConfig>();
             let bob_account_id_32 = bob.account_id();
             let courier_account = AccountId::try_from(bob_account_id_32.as_ref()).unwrap();
@@ -530,7 +530,7 @@ mod inksmartcontract {
             let courier_address = String::from("courier address");
             let phone_number = String::from("123456789");
 
-            // Add courier
+            /// Add courier
             let add_courier = build_message::<FoodOrderRef>(contract_acc_id.clone()).call(|foodorder| {
                 foodorder.add_courier(
                     courier_account,
@@ -545,7 +545,7 @@ mod inksmartcontract {
                 .await
                 .expect("calling add_courier failed");
             
-            // check event message
+            /// check event message
             let contract_emitted_event = add_courier
                 .events
                 .iter()
@@ -560,17 +560,17 @@ mod inksmartcontract {
                 .expect("Expect ContractEmitted event")
                 .unwrap();
             
-            // Decode the expected event type
+            /// Decode the expected event type
             let event = contract_emitted_event.field_bytes();
             let decoded_event = 
                 <AddCourierEvent as scale::Decode>::decode(&mut &event[34..]).expect("Invalid data");
             
             let AddCourierEvent { courier_id, courier_name, courier_address, phone_number} = decoded_event;
 
-            // assert with expected value
+            /// assert with expected value
             assert_eq!(courier_id, 1);
 
-            // get the courier
+            /// get the courier
             let get_courier_all = 
                 build_message::<FoodOrderRef>(contract_acc_id.clone()).call(|foodorder| foodorder.get_courier_all(1, 2));
 
@@ -578,7 +578,7 @@ mod inksmartcontract {
                 .call_dry_run(&ink_e2e::alice(), &get_courier_all, 0, None)
                 .await;
             
-            // check courier add seccessfully
+            /// check courier add seccessfully
             assert_eq!(
                 get_courier_all_result.return_value().unwrap(),
                 vec![Courier {
@@ -589,13 +589,13 @@ mod inksmartcontract {
                 }]
             );
 
-            // given food information
+            /// given food information
             let food_name = String::from("food one");
             let description = String::from("food description");
             let price = 1000;
             let eta = 100;
 
-            // Add Food
+            /// Add Food
             let add_food = build_message::<FoodOrderRef>(contract_acc_id.clone())
                 .call(|foodorder| {foodorder.add_food(
                     food_name.clone(),
@@ -610,7 +610,7 @@ mod inksmartcontract {
                 .await
                 .expect("calling add_food failed");
 
-            // get the food
+            /// get the food
             let get_food = 
                 build_message::<FoodOrderRef>(contract_acc_id.clone()).call(|foodorder| foodorder.get_food_all(1,2));
             
@@ -618,7 +618,7 @@ mod inksmartcontract {
                 .call_dry_run(&ink_e2e::alice(), &get_food, 0, None)
                 .await;
             
-            // check food add successfully
+            /// check food add successfully
             let food = get_food_result.return_value().unwrap()[0].clone();
             assert_eq!(food_name, food.food_name);
             assert_eq!(1, food.restaurant_id);
@@ -626,7 +626,7 @@ mod inksmartcontract {
             assert_eq!(price, food.price);
             assert_eq!(eta, food.eta);
 
-            // given customer information
+            /// given customer information
             let charlie = ink_e2e::charlie::<ink_e2e::PolkadotConfig>();
             let charlie_account_id_32 = charlie.account_id();
             let customer_account = AccountId::try_from(charlie_account_id_32.as_ref()).unwrap();
@@ -634,7 +634,7 @@ mod inksmartcontract {
             let customer_address = String::from("customer address");
             let phone_number = String::from("phone number");
 
-            // Add customer
+            /// Add customer
             let add_customer = build_message::<FoodOrderRef>(contract_acc_id.clone())
                 .call(|foodorder| {
                     foodorder.add_customer(
@@ -649,7 +649,7 @@ mod inksmartcontract {
                 .await
                 .expect("calling add_customer failed");
             
-            //get the customer
+            ///get the customer
             let get_customer = 
                 build_message::<FoodOrderRef>(contract_acc_id.clone()).call(|foodorder| foodorder.get_customer_all(1,2));
             
@@ -657,7 +657,7 @@ mod inksmartcontract {
                 .call_dry_run(&ink_e2e::alice(), &get_customer, 0, None)
                 .await;
             
-            // check customer add successfully
+            /// check customer add successfully
             assert_eq!(
                 get_customer_result.return_value().unwrap(),
                 vec![Customer{
@@ -668,11 +668,11 @@ mod inksmartcontract {
                 }]
             );
 
-            // give order information
+            /// give order information
             let food_id = 1;
             let delivery_address = String::from("delivery address");
             
-            // submit order
+            /// submit order
             let submit_order = build_message::<FoodOrderRef>(contract_acc_id.clone())
                 .call(|foodorder| {
                     foodorder.submit_order(
@@ -685,7 +685,7 @@ mod inksmartcontract {
                 .call(&ink_e2e::charlie(), submit_order, 1000, None)
                 .await;
             
-            // get the order
+            /// get the order
             let get_order = build_message::<FoodOrderRef>(contract_acc_id.clone())
                 .call(|foodorder| foodorder.get_order_all(1,2));
             
@@ -693,7 +693,7 @@ mod inksmartcontract {
                 .call_dry_run(&ink_e2e::charlie(), &get_order, 0, None)
                 .await;
             
-            // check order submit successfully
+            /// check order submit successfully
             let order = get_order_result.return_value().unwrap()[0].clone();
             assert_eq!(food_id, order.food_id);
             assert_eq!(1, order.restaurant_id);
@@ -702,14 +702,14 @@ mod inksmartcontract {
             assert_eq!(delivery_address, order.delivery_address);
             assert_eq!(OrderStatus::OrderSubmitted, order.status);
 
-            // given update food information
+            /// given update food information
             let food_id = 1;
             let food_name = String::from("food update");
             let description = String::from("food update descriptioin");
             let price = 1000;
             let eta = 1000;
 
-            // update Food
+            /// update Food
             let update_food = build_message::<FoodOrderRef>(contract_acc_id.clone())
                 .call(|foodorder| {
                     foodorder.update_food(
@@ -726,12 +726,12 @@ mod inksmartcontract {
                 .await
                 .expect("calling update_food failed");
 
-            // get the food
+            /// get the food
             let get_food_result = client
                 .call_dry_run(&ink_e2e::alice(), &get_food, 0, None)
                 .await;
             
-            // check food add successfully
+            /// check food add successfully
             let food = get_food_result.return_value().unwrap()[0].clone();
             assert_eq!(food_name, food.food_name);
             assert_eq!(1, food.restaurant_id);
@@ -739,11 +739,11 @@ mod inksmartcontract {
             assert_eq!(price, food.price);
             assert_eq!(eta, food.eta);
 
-            // given confirm order information
+            /// given confirm order information
             let order_id = 1;
             let eta = 1000;
 
-            // confirm order
+            /// confirm order
             let confirm_order = build_message::<FoodOrderRef>(contract_acc_id.clone())
                 .call(|foodorder| {
                     foodorder.confirm_order(
@@ -757,16 +757,16 @@ mod inksmartcontract {
                 .await
                 .expect("calling confirm_order failed");
             
-            // get the order
+            /// get the order
             let get_order_result = client
                 .call_dry_run(&ink_e2e::alice(), &get_order, 0, None)
                 .await;
             
-            // check confirm order successfully
+            /// check confirm order successfully
             let order = get_order_result.return_value().unwrap()[0].clone();
             assert_eq!(OrderStatus::OrderConfirmed, order.status);
 
-            // get the delivery
+            /// get the delivery
             let get_delivery = 
                 build_message::<FoodOrderRef>(contract_acc_id.clone()).call(|foodorder| foodorder.get_delivery_all(1,2));
             
@@ -774,7 +774,7 @@ mod inksmartcontract {
                 .call_dry_run(&ink_e2e::alice(), &get_delivery, 0, None)
                 .await;
 
-            // chech request delivery successfully
+            /// chech request delivery successfully
             let delivery = get_delivery_result.return_value().unwrap()[0].clone();
             assert_eq!(order_id, delivery.order_id);
             assert_eq!(1, delivery.restaurant_id);
@@ -783,7 +783,7 @@ mod inksmartcontract {
             assert_eq!(String::from("delivery address"), delivery.delivery_address);
             assert_eq!(DeliveryStatus::Waiting, delivery.status);
 
-            // given finish cook information
+            /// given finish cook information
             let order_id = 1;
 
             let finish_cook = build_message::<FoodOrderRef>(contract_acc_id.clone())
@@ -798,16 +798,16 @@ mod inksmartcontract {
                 .await
                 .expect("calling finish_cook failed");
             
-            // get the order
+            /// get the order
             let get_order_result = client
                 .call_dry_run(&ink_e2e::alice(), &get_order, 0, None)
                 .await;
             
-            // check finish cook successfully
+            /// check finish cook successfully
             let order = get_order_result.return_value().unwrap()[0].clone();
             assert_eq!(OrderStatus::FoodPrepared, order.status);
 
-            // given pickup delivery information
+            /// given pickup delivery information
             let delivery_id = 1;
 
             let pickup_delivery = build_message::<FoodOrderRef>(contract_acc_id.clone())
@@ -822,23 +822,23 @@ mod inksmartcontract {
                 .await
                 .expect("calling pickup_delivery failed");
             
-            // get the delivery    
+            /// get the delivery    
             let get_delivery_result = client
                 .call_dry_run(&ink_e2e::bob(), &get_delivery, 0, None)
                 .await;
 
-            // get the order
+            /// get the order
             let get_order_result = client
                 .call_dry_run(&ink_e2e::bob(), &get_order, 0, None)
                 .await;
 
-            // chech pickup delivery successfully
+            /// chech pickup delivery successfully
             let delivery = get_delivery_result.return_value().unwrap()[0].clone();
             assert_eq!(DeliveryStatus::PickedUp, delivery.status);
             let order = get_order_result.return_value().unwrap()[0].clone();
             assert_eq!(1, order.courier_id);
 
-            // given deliver order information
+            /// given deliver order information
             let order_id = 1;
 
             let deliver_order = build_message::<FoodOrderRef>(contract_acc_id.clone())
@@ -853,16 +853,16 @@ mod inksmartcontract {
                 .await
                 .expect("calling deliver_order failed");
 
-            // get the order
+            /// get the order
             let get_order_result = client
                 .call_dry_run(&ink_e2e::alice(), &get_order, 0, None)
                 .await;
 
-            // check deliver order successfully
+            /// check deliver order successfully
             let order = get_order_result.return_value().unwrap()[0].clone();
             assert_eq!(OrderStatus::FoodDelivered, order.status);
 
-            // given accept delivery
+            /// given accept delivery
             let delivery_id = 1;
             
             let accept_delivery = build_message::<FoodOrderRef>(contract_acc_id.clone())
@@ -877,17 +877,17 @@ mod inksmartcontract {
                 .await
                 .expect("calling accept_delivery failed");
             
-            // get the order
+            /// get the order
             let get_order_result = client
                 .call_dry_run(&ink_e2e::charlie(), &get_order, 0, None)
                 .await;
 
-            // get the delivery
+            /// get the delivery
             let get_delivery_result = client
                 .call_dry_run(&ink_e2e::bob(), &get_delivery, 0, None)
                 .await;
             
-            // check accept delivery successfully
+            /// check accept delivery successfully
             let order = get_order_result.return_value().unwrap()[0].clone();
             assert_eq!(OrderStatus::DeliveryAcceptted, order.status);
             let delivery = get_delivery_result.return_value().unwrap()[0].clone();

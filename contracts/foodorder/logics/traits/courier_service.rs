@@ -5,7 +5,7 @@ use crate::impls::{
     },
 };
 
-// Courier Service Definition
+/// Courier Service Definition
 #[openbrush::trait_definition]
 pub trait CourierService {
     #[ink(message)]

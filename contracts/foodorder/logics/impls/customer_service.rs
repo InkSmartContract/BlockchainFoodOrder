@@ -29,7 +29,7 @@ use super::types::{
     CustomerResult,
 };
 
-// Customer Events Definition
+/// Customer Events Definition
 pub trait CustomerServiceEvents {
     fn emit_submit_order_event(
         &self, 
@@ -48,13 +48,13 @@ pub trait CustomerServiceEvents {
     );
 }
 
-// Implementation of Customer Service 
+/// Implementation of Customer Service 
 impl<T> CustomerService for T
 where
     T: Storage<Data> + Storage<ownable::Data>,
 {
-    // Customer's function.
-    // Function that adds a new customer.
+    /// Customer's function.
+    /// Function that adds a new customer.
     default fn add_customer(
         &mut self,
         customer_name: String,
@@ -82,8 +82,8 @@ where
         Ok(customer_id)
     }
 
-    // Customer's function.
-    // Function taht request an order.
+    /// Customer's function.
+    /// Function taht request an order.
     #[modifiers(is_customer_user)]
     default fn submit_order(&mut self, food_id: FoodId, delivery_address: String) -> OrderResult {
         let customer_account = T::env().caller();
@@ -136,8 +136,8 @@ where
         Ok(order_id)
     }
 
-    // Customer's function.
-    // Function that confirm a delivery.
+    /// Customer's function.
+    /// Function that confirm a delivery.
     #[modifiers(is_customer_user)]
     default fn accept_delivery(
         &mut self, 
@@ -174,7 +174,7 @@ where
     }
 }
 
-// Courier Event Initation
+/// Courier Event Initation
 impl<T> CustomerServiceEvents for T
 where
     T: Storage<Data>,
@@ -196,7 +196,7 @@ where
     ) {}
 }
 
-// modifier to check customer user
+/// modifier to check customer user
 #[modifier_definition]
 pub fn is_customer_user<T, F, R, E>(instance: &mut T, body: F) -> Result<R, E>
 where

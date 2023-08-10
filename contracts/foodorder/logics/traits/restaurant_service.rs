@@ -9,7 +9,7 @@ use crate::impls::{
 use ink::prelude::string::String;
 use openbrush::traits::Balance;
 
-// Restaurant Service Definition
+/// Restaurant Service Definition
 #[openbrush::trait_definition]
 pub trait RestaurantService {
 

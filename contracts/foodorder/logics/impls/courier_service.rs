@@ -20,7 +20,7 @@ use super::types::{
     DeliveryResult,
 };
 
-// Courier Event Definition
+//// Courier Event Definition
 pub trait CourierServiceEvents {
     fn emit_pickup_delivery_event (
         &self,
@@ -29,13 +29,13 @@ pub trait CourierServiceEvents {
     );
 }
 
-// Implementation of Courier Service 
+/// Implementation of Courier Service 
 impl<T> CourierService for T
 where
     T: Storage<Data> + Storage<ownable::Data>,
 {
-    // Courier's function.
-    // Function that pick up the delivery requested by restaurant.
+    /// Courier's function.
+    /// Function that pick up the delivery requested by restaurant.
     #[modifiers(is_courier_user)]
     default fn pickup_delivery(
         &mut self,
@@ -67,7 +67,7 @@ where
     }
 }
 
-// Courier Event Initation
+/// Courier Event Initation
 impl<T> CourierServiceEvents for T
 where
     T: Storage<Data>,
@@ -75,7 +75,7 @@ where
     default fn emit_pickup_delivery_event(&self, _delivery_id: DeliveryId, _courier_id: CourierId) {}
 }
 
-// modifier to check courier user
+/// modifier to check courier user
 #[modifier_definition]
 pub fn is_courier_user<T, F, R, E>(instance: &mut T, body: F) -> Result<R, E>
 where
