@@ -5,9 +5,6 @@ FROM rust:1.70.0 as base
 # Set the current directory
 WORKDIR /OpenSmartContract
 
-# Copy everthing that is not dockerignored to the image
-COPY . .
-
 # Prepare Rust
 RUN apt update
 
@@ -36,13 +33,16 @@ RUN npm install -g yarn@1
 
 # Verify installations
 RUN node --version && \
-  wasm-opt --version && \
-  pkg-config --version && \
-  openssl version && \
   swanky --version && \
   yarn --version
 
 # Clean up the package lists to reduce image size
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Copy everthing that is not dockerignored to the image
+COPY . .
+
+# Install npm dependencies
+RUN npm install
 
 RUN swanky contract compile foodorder
