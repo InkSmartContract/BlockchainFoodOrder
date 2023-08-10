@@ -8,7 +8,7 @@ use crate::impls::{
 use ink::prelude::string::String;
 use openbrush::traits::AccountId;
 
-// Manager Service Definition
+/// Manager Service Definition
 #[openbrush::trait_definition]
 pub trait ManagerService {
     #[ink(message)]

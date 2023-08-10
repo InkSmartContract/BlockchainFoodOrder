@@ -9,7 +9,7 @@ use crate::impls::{
 };
 use ink::prelude::string::String;
 
-// Customer Service Definition
+/// Customer Service Definition
 #[openbrush::trait_definition]
 pub trait CustomerService {
     #[ink(message)]

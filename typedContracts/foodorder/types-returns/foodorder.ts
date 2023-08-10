@@ -216,13 +216,6 @@ export enum OwnableError {
 	newOwnerIsZero = 'NewOwnerIsZero'
 }
 
-export type Courier = {
-	courierAccount: AccountId,
-	courierName: string,
-	courierAddress: string,
-	phoneNumber: string
-}
-
 export type Food = {
 	foodName: string,
 	restaurantId: number,
@@ -232,20 +225,11 @@ export type Food = {
 	timestamp: number
 }
 
-export type Delivery = {
-	orderId: number,
-	restaurantId: number,
-	customerId: number,
-	courierId: number,
-	deliveryAddress: string,
-	status: DeliveryStatus,
-	timestamp: number
-}
-
-export enum DeliveryStatus {
-	waiting = 'Waiting',
-	pickedUp = 'PickedUp',
-	accepted = 'Accepted'
+export type Customer = {
+	customerAccount: AccountId,
+	customerName: string,
+	customerAddress: string,
+	phoneNumber: string
 }
 
 export type Order = {
@@ -268,10 +252,26 @@ export enum OrderStatus {
 	deliveryAcceptted = 'DeliveryAcceptted'
 }
 
-export type Customer = {
-	customerAccount: AccountId,
-	customerName: string,
-	customerAddress: string,
+export type Delivery = {
+	orderId: number,
+	restaurantId: number,
+	customerId: number,
+	courierId: number,
+	deliveryAddress: string,
+	status: DeliveryStatus,
+	timestamp: number
+}
+
+export enum DeliveryStatus {
+	waiting = 'Waiting',
+	pickedUp = 'PickedUp',
+	accepted = 'Accepted'
+}
+
+export type Courier = {
+	courierAccount: AccountId,
+	courierName: string,
+	courierAddress: string,
 	phoneNumber: string
 }
 

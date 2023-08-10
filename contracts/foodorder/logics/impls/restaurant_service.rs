@@ -28,13 +28,14 @@ use openbrush::{
     modifiers,
     modifier_definition,
 };
+use crud_macro::*;
 
 use super::types::{
     FoodResult,
     OrderResult,
 };
 
-// Restaurant Events Definition
+/// Restaurant Events Definition
 pub trait RestaurantServiceEvents {
 
     fn emit_add_food_event(
@@ -76,7 +77,7 @@ pub trait RestaurantServiceEvents {
         order_id: OrderId,
     );
 
-    fn emit_deliver_food_event (
+    fn emit_deliver_food_event(
         &self,
         order_id: OrderId,
         restaurant_id: RestaurantId,
@@ -85,13 +86,14 @@ pub trait RestaurantServiceEvents {
     );
 }
 
-// Implementation of Restaurant Service 
+/// Implementation of Restaurant Service 
 impl<T> RestaurantService for T
 where
     T: Storage<Data> + Storage<ownable::Data>,
 {
-    // Restaurant's function.
-    // Function that add new food with information.
+    /// Restaurant's function.
+    /// Function that add new food with information.
+
     #[modifiers(is_restaurant_user)]
     default fn add_food(
         &mut self,
@@ -137,14 +139,8 @@ where
         Ok(food_id)
     }
 
-    // #[add_foods]
-    // #[modifiers(is_restaurant_user)]
-    // pub struct AddFoodsInput {
-    //     pub foods: Vec<Food>,
-    // }
-
-    // Restaurant's function.
-    // Function that update the food inforamtion using food_id.
+    /// Restaurant's function.
+    /// Function that update the food inforamtion using food_id.
     #[modifiers(is_restaurant_user)]
     default fn update_food(
         &mut self,
@@ -185,8 +181,8 @@ where
         Ok(food_id)
     }
 
-    // Restaurant's function.
-    // Function that confirm the order requested by customer.
+    /// Restaurant's function.
+    /// Function that confirm the order requested by customer.
     #[modifiers(is_restaurant_user)]
     default fn confirm_order(
         &mut self,
@@ -253,8 +249,8 @@ where
         Ok(order_id)
     }
 
-    // Restaurant's function.
-    // Function that finish cook.
+    /// Restaurant's function.
+    /// Function that finish cook.
     #[modifiers(is_restaurant_user)]
     default fn finish_cook(
         &mut self,
@@ -312,7 +308,7 @@ where
     }
 }
 
-// Restaurant Event Initation
+/// Restaurant Event Initation
 impl<T> RestaurantServiceEvents for T
 where
     T: Storage<Data>,
@@ -365,7 +361,7 @@ where
     ) {}
 }
 
-// modifier to check restaurant user
+/// modifier to check restaurant user
 #[modifier_definition]
 pub fn is_restaurant_user<T, F, R, E>(instance: &mut T, body: F) -> Result<R, E>
 where

@@ -6,7 +6,7 @@ use crate::impls::{
     },
 };
 
-// Payment Service Definition
+/// Payment Service Definition
 #[openbrush::trait_definition]
 pub trait PaymentService {
     fn transfer_restaurant(
