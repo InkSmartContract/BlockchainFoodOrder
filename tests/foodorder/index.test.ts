@@ -45,7 +45,7 @@ describe("foodorder test", () => {
     await api.disconnect();
   });
 
-  describe("Contructor", () => {
+  describe("Main Functionality", () => {
     it("Platform is ready", async() => {
       expect((await contract.query.getFeeRate()).value.ok).to.equal(feeRate);
     });

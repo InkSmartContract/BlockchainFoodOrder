@@ -1,4 +1,8 @@
 [workspace]
 members = [
-    "contracts/*",
+    "contracts/foodorder",
 ]
+
+[profile.release] 
+overflow-checks = false
+opt-level = 3

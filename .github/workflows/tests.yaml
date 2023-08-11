@@ -4,8 +4,8 @@ on:
     types: [opened, reopened, synchronize, ready_for_review]
   workflow_dispatch:
 env:
-  NODE_JS_VER: 18.x
-  SWANKY_NODE_VER: v1.2.0
+  NODE_JS_VER: 16.x
+  SWANKY_NODE_VER: v1.6.0
 jobs:
   e2e-tests:
     runs-on: ubuntu-latest
@@ -15,10 +15,11 @@ jobs:
 
     - name: Install & display rust toolchain
       run: |
-        rustup toolchain install nightly
+        rustup toolchain install nightly-2023-01-01
         rustup default nightly
         rustup show
-        rustup component add rust-src
+        rustup component add rust-src --toolchain nightly-2023-01-01
+        rustup target add wasm32-unknown-unknown --toolchain nightly-2023-01-01
 
     - name: Check targets are installed correctly
       run: rustup target list --installed
@@ -39,8 +40,7 @@ jobs:
     - name: Install cargo contract
       if: ${{ steps.check-cargo-contract.outcome == 'failure' }}
       run: |
-        cargo install cargo-dylint dylint-link
-        cargo install --force --locked cargo-contract
+        cargo install --force --locked cargo-contract --version 2.0.2
 
     - name: Use Node.js
       uses: actions/setup-node@v3
@@ -58,7 +58,7 @@ jobs:
         sudo wget https://github.com/AstarNetwork/swanky-node/releases/download/${{ env.SWANKY_NODE_VER }}/swanky-node-${{ env.SWANKY_NODE_VER }}-ubuntu-x86_64.tar.gz
         sudo tar -zxvf swanky-node-v1.2.0-ubuntu-x86_64.tar.gz
         sudo chmod +x swanky-node
-        ./swanky-node -lerror,runtime::contracts=debug &
+        ./bin/swanky-node -lerror,runtime::contracts=debug &
         sleep 10
 
     - name: Test contracts

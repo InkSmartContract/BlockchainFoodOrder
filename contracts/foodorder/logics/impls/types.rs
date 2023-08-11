@@ -1,12 +1,9 @@
-use ink::prelude::{
-    string::String,
-    vec::Vec,
-};
+use ink::prelude::{string::String, vec::Vec};
 use openbrush::traits::Timestamp;
 use openbrush::{
     contracts::ownable::OwnableError,
     storage::Mapping,
-    traits::{AccountId, ZERO_ADDRESS, Balance},
+    traits::{AccountId, Balance, ZERO_ADDRESS},
 };
 
 pub type FoodId = u64;
@@ -264,7 +261,6 @@ impl Default for Data {
         }
     }
 }
-
 
 #[derive(scale::Decode, scale::Encode, PartialEq, Eq, Debug)]
 #[cfg_attr(feature = "std", derive(scale_info::TypeInfo))]

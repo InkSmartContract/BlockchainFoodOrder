@@ -2,7 +2,19 @@
 
 This smart contract called `FoodOrder` is developed using ink! language and OpenBrush tools.
 
-# Test
+## Structure
+`FoodOrder` contract consists of 4 parts
+
+- crud-macro
+    ##### Here you can see the macros implemented into the smart contract
+- logics
+    ##### Here you can see the main logic of the smart contract
+- proxy
+    ##### This smart contract is for upgradability
+- src
+    ##### The main `lib.rs` file exists in here 
+
+# Test the smart contract
 
 To test it's functionality, run this following command after running a node.
 
@@ -10,11 +22,55 @@ To test it's functionality, run this following command after running a node.
 swanky contract test foodorder
 ```
 
+You can see this following results if you had happy pass.
+
+```
+foodorder test
+    Contructor
+      ✔ Platform is ready
+      ✔ Restaurant A is added (...ms)
+      ✔ Courier A is added (...ms)
+      ✔ Customer A is added (...ms)
+      ✔ Food A is added (...ms)
+      ✔ Order is submitted (...ms)
+      ✔ Order is Confirmed (...ms)
+      ✔ Food is cooked (...ms)
+      ✔ Order is Delivered (...ms)
+      ✔ Delivery is accepted (...ms)
+
+    10 passing (4s)
+```
+
 ### To run a node
 
 ```
 swanky node start
 ```
+
+# Deploy it to Shibuya network
+
+Make sure that you have to run a local node before deploying it to Shibuya network.
+
+```
+swanky contract deploy foodorder --account deploy --gas 100000 --network shibuya
+```
+
+Here is the happy result.
+
+```
+✔ Initialising OK
+✔ Getting WASM OK
+⠸ Connecting to node2023-08-11 11:47:18        API/INIT: shibuya/105: Not decorating runtime apis without matching versions: EthereumRuntimeRPCApi/5 (4 known)
+✔ Connecting to node OK
+✔ Deploying OK
+✔ Writing config OK
+Contract deployed!
+Contract address: ZkedUUC36pznjiVPUtDDnijU3jQokAmxxSnpr3DnegGM893
+```
+
+After successfully deployed, you can check the deployed contract on the `shibuya` blockexplorer `https://shibuya.subscan.io/`.
+
+![alt text](https://github.com/InkSmartContract/foodorder-smartcontract/blob/main/deploy_to_shibuya.png?raw=true)
 
 # Using docker image
 
@@ -25,11 +81,3 @@ docker build --tag=foodorder .
 docker run --name=foodorder --rm --detach foodorder
 swanky contract test foodorder
 ```
-
-# Deploy it to Shibuya network
-
-```
-swanky contract deploy foodorder --account deploy --gas 100000 --network shibuya
-```
-
-After successfully deployed, you can check the deployed contract on the `shibuya` blockexplorer `https://shibuya.subscan.io/`.

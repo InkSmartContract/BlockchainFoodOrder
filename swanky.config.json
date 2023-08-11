@@ -48,7 +48,14 @@
     "foodorder": {
       "name": "foodorder",
       "moduleName": "foodorder",
-      "deployments": []
+      "deployments": [
+        {
+          "timestamp": 1691754463770,
+          "address": "ZkedUUC36pznjiVPUtDDnijU3jQokAmxxSnpr3DnegGM893",
+          "networkUrl": "wss://rpc.shibuya.astar.network",
+          "deployerAlias": "deploy"
+        }
+      ]
     }
   }
 }

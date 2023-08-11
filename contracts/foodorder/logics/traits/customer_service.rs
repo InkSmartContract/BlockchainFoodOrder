@@ -1,12 +1,4 @@
-use crate::impls::{
-    types::{
-        FoodId, 
-        DeliveryId, 
-        OrderResult, 
-        DeliveryResult, 
-        CustomerResult, 
-    },
-};
+use crate::impls::types::{CustomerResult, DeliveryId, DeliveryResult, FoodId, OrderResult};
 use ink::prelude::string::String;
 
 /// Customer Service Definition
@@ -21,15 +13,8 @@ pub trait CustomerService {
     ) -> CustomerResult;
 
     #[ink(message, payable)]
-    fn submit_order(
-        &mut self, 
-        food_id: FoodId,
-        delivery_address: String,
-    ) -> OrderResult;
+    fn submit_order(&mut self, food_id: FoodId, delivery_address: String) -> OrderResult;
 
     #[ink(message)]
-    fn accept_delivery(
-        &mut self, 
-        delivery_id: DeliveryId,
-    ) -> DeliveryResult;
+    fn accept_delivery(&mut self, delivery_id: DeliveryId) -> DeliveryResult;
 }

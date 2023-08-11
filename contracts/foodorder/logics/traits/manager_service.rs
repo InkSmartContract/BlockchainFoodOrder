@@ -1,10 +1,4 @@
-use crate::impls::{
-    types::{
-        RestaurantResult, 
-        CourierResult, 
-        ManagerResult,
-    },
-};
+use crate::impls::types::{CourierResult, ManagerResult, RestaurantResult};
 use ink::prelude::string::String;
 use openbrush::traits::AccountId;
 
@@ -30,14 +24,8 @@ pub trait ManagerService {
     ) -> CourierResult;
 
     #[ink(message)]
-    fn change_manager(
-        &mut self,
-        new_account: AccountId,
-    ) -> ManagerResult;
+    fn change_manager(&mut self, new_account: AccountId) -> ManagerResult;
 
     #[ink(message)]
-    fn change_fee_rate(
-        &mut self,
-        rate: u32,
-    ) -> ManagerResult;
+    fn change_fee_rate(&mut self, rate: u32) -> ManagerResult;
 }

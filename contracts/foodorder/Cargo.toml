@@ -1,7 +1,7 @@
 [package]
 name = "foodorder"
 version = "1.0.0"
-authors = ["Alan Boyd"]
+authors = ["Alan Boyd <alancameronboyd@gmail.com>"]
 edition = "2021"
 
 [dependencies]
@@ -43,4 +43,5 @@ e2e-tests = []
 
 [profile.release] 
 overflow-checks = false
+opt-level = 3
 
