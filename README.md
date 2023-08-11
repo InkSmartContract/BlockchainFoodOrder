@@ -1,6 +1,7 @@
 # FoodOrder Smart Contract
 
 This smart contract called `FoodOrder` is developed using ink! language and OpenBrush tools.
+[Learning FoodOrder Smart Contract](https://docs.google.com/document/d/1yiZrPnSaz9myrXOrR2k2IALbJA9XcjeEJ-wCmhn3S3o)
 
 ## Structure
 `FoodOrder` contract consists of 4 parts
@@ -47,7 +48,7 @@ foodorder test
 swanky node start
 ```
 
-# Deploy it to Shibuya network
+# Deploy it to Shibuya network [(guide)](https://docs.google.com/document/d/1stF4dCXdT0fjPur23OD-eTZ90FdOq7tU8x2xEkoPojw)
 
 ```
 swanky contract deploy foodorder --account deploy --gas 100000 --network shibuya
