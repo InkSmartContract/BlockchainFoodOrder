@@ -87,5 +87,5 @@ swanky contract test foodorder                              // test foodorder co
 
 ## you can build image from tarball
 ```
-docker import bin/image.tar 
+cat dockerimage.tar | docker import - foodorder:latest
 ```
