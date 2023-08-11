@@ -1,6 +1,6 @@
 # FoodOrder Smart Contract
 
-This smart contract called `FoodOrder` is developed using ink! language and OpenBrush tools. Please refer to this comprehensive [document]() about this project, use case definition, implementation and macros, security and access control, deployment and testing details. 
+This smart contract called `FoodOrder` is developed using ink! language and OpenBrush tools. Please refer to this comprehensive [document](https://github.com/InkSmartContract/foodorder-smartcontract/blob/main/Learn%20ink!%20-%20Food%20Order%20on%20Blockchain.pdf) about this project, use case definition, implementation and macros, security and access control, deployment and testing details. 
 
 ## Code structure
 `FoodOrder` smart contract ink code consists of the following directories: 
@@ -89,4 +89,4 @@ swanky contract test foodorder                              // test foodorder co
 cat dockerimage.tar | docker import - foodorder:latest
 ```
 
-Please refer to this comprehensive [document]() about this project, use case definition, implementation and macros, security and access control, deployment / testing details, and next steps. You are more than welcome to contribute to this open source project!
+Please refer to this comprehensive [document](https://github.com/InkSmartContract/foodorder-smartcontract/blob/main/ink!%20Smart%20Contract%20Deployment%20and%20Interactions.pdf) about this project, use case definition, implementation and macros, security and access control, deployment / testing details, and next steps. You are more than welcome to contribute to this open source project!
