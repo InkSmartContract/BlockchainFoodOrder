@@ -70,7 +70,7 @@ Contract address: ZkedUUC36pznjiVPUtDDnijU3jQokAmxxSnpr3DnegGM893
 
 After successfully deployed, you can check the deployed contract on the `shibuya` blockexplorer `https://shibuya.subscan.io/`.
 
-![alt text](https://github.com/InkSmartContract/foodorder-smartcontract/blob/main/deploy_to_shibuya.png?raw=true)
+![IMAGE](https://github.com/InkSmartContract/foodorder-smartcontract/blob/main/bin/deploy_to_shibuya.png?raw=true)
 
 # Using docker image
 
