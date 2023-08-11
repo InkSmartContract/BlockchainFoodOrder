@@ -185,7 +185,7 @@ pub fn delete_food(_attr: TokenStream, item: TokenStream) -> TokenStream {
         attrs,
         vis,
         sig,
-        _block,
+        block,
     } = input;
 
     let expanded = quote! {
