@@ -49,8 +49,6 @@ swanky node start
 
 # Deploy it to Shibuya network
 
-Make sure that you have to run a local node before deploying it to Shibuya network.
-
 ```
 swanky contract deploy foodorder --account deploy --gas 100000 --network shibuya
 ```
