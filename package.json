@@ -8,7 +8,7 @@
     "test": "mocha --config .mocharc.json"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=16.0.0"
   },
   "dependencies": {
     "@727-ventures/typechain-types": "1.0.0-beta.1",

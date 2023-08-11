@@ -71,12 +71,21 @@ Contract address: ZkedUUC36pznjiVPUtDDnijU3jQokAmxxSnpr3DnegGM893
 After successfully deployed, you can check the deployed contract on the `shibuya` blockexplorer `https://shibuya.subscan.io/`.
 
 ![/main/bin/deploy_to_shibuya.png](https://github.com/InkSmartContract/foodorder-smartcontract/blob/main/bin/deploy_to_shibuya.png)
+
+
 # Using docker image
 
 If you want to test the smart contract in docker image, run following command.
 
 ```
-docker build --tag=foodorder .
-docker run --name=foodorder --rm --detach foodorder
-swanky contract test foodorder
+docker build --tag=foodorder .                              // build a docker image
+docker run -t -d --name=opensmartcontract foodorder         // make a docker container
+docker ps -a                                                // list docker containers
+docker exec -it opensmartcontract bash                      // get into the docker container's terminal 
+swanky contract test foodorder                              // test foodorder contract
+```
+
+## you can build image from tarball
+```
+docker import bin/image.tar 
 ```

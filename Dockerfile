@@ -1,6 +1,6 @@
 
 # Start from a rust base image
-FROM ubuntu:22.04 as base
+FROM rust:1.70.0 as base
 
 # Set the current directory
 WORKDIR /OpenSmartContract
@@ -15,13 +15,13 @@ RUN curl -L https://github.com/AstarNetwork/swanky-cli/releases/download/v3.0.4/
   ln -s /opt/swanky/bin/swanky /usr/local/bin/swanky
 
 # Install Rustup and Rust, additional components, packages, and verify the installations
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -y && \
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && \
   /bin/bash -c "source /usr/local/cargo/env && \
   rustup toolchain install nightly-2023-01-01 && \
   rustup default nightly-2023-01-01 && \
   rustup component add rust-src --toolchain nightly-2023-01-01 && \
   rustup target add wasm32-unknown-unknown --toolchain nightly-2023-01-01 && \
-  cargo install cargo-dylint dylint-link && \
+  # cargo install cargo-dylint dylint-link && \
   cargo install cargo-contract --force --version 2.0.2 && \   
   rustc --version"
 
