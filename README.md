@@ -7,7 +7,7 @@ This smart contract called `FoodOrder` is developed using ink! language and Open
 
 - crud-macro
     ##### Here you can see the macros implemented into the smart contract
-- logics
+- logic
     ##### Here you can see the main logic of the smart contract
 - proxy
     ##### This smart contract is for upgradability
@@ -34,9 +34,9 @@ foodorder test
       ✔ Food A is added (...ms)
       ✔ Order is submitted (...ms)
       ✔ Order is Confirmed (...ms)
-      ✔ Food is cooked (...ms)
+      ✔ Food is cooked and Payment is transferred to restaurant (...ms)
       ✔ Order is Delivered (...ms)
-      ✔ Delivery is accepted (...ms)
+      ✔ Delivery is accepted and Payment is sent to courier (...ms) 
 
     10 passing (4s)
 ```

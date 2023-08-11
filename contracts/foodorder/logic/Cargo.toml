@@ -1,5 +1,5 @@
 [package]
-name = "logics"
+name = "logic"
 version = "1.0.0"
 authors = ["Alan Boyd"]
 edition = "2021"

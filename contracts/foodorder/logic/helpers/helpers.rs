@@ -12,9 +12,9 @@ macro_rules! ensure {
 
 #[macro_export]
 macro_rules! transfer_from_contract_to_account {
-    ($account:expr, $amount:expr, $id:expr) => {
+    ($account:expr, $amount:expr) => {
         if T::env().transfer($account, $amount).is_err() {
             return core::prelude::v1::Err(FoodOrderError::NotTransfered);
-        } 
+        }
     };
 }

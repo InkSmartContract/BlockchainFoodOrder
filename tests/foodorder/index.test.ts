@@ -113,7 +113,7 @@ describe("foodorder test", () => {
       
       expect(deliveryStatus).to.be.equal("Waiting")
     })
-    it("Food is cooked", async() => {
+    it("Food is cooked and Payment is transferred to restaurant", async() => {
       let balance = await api.query.system.account(contract.address)
       let freeBalance = balance['data']['free']
       
@@ -145,7 +145,7 @@ describe("foodorder test", () => {
       
       expect(deliveryStatus).to.be.equal("PickedUp")
     })
-    it("Delivery is accepted", async() => {
+    it("Delivery is accepted and Payment is sent to courier", async() => {
       let balance = await api.query.system.account(contract.address)
       let freeBalance = balance['data']['free']
       

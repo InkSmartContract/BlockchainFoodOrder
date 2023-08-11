@@ -6,7 +6,7 @@ mod inksmartcontract {
     use ink::codegen::EmitEvent;
     use ink::codegen::Env;
     use ink::prelude::string::String;
-    use logics::{
+    use logic::{
         impls::{
             courier_service::CourierServiceEvents, customer_service::CustomerServiceEvents,
             manager_service::ManagerServiceEvents, restaurant_service::RestaurantServiceEvents,
@@ -295,12 +295,12 @@ mod inksmartcontract {
     #[cfg(all(test, feature = "e2e-tests"))]
     mod e2e_tests {
         use ink_e2e::build_message;
-        use logics::impls::types::{Courier, Customer, Restaurant};
-        use logics::traits::courier_service::courierservice_external::CourierService;
-        use logics::traits::customer_service::customerservice_external::CustomerService;
-        use logics::traits::get_service::getservice_external::GetService;
-        use logics::traits::manager_service::managerservice_external::ManagerService;
-        use logics::traits::restaurant_service::restaurantservice_external::RestaurantService;
+        use logic::impls::types::{Courier, Customer, Restaurant};
+        use logic::traits::courier_service::courierservice_external::CourierService;
+        use logic::traits::customer_service::customerservice_external::CustomerService;
+        use logic::traits::get_service::getservice_external::GetService;
+        use logic::traits::manager_service::managerservice_external::ManagerService;
+        use logic::traits::restaurant_service::restaurantservice_external::RestaurantService;
         use openbrush::traits::{AccountId, ZERO_ADDRESS};
 
         use super::*;

@@ -7,7 +7,7 @@ use openbrush::{contracts::ownable::*, modifier_definition, modifiers, traits::S
 
 use super::types::DeliveryResult;
 
-//// Courier Event Definition
+/// Courier Event Definition
 pub trait CourierServiceEvents {
     fn emit_pickup_delivery_event(&self, delivery_id: DeliveryId, courier_id: CourierId);
 }

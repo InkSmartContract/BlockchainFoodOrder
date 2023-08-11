@@ -36,7 +36,9 @@ where
         // } else {
         //     Ok(order_id)
         // }
-        transfer_from_contract_to_account!(restaurant_account, restaurant_amount, order_id)
+        transfer_from_contract_to_account!(restaurant_account, restaurant_amount);
+        Ok(order_id)
+
     }
 
     /// Function that transfer money to courier.
@@ -67,6 +69,7 @@ where
         // } else {
         //     Ok(delivery_id)
         // }
-        transfer_from_contract_to_account!(courier_account, courier_amount, delivery_id)
+        transfer_from_contract_to_account!(courier_account, courier_amount);
+        Ok(delivery_id)
     }
 }

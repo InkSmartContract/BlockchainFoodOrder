@@ -14,7 +14,7 @@ scale-info = { version = "2.3", default-features = false, features = [
     "derive",
 ], optional = true }
 
-logics = { path = "logics", default-features = false, features = [
+logic = { path = "logic", default-features = false, features = [
     "ink-as-dependency",
 ] }
 
@@ -37,7 +37,7 @@ crate-type = [
 
 [features]
 default = ["std"]
-std = ["ink/std", "scale/std", "scale-info/std", "openbrush/std", "logics/std"]
+std = ["ink/std", "scale/std", "scale-info/std", "openbrush/std", "logic/std"]
 ink-as-dependency = []
 e2e-tests = []
 
