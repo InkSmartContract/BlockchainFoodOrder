@@ -70,7 +70,7 @@ After successfully deployed, you can check the deployed contract on the `shibuya
 
 ![/main/bin/deploy_to_shibuya.png](https://github.com/InkSmartContract/foodorder-smartcontract/blob/main/bin/deploy_to_shibuya.png)
 
-For steo by step guide on how to deploy and interact with the smart contract, please refer to [this document]() with screenshots.
+For steo by step guide on how to deploy and interact with the smart contract, please refer to [this document](https://github.com/InkSmartContract/foodorder-smartcontract/blob/main/ink!%20Smart%20Contract%20Deployment%20and%20Interactions.pdf) with screenshots.
 
 # Using docker image
 
@@ -89,4 +89,4 @@ swanky contract test foodorder                              // test foodorder co
 cat dockerimage.tar | docker import - foodorder:latest
 ```
 
-Please refer to this comprehensive [document](https://github.com/InkSmartContract/foodorder-smartcontract/blob/main/ink!%20Smart%20Contract%20Deployment%20and%20Interactions.pdf) about this project, use case definition, implementation and macros, security and access control, deployment / testing details, and next steps. You are more than welcome to contribute to this open source project!
+Please refer to this comprehensive [document](https://github.com/InkSmartContract/foodorder-smartcontract/blob/main/Learn%20ink!%20-%20Food%20Order%20on%20Blockchain.pdf) about this project, use case definition, implementation and macros, security and access control, deployment / testing details, and next steps. You are more than welcome to contribute to this open source project!
