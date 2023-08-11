@@ -839,7 +839,7 @@ mod inksmartcontract {
 
             /// check accept delivery successfully
             let order = get_order_result.return_value().unwrap()[0].clone();
-            assert_eq!(OrderStatus::DeliveryAcceptted, order.status);
+            assert_eq!(OrderStatus::DeliveryAccepted, order.status);
             let delivery = get_delivery_result.return_value().unwrap()[0].clone();
             assert_eq!(DeliveryStatus::Accepted, delivery.status);
 

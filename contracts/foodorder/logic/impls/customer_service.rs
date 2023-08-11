@@ -207,9 +207,9 @@ where
             FoodOrderError::CallerIsNotCustomerOrder
         );
 
-        // Change order status from `FoodDelivered` to `DeliveryAcceptted`
+        // Change order status from `FoodDelivered` to `DeliveryAccepted`
         let mut order = self.data::<Data>().order_data.get(&order_id).unwrap();
-        let status = OrderStatus::DeliveryAcceptted;
+        let status = OrderStatus::DeliveryAccepted;
         order.status = status;
         self.data::<Data>().order_data.insert(&order_id, &order);
 

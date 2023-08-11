@@ -233,7 +233,14 @@ export enum OrderStatus {
 	orderConfirmed = 'OrderConfirmed',
 	foodPrepared = 'FoodPrepared',
 	foodDelivered = 'FoodDelivered',
-	deliveryAcceptted = 'DeliveryAcceptted'
+	deliveryAccepted = 'DeliveryAccepted'
+}
+
+export type Customer = {
+	customerAccount: AccountId,
+	customerName: string,
+	customerAddress: string,
+	phoneNumber: string
 }
 
 export type Food = {
@@ -261,13 +268,6 @@ export enum DeliveryStatus {
 	accepted = 'Accepted'
 }
 
-export type Restaurant = {
-	restaurantAccount: AccountId,
-	restaurantName: string,
-	restaurantAddress: string,
-	phoneNumber: string
-}
-
 export type Courier = {
 	courierAccount: AccountId,
 	courierName: string,
@@ -275,10 +275,10 @@ export type Courier = {
 	phoneNumber: string
 }
 
-export type Customer = {
-	customerAccount: AccountId,
-	customerName: string,
-	customerAddress: string,
+export type Restaurant = {
+	restaurantAccount: AccountId,
+	restaurantName: string,
+	restaurantAddress: string,
 	phoneNumber: string
 }
 

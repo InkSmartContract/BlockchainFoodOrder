@@ -50,8 +50,8 @@
       "moduleName": "foodorder",
       "deployments": [
         {
-          "timestamp": 1691754463770,
-          "address": "ZkedUUC36pznjiVPUtDDnijU3jQokAmxxSnpr3DnegGM893",
+          "timestamp": 1691785795370,
+          "address": "Yn1dHJTbKuMhA6rLLsRXQtDu4mSFGC6xtvDTueNz1axJ5Dz",
           "networkUrl": "wss://rpc.shibuya.astar.network",
           "deployerAlias": "deploy"
         }

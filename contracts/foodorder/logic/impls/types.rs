@@ -31,7 +31,7 @@ pub enum OrderStatus {
     OrderConfirmed,
     FoodPrepared,
     FoodDelivered,
-    DeliveryAcceptted,
+    DeliveryAccepted,
 }
 
 #[derive(scale::Decode, scale::Encode, Debug, Clone, Eq, PartialEq)]

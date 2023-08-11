@@ -26,7 +26,7 @@ You can see this following results if you had happy pass.
 
 ```
 foodorder test
-    Contructor
+    Main Functionality
       ✔ Platform is ready
       ✔ Restaurant A is added (...ms)
       ✔ Courier A is added (...ms)
@@ -65,7 +65,7 @@ Here is the happy result.
 ✔ Deploying OK
 ✔ Writing config OK
 Contract deployed!
-Contract address: ZkedUUC36pznjiVPUtDDnijU3jQokAmxxSnpr3DnegGM893
+Contract address: Yn1dHJTbKuMhA6rLLsRXQtDu4mSFGC6xtvDTueNz1axJ5Dz
 ```
 
 After successfully deployed, you can check the deployed contract on the `shibuya` blockexplorer `https://shibuya.subscan.io/`.

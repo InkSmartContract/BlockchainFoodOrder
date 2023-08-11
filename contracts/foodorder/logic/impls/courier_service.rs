@@ -4,7 +4,7 @@ pub use crate::{
     traits::courier_service::*,
 };
 use openbrush::{contracts::ownable::*, modifier_definition, modifiers, traits::Storage};
-
+use ink::prelude::{vec::Vec};
 use super::types::DeliveryResult;
 
 /// Courier Event Definition
@@ -49,6 +49,17 @@ where
         self.data::<Data>()
             .delivery_data
             .insert(&delivery_id, &delivery);
+
+        // Update Courier Delivery Data
+        let mut courier_delivery_vec = self
+            .data::<Data>()
+            .courier_delivery_data
+            .get(&courier_id)
+            .unwrap_or(Vec::new());
+        courier_delivery_vec.push(delivery_id);
+        self.data::<Data>()
+            .courier_delivery_data
+            .insert(&courier_id, &courier_delivery_vec);
 
         // Change Order's CourierId
         let order_id = self
