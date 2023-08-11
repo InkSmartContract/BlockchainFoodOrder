@@ -1,23 +1,22 @@
 # FoodOrder Smart Contract
 
-This smart contract called `FoodOrder` is developed using ink! language and OpenBrush tools.
-[Learning FoodOrder Smart Contract](https://docs.google.com/document/d/1yiZrPnSaz9myrXOrR2k2IALbJA9XcjeEJ-wCmhn3S3o)
+This smart contract called `FoodOrder` is developed using ink! language and OpenBrush tools. Please refer to this comprehensive [document]() about this project, use case definition, implementation and macros, security and access control, deployment and testing details. 
 
-## Structure
-`FoodOrder` contract consists of 4 parts
+## Code structure
+`FoodOrder` smart contract ink code consists of the following directories: 
 
-- crud-macro
-    ##### Here you can see the macros implemented into the smart contract
 - logic
-    ##### Here you can see the main logic of the smart contract
-- proxy
-    ##### This smart contract is for upgradability
+    ##### The main smart contract logic implementing the FoodOrder use case
 - src
     ##### The main `lib.rs` file exists in here 
-
+- crud-macro
+    ##### Here you can see the macros implemented into the smart contract
+- proxy
+    ##### This smart contract is for smart contract upgrades
+    
 # Test the smart contract
 
-To test it's functionality, run this following command after running a node.
+To test e2e functionality
 
 ```
 swanky contract test foodorder
@@ -71,6 +70,7 @@ After successfully deployed, you can check the deployed contract on the `shibuya
 
 ![/main/bin/deploy_to_shibuya.png](https://github.com/InkSmartContract/foodorder-smartcontract/blob/main/bin/deploy_to_shibuya.png)
 
+For steo by step guide on how to deploy and interact with the smart contract, please refer to [this document]() with screenshots.
 
 # Using docker image
 
@@ -88,3 +88,5 @@ swanky contract test foodorder                              // test foodorder co
 ```
 cat dockerimage.tar | docker import - foodorder:latest
 ```
+
+Please refer to this comprehensive [document]() about this project, use case definition, implementation and macros, security and access control, deployment / testing details, and next steps. You are more than welcome to contribute to this open source project!
