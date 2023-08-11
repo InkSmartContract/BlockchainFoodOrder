@@ -12,8 +12,8 @@ const wsProvider = new WsProvider("ws://127.0.0.1:9944");
 // Create a keyring instance
 const keyring = new Keyring({ type: "sr25519" });
 
-describe("fooddelivery test", () => {
-  let fooddeliveryFactory: FoodorderFactory;
+describe("foodorder test", () => {
+  let foodorderfactory: FoodorderFactory;
   let api: ApiPromise;
   let deployer: KeyringPair;
   let restaurantAccount: KeyringPair;
@@ -31,10 +31,10 @@ describe("fooddelivery test", () => {
     courierAccount = keyring.addFromUri("//Charlie");
     customerAccount = deployer;
 
-    fooddeliveryFactory = new FoodorderFactory(api, deployer);
+    foodorderfactory = new FoodorderFactory(api, deployer);
 
     contract = new FoodOrder(
-      (await fooddeliveryFactory.new()).address,
+      (await foodorderfactory.new()).address,
       deployer,
       api
     );
@@ -143,7 +143,7 @@ describe("fooddelivery test", () => {
       let allDeliveries = (await contract.query.getDeliveryAll(0, 10)).value.ok
       let deliveryStatus = allDeliveries?.ok?.at(0)?.status
       
-      expect(deliveryStatus).to.be.equal("PickUp")
+      expect(deliveryStatus).to.be.equal("PickedUp")
     })
     it("Delivery is accepted", async() => {
       let balance = await api.query.system.account(contract.address)
@@ -167,7 +167,7 @@ describe("fooddelivery test", () => {
       let allDeliveries = (await contract.query.getDeliveryAll(0, 10)).value.ok
       let deliveryStatus = allDeliveries?.ok?.at(0)?.status
 
-      expect(deliveryStatus).to.be.equal("Accept")
+      expect(deliveryStatus).to.be.equal("Accepted")
     })
   });
 });
