@@ -47,7 +47,7 @@ foodorder test
 swanky node start
 ```
 
-# Deploy it to Shibuya network [(guide)](https://docs.google.com/document/d/1stF4dCXdT0fjPur23OD-eTZ90FdOq7tU8x2xEkoPojw)
+# Deploy it to Shibuya network 
 
 ```
 swanky contract deploy foodorder --account deploy --gas 100000 --network shibuya
