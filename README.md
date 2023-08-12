@@ -77,16 +77,20 @@ For steo by step guide on how to deploy and interact with the smart contract, pl
 If you want to test the smart contract in docker image, run following command.
 
 ```
-docker build --tag=foodorder .                              // build a docker image
-docker run -t -d --name=opensmartcontract foodorder         // make a docker container
-docker ps -a                                                // list docker containers
-docker exec -it opensmartcontract bash                      // get into the docker container's terminal 
-swanky contract test foodorder                              // test foodorder contract
+docker build --tag=foodorder .                                          // build a docker image
+docker image tag foodorder:latest fpleader/opensmartcontract:latest     // rename the tag
+docker run -t -d --name=opensmartcontract fpleader/opensmartcontract    // make a docker container
+docker ps -a                                                            // list docker containers
+docker exec -it opensmartcontract bash                                  // get into the docker container's terminal 
+swanky contract test foodorder                                          // test foodorder contract
 ```
 
-## you can build image from tarball
+## you can build image by pulling from docker hub
+docker image is pushed to fpleader/opensmartcontract:latest 
+Build the image by following command.
+
 ```
-cat dockerimage.tar | docker import - foodorder:latest
+docker image pull fpleader/opensmartcontract:latest
 ```
 
 Please refer to this comprehensive [document](https://github.com/InkSmartContract/foodorder-smartcontract/blob/main/Learn%20ink!%20-%20Food%20Order%20on%20Blockchain.pdf) about this project, use case definition, implementation and macros, security and access control, deployment / testing details, and next steps. You are more than welcome to contribute to this open source project!
