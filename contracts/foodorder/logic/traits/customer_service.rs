@@ -4,6 +4,7 @@ use ink::prelude::string::String;
 /// Customer Service Definition
 #[openbrush::trait_definition]
 pub trait CustomerService {
+    /// Function customer registers
     #[ink(message)]
     fn add_customer(
         &mut self,
@@ -12,9 +13,11 @@ pub trait CustomerService {
         phone_number: String,
     ) -> CustomerResult;
 
+    /// Function customer submits an order
     #[ink(message, payable)]
     fn submit_order(&mut self, food_id: FoodId, delivery_address: String) -> OrderResult;
 
+    /// Function customer accepts food delivery by courier 
     #[ink(message)]
     fn accept_delivery(&mut self, delivery_id: DeliveryId) -> DeliveryResult;
 }
