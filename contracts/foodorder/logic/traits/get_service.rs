@@ -8,93 +8,93 @@ use openbrush::traits::AccountId;
 /// Get Service Definition
 #[openbrush::trait_definition]
 pub trait GetService {
-    /// Function that get eta deadline using order identifier.
+    /// Function to get food delivery ETA given an order identifier
     #[ink(message)]
     fn get_eta(&self, order_id: OrderId) -> Result<u64, FoodOrderError>;
 
-    /// Function that get order information using order identifier.
+    /// Function to get order information given an order identifier
     #[ink(message)]
     fn get_order_from_id(&self, order_id: OrderId) -> Result<Order, FoodOrderError>;
 
-    /// Function that get all order information placed in a restaurant.
+    /// Function to list all orders placed for a restaurant
     #[ink(message)]
     fn get_order_from_restaurant(
         &self,
         restaurant_id: RestaurantId,
     ) -> Result<Vec<Order>, FoodOrderError>;
 
-    /// Function that get all order information placed by customers.
+    /// Function to list all orders placed by a customer
     #[ink(message)]
     fn get_order_from_customer(
         &self,
         customer_id: CustomerId,
     ) -> Result<Vec<Order>, FoodOrderError>;
 
-    /// Function that get all orders from A to B.
+    /// Function to list all orders from order id1 to order id2 for display pagination 
     #[ink(message)]
     fn get_order_all(&self, from: u64, to: u64) -> Result<Vec<Order>, FoodOrderError>;
 
-    /// Function that get food information using food identifier.
+    /// Function to get food information given a food identifier
     #[ink(message)]
     fn get_food_from_id(&self, food_id: FoodId) -> Result<Food, FoodOrderError>;
 
-    /// Function that get all food information posted by the restaurant.
+    /// Function to list menu items from a restaurant.
     #[ink(message)]
     fn get_food_from_restaurant(
         &self,
         restaurant_id: RestaurantId,
     ) -> Result<Vec<Food>, FoodOrderError>;
 
-    /// Function that get all food information from A to B.
+    /// Function to list all menu items from food id1 to food id2 for display pagination
     #[ink(message)]
     fn get_food_all(&self, from: u64, to: u64) -> Result<Vec<Food>, FoodOrderError>;
 
-    /// Function that get delivery information using delivery identifier.
+    /// Function to get delivery information given delivery identifier
     #[ink(message)]
     fn get_delivery_from_id(&self, delivery_id: DeliveryId) -> Result<Delivery, FoodOrderError>;
 
-    /// Function that get all delivery information ordered form the forwarder.
+    /// Function to list all deliveries by a courier
     #[ink(message)]
     fn get_delivery_from_courier(
         &self,
         courier_id: CourierId,
     ) -> Result<Vec<Delivery>, FoodOrderError>;
 
-    /// Function that get all delivery information requested by restaurant.
+    /// Function to list all deliveries requested by a restaurant
     #[ink(message)]
     fn get_delivery_from_restaurant(
         &self,
         restaurant_id: RestaurantId,
     ) -> Result<Vec<Delivery>, FoodOrderError>;
 
-    /// Function taht get all delivery information delivered to customer.
+    /// Function to list all deliveries to a customer
     #[ink(message)]
     fn get_delivery_from_customer(
         &self,
         customer_id: CustomerId,
     ) -> Result<Vec<Delivery>, FoodOrderError>;
 
-    /// Function that get all delivery information.
+    /// Function to list all deliveries
     #[ink(message)]
     fn get_delivery_all(&self, from: u64, to: u64) -> Result<Vec<Delivery>, FoodOrderError>;
 
-    /// Function that get all restaurant information.
+    /// Function to list all restaurants
     #[ink(message)]
     fn get_restaurant_all(&self, from: u64, to: u64) -> Result<Vec<Restaurant>, FoodOrderError>;
 
-    /// Function that get all courier information.
+    /// Function to list all couriers
     #[ink(message)]
     fn get_courier_all(&self, from: u64, to: u64) -> Result<Vec<Courier>, FoodOrderError>;
 
-    /// Function that get all customer information.
+    /// Function to list all customers
     #[ink(message)]
     fn get_customer_all(&self, from: u64, to: u64) -> Result<Vec<Customer>, FoodOrderError>;
 
-    /// Function that get manager account
+    /// Function to list manager account
     #[ink(message)]
     fn get_owner(&self) -> AccountId;
 
-    /// Function that get fee rate
+    /// Function to get courier charge rate
     #[ink(message)]
     fn get_fee_rate(&self) -> u32;
 }

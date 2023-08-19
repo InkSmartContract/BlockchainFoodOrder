@@ -5,7 +5,7 @@ use openbrush::traits::Balance;
 /// Restaurant Service Definition
 #[openbrush::trait_definition]
 pub trait RestaurantService {
-    /// Function that add a food item to the restaurant menu
+    /// Function that a restaurant adds a menu item 
     #[ink(message)]
     fn add_food(
         &mut self,
@@ -15,7 +15,7 @@ pub trait RestaurantService {
         eta: u64,
     ) -> FoodResult;
 
-    /// Function that update a food item to the restaurant menu
+    /// Function that a restaurant updates a menu item
     #[ink(message)]
     fn update_food(
         &mut self,
@@ -26,15 +26,15 @@ pub trait RestaurantService {
         eta: u64,
     ) -> FoodResult;
 
-    /// Function that restaurant confirms an order    
+    /// Function that a restaurant confirms an order    
     #[ink(message)]
     fn confirm_order(&mut self, order_id: OrderId, eta: u64) -> OrderResult;
 
-    /// Function that restaurant finished cooking food for an order
+    /// Function that a restaurant finishes cooking allf ood for an order
     #[ink(message)]
     fn finish_cook(&mut self, order_id: OrderId) -> OrderResult;
 
-    /// Function that restaurant advance the order status to be delivered
+    /// Function that a restaurant requests cooked food to be delivered
     #[ink(message)]
     fn deliver_order(&mut self, order_id: OrderId) -> OrderResult;
 }
