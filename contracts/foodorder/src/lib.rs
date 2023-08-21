@@ -2,7 +2,7 @@
 #![feature(min_specialization)]
 
 #[openbrush::contract]
-mod inksmartcontract {
+mod blockchainfoodorder {
     use ink::codegen::EmitEvent;
     use ink::codegen::Env;
     use ink::prelude::string::String;
