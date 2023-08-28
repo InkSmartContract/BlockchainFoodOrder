@@ -19,9 +19,11 @@ The BlockchainFoodOrder smart contract is developed in ink! language and OpenBru
 
 ## Dev Dependencies
 
+```
 rust: rustc 1.68.0-nightly (574b64a97 2022-12-31)
 cargo: cargo 1.68.0-nightly (2381cbdb4 2022-12-23)
 cargo contract: cargo-contract-contract 2.0.2-unknown-x86_64-unknown-linux-gnu
+```
 
 # Test the smart contract
 
