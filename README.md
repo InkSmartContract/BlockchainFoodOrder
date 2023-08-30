@@ -16,7 +16,15 @@ The BlockchainFoodOrder smart contract is developed in ink! language and OpenBru
     The procedure macros implementation encapsulating logic to create, update and delete food items 
 - proxy
     Used to handle smart contract upgrades: updating smart contract code to reflect business logic changes while still preserving smart contract data storage 
-    
+
+## Dev Dependencies
+
+```
+rust: rustc 1.68.0-nightly (574b64a97 2022-12-31)
+cargo: cargo 1.68.0-nightly (2381cbdb4 2022-12-23)
+cargo contract: cargo-contract-contract 2.0.2-unknown-x86_64-unknown-linux-gnu
+```
+
 # Test the smart contract
 
 To test e2e functionality
