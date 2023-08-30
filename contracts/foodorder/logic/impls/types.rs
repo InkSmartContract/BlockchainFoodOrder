@@ -233,6 +233,26 @@ pub struct Data {
     pub courier_account_id: Mapping<AccountId, CourierId>,
 }
 
+/// Please notice that for all Mapping<Id, Vec<>> data types defined here, 
+/// there's a risk that ink! Packed layout gets large enough such as a growing Vec, 
+/// it will break the contract. This is because for encoding and decoding storage items, 
+/// there is a buffer with only limited capacity (16KB default config) available. 
+/// This means any contract trying to decode more than that will trap! 
+/// If you are unsure about the potential size, consider using an ink! Mapping, 
+/// which can store an arbitrary number of elements. 
+///
+/// Notice also that ink::prelude::vec::Vec's are always loaded in their entirety. 
+/// This is because all elements of the ink::prelude::vec::Vec live under a single storage key. 
+/// Wrapping the ink::prelude::vec::Vec inside Lazy has no influence on its inner layout. 
+///
+/// While using a Packed layout will keep the contracts overall code size smaller, it can cause 
+/// unnecessarily high gas costs. Depending on the usage pattern, consider the practice of breaking up 
+/// large or complex storage layouts into reasonably sized distinct storage cells, and weigh 
+/// trade-offs among gas costs, contract size, performance and code complexity.  
+/// For more details, please refer to ink! docs: 
+/// ink! storage layout: https://use.ink/datastructures/storage-layout/
+/// ink! Mapping:  https://use.ink/datastructures/mapping
+
 impl Default for Data {
     fn default() -> Self {
         Data {
