@@ -4,59 +4,6 @@ use proc_macro::TokenStream;
 use quote::quote;
 use syn::{parse_macro_input, ItemFn};
 
-// struct Args {
-//     vars: Set<Ident>,
-// }
-
-// impl Parse for Args {
-//     fn parse(input: ParseStream) -> Result<Self> {
-//         let vars = Punntuated::<Ident, Token![,]>::parse_terminated(input)?;
-//         Ok(Args {
-//             vars: vars.into_iter().collect(),
-//         })
-//     }
-// }
-
-// impl Fold for Args {
-//     fn fold_expr(&mut self, e: Expr) -> Expr {
-//         match e {
-//             Expr::Assign(e) => {
-//                 if self.should_print_expr(&e.left) {
-//                     self.assign_and_print(*e.left, &e.eq_token, *e.right)
-//                 } else {
-//                     Expr::Assign(fold::fold_expr_assign(self, e))
-//                 }
-//             }
-//             Expr::Binary(e) if is_assign_op(e.op) => {
-//                 if self.should_print_expr(&e.left) {
-//                     self.assign_and_print(*e.left, &e.op, *e.right)
-//                 } else {
-//                     Expr::Binary(fold::fold_expr_binary(self, e))
-//                 }
-//             }
-//             _ => fold::fold_expr(self, e),
-//         }
-//     }
-
-//     fn fold_stmt(&mut self, s: Stmt) -> Stmt {
-//         match s {
-//             Stmt::Local(s) => {
-//                 if s.init.is_some() && self.should_print_pat(&s.pat) {
-//                     self.let_and_print(s)
-//                 } else {
-//                     Stmt::Local(fold::fold_local(self, s))
-//                 }
-//             }
-//             _ => fold::fold_stmt(self, s),
-//         }
-//     }
-// }
-
-#[proc_macro_attribute]
-pub fn custom_attribute(_metadata: TokenStream, _input: TokenStream) -> TokenStream {
-    TokenStream::from(quote! {struct H{}})
-}
-
 #[proc_macro_attribute]
 pub fn create_food(_attr: TokenStream, item: TokenStream) -> TokenStream {
     let input = parse_macro_input!(item as ItemFn);

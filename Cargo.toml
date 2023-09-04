@@ -5,4 +5,5 @@ members = [
 
 [profile.release] 
 overflow-checks = false
+codegen-units = 16
 opt-level = 3

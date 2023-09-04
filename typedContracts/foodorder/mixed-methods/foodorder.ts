@@ -38,35 +38,138 @@ export default class Methods {
 	}
 
 	/**
-	* acceptDelivery
+	* updateCourier
+	*
+	* @param { string } courierName,
+	* @param { string } courierAddress,
+	* @param { string } phoneNumber,
+	* @returns { void }
+	*/
+	"updateCourier" (
+		courierName: string,
+		courierAddress: string,
+		phoneNumber: string,
+		__options: GasLimit,
+	){
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "courierServiceImpl::updateCourier", (events: EventRecord) => {
+			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
+		}, [courierName, courierAddress, phoneNumber], __options);
+	}
+
+	/**
+	* createCourier
+	*
+	* @param { string } courierName,
+	* @param { string } courierAddress,
+	* @param { string } phoneNumber,
+	* @returns { void }
+	*/
+	"createCourier" (
+		courierName: string,
+		courierAddress: string,
+		phoneNumber: string,
+		__options: GasLimit,
+	){
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "courierServiceImpl::createCourier", (events: EventRecord) => {
+			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
+		}, [courierName, courierAddress, phoneNumber], __options);
+	}
+
+	/**
+	* deleteCourier
+	*
+	* @returns { void }
+	*/
+	"deleteCourier" (
+		__options: GasLimit,
+	){
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "courierServiceImpl::deleteCourier", (events: EventRecord) => {
+			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
+		}, [], __options);
+	}
+
+	/**
+	* readCourierAll
+	*
+	* @param { (number | string | BN) } from,
+	* @param { (number | string | BN) } to,
+	* @returns { Result<Result<Array<ReturnTypes.Courier>, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> }
+	*/
+	"readCourierAll" (
+		from: (number | string | BN),
+		to: (number | string | BN),
+		__options: GasLimit,
+	): Promise< QueryReturnType< Result<Result<Array<ReturnTypes.Courier>, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> > >{
+		return queryOkJSON( this.__apiPromise, this.__nativeContract, this.__callerAddress, "courierServiceImpl::readCourierAll", [from, to], __options, (result) => { return handleReturnType(result, getTypeDescription(16, DATA_TYPE_DESCRIPTIONS)); });
+	}
+
+	/**
+	* pickupDelivery
 	*
 	* @param { (number | string | BN) } deliveryId,
 	* @returns { void }
 	*/
-	"acceptDelivery" (
+	"pickupDelivery" (
 		deliveryId: (number | string | BN),
 		__options: GasLimit,
 	){
-		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "customerService::acceptDelivery", (events: EventRecord) => {
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "courierServiceImpl::pickupDelivery", (events: EventRecord) => {
 			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
 		}, [deliveryId], __options);
 	}
 
 	/**
-	* addCustomer
+	* readCourier
+	*
+	* @returns { Result<Result<ReturnTypes.Courier, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> }
+	*/
+	"readCourier" (
+		__options: GasLimit,
+	): Promise< QueryReturnType< Result<Result<ReturnTypes.Courier, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> > >{
+		return queryOkJSON( this.__apiPromise, this.__nativeContract, this.__callerAddress, "courierServiceImpl::readCourier", [], __options, (result) => { return handleReturnType(result, getTypeDescription(20, DATA_TYPE_DESCRIPTIONS)); });
+	}
+
+	/**
+	* readCourierFromId
+	*
+	* @param { (number | string | BN) } courierId,
+	* @returns { Result<Result<ReturnTypes.Courier, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> }
+	*/
+	"readCourierFromId" (
+		courierId: (number | string | BN),
+		__options: GasLimit,
+	): Promise< QueryReturnType< Result<Result<ReturnTypes.Courier, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> > >{
+		return queryOkJSON( this.__apiPromise, this.__nativeContract, this.__callerAddress, "courierServiceImpl::readCourierFromId", [courierId], __options, (result) => { return handleReturnType(result, getTypeDescription(20, DATA_TYPE_DESCRIPTIONS)); });
+	}
+
+	/**
+	* readCustomerFromId
+	*
+	* @param { (number | string | BN) } customerId,
+	* @returns { Result<Result<ReturnTypes.Customer, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> }
+	*/
+	"readCustomerFromId" (
+		customerId: (number | string | BN),
+		__options: GasLimit,
+	): Promise< QueryReturnType< Result<Result<ReturnTypes.Customer, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> > >{
+		return queryOkJSON( this.__apiPromise, this.__nativeContract, this.__callerAddress, "customerServiceImpl::readCustomerFromId", [customerId], __options, (result) => { return handleReturnType(result, getTypeDescription(22, DATA_TYPE_DESCRIPTIONS)); });
+	}
+
+	/**
+	* createCustomer
 	*
 	* @param { string } customerName,
 	* @param { string } customerAddress,
 	* @param { string } phoneNumber,
 	* @returns { void }
 	*/
-	"addCustomer" (
+	"createCustomer" (
 		customerName: string,
 		customerAddress: string,
 		phoneNumber: string,
 		__options: GasLimit,
 	){
-		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "customerService::addCustomer", (events: EventRecord) => {
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "customerServiceImpl::createCustomer", (events: EventRecord) => {
 			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
 		}, [customerName, customerAddress, phoneNumber], __options);
 	}
@@ -83,54 +186,170 @@ export default class Methods {
 		deliveryAddress: string,
 		__options: GasLimitAndRequiredValue,
 	){
-		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "customerService::submitOrder", (events: EventRecord) => {
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "customerServiceImpl::submitOrder", (events: EventRecord) => {
 			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
 		}, [foodId, deliveryAddress], __options);
 	}
 
 	/**
-	* pickupDelivery
+	* readCustomerAll
+	*
+	* @param { (number | string | BN) } from,
+	* @param { (number | string | BN) } to,
+	* @returns { Result<Result<Array<ReturnTypes.Customer>, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> }
+	*/
+	"readCustomerAll" (
+		from: (number | string | BN),
+		to: (number | string | BN),
+		__options: GasLimit,
+	): Promise< QueryReturnType< Result<Result<Array<ReturnTypes.Customer>, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> > >{
+		return queryOkJSON( this.__apiPromise, this.__nativeContract, this.__callerAddress, "customerServiceImpl::readCustomerAll", [from, to], __options, (result) => { return handleReturnType(result, getTypeDescription(25, DATA_TYPE_DESCRIPTIONS)); });
+	}
+
+	/**
+	* updateCustomer
+	*
+	* @param { string } customerName,
+	* @param { string } customerAddress,
+	* @param { string } phoneNumber,
+	* @returns { void }
+	*/
+	"updateCustomer" (
+		customerName: string,
+		customerAddress: string,
+		phoneNumber: string,
+		__options: GasLimit,
+	){
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "customerServiceImpl::updateCustomer", (events: EventRecord) => {
+			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
+		}, [customerName, customerAddress, phoneNumber], __options);
+	}
+
+	/**
+	* deleteCustomer
+	*
+	* @returns { void }
+	*/
+	"deleteCustomer" (
+		__options: GasLimit,
+	){
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "customerServiceImpl::deleteCustomer", (events: EventRecord) => {
+			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
+		}, [], __options);
+	}
+
+	/**
+	* acceptDelivery
 	*
 	* @param { (number | string | BN) } deliveryId,
 	* @returns { void }
 	*/
-	"pickupDelivery" (
+	"acceptDelivery" (
 		deliveryId: (number | string | BN),
 		__options: GasLimit,
 	){
-		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "courierService::pickupDelivery", (events: EventRecord) => {
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "customerServiceImpl::acceptDelivery", (events: EventRecord) => {
 			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
 		}, [deliveryId], __options);
 	}
 
 	/**
-	* finishCook
+	* readCustomer
 	*
-	* @param { (number | string | BN) } orderId,
-	* @returns { void }
+	* @returns { Result<Result<ReturnTypes.Customer, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> }
 	*/
-	"finishCook" (
-		orderId: (number | string | BN),
+	"readCustomer" (
 		__options: GasLimit,
-	){
-		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "restaurantService::finishCook", (events: EventRecord) => {
-			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
-		}, [orderId], __options);
+	): Promise< QueryReturnType< Result<Result<ReturnTypes.Customer, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> > >{
+		return queryOkJSON( this.__apiPromise, this.__nativeContract, this.__callerAddress, "customerServiceImpl::readCustomer", [], __options, (result) => { return handleReturnType(result, getTypeDescription(22, DATA_TYPE_DESCRIPTIONS)); });
 	}
 
 	/**
-	* deliverOrder
+	* changeFeeRate
 	*
-	* @param { (number | string | BN) } orderId,
+	* @param { (number | string | BN) } rate,
 	* @returns { void }
 	*/
-	"deliverOrder" (
-		orderId: (number | string | BN),
+	"changeFeeRate" (
+		rate: (number | string | BN),
 		__options: GasLimit,
 	){
-		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "restaurantService::deliverOrder", (events: EventRecord) => {
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "managerServiceImpl::changeFeeRate", (events: EventRecord) => {
 			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
-		}, [orderId], __options);
+		}, [rate], __options);
+	}
+
+	/**
+	* readFood
+	*
+	* @param { (number | string | BN) } foodId,
+	* @returns { Result<Result<ReturnTypes.Food, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> }
+	*/
+	"readFood" (
+		foodId: (number | string | BN),
+		__options: GasLimit,
+	): Promise< QueryReturnType< Result<Result<ReturnTypes.Food, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> > >{
+		return queryOkJSON( this.__apiPromise, this.__nativeContract, this.__callerAddress, "restaurantServiceImpl::readFood", [foodId], __options, (result) => { return handleReturnType(result, getTypeDescription(28, DATA_TYPE_DESCRIPTIONS)); });
+	}
+
+	/**
+	* readRestaurantFromId
+	*
+	* @param { (number | string | BN) } restaurantId,
+	* @returns { Result<Result<ReturnTypes.Restaurant, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> }
+	*/
+	"readRestaurantFromId" (
+		restaurantId: (number | string | BN),
+		__options: GasLimit,
+	): Promise< QueryReturnType< Result<Result<ReturnTypes.Restaurant, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> > >{
+		return queryOkJSON( this.__apiPromise, this.__nativeContract, this.__callerAddress, "restaurantServiceImpl::readRestaurantFromId", [restaurantId], __options, (result) => { return handleReturnType(result, getTypeDescription(31, DATA_TYPE_DESCRIPTIONS)); });
+	}
+
+	/**
+	* updateRestaurant
+	*
+	* @param { string } restaurantName,
+	* @param { string } restaurantAddress,
+	* @param { string } phoneNumber,
+	* @returns { void }
+	*/
+	"updateRestaurant" (
+		restaurantName: string,
+		restaurantAddress: string,
+		phoneNumber: string,
+		__options: GasLimit,
+	){
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "restaurantServiceImpl::updateRestaurant", (events: EventRecord) => {
+			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
+		}, [restaurantName, restaurantAddress, phoneNumber], __options);
+	}
+
+	/**
+	* deleteRestaurant
+	*
+	* @returns { void }
+	*/
+	"deleteRestaurant" (
+		__options: GasLimit,
+	){
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "restaurantServiceImpl::deleteRestaurant", (events: EventRecord) => {
+			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
+		}, [], __options);
+	}
+
+	/**
+	* readRestaurantAll
+	*
+	* @param { (number | string | BN) } from,
+	* @param { (number | string | BN) } to,
+	* @returns { Result<Result<Array<ReturnTypes.Restaurant>, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> }
+	*/
+	"readRestaurantAll" (
+		from: (number | string | BN),
+		to: (number | string | BN),
+		__options: GasLimit,
+	): Promise< QueryReturnType< Result<Result<Array<ReturnTypes.Restaurant>, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> > >{
+		return queryOkJSON( this.__apiPromise, this.__nativeContract, this.__callerAddress, "restaurantServiceImpl::readRestaurantAll", [from, to], __options, (result) => { return handleReturnType(result, getTypeDescription(34, DATA_TYPE_DESCRIPTIONS)); });
 	}
 
 	/**
@@ -145,9 +364,101 @@ export default class Methods {
 		eta: (number | string | BN),
 		__options: GasLimit,
 	){
-		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "restaurantService::confirmOrder", (events: EventRecord) => {
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "restaurantServiceImpl::confirmOrder", (events: EventRecord) => {
 			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
 		}, [orderId, eta], __options);
+	}
+
+	/**
+	* deleteFood
+	*
+	* @param { (number | string | BN) } foodId,
+	* @returns { void }
+	*/
+	"deleteFood" (
+		foodId: (number | string | BN),
+		__options: GasLimit,
+	){
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "restaurantServiceImpl::deleteFood", (events: EventRecord) => {
+			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
+		}, [foodId], __options);
+	}
+
+	/**
+	* finishCook
+	*
+	* @param { (number | string | BN) } orderId,
+	* @returns { void }
+	*/
+	"finishCook" (
+		orderId: (number | string | BN),
+		__options: GasLimit,
+	){
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "restaurantServiceImpl::finishCook", (events: EventRecord) => {
+			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
+		}, [orderId], __options);
+	}
+
+	/**
+	* deliverOrder
+	*
+	* @param { (number | string | BN) } orderId,
+	* @returns { void }
+	*/
+	"deliverOrder" (
+		orderId: (number | string | BN),
+		__options: GasLimit,
+	){
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "restaurantServiceImpl::deliverOrder", (events: EventRecord) => {
+			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
+		}, [orderId], __options);
+	}
+
+	/**
+	* readFoodAll
+	*
+	* @param { (number | string | BN) } from,
+	* @param { (number | string | BN) } to,
+	* @returns { Result<Result<Array<ReturnTypes.Food>, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> }
+	*/
+	"readFoodAll" (
+		from: (number | string | BN),
+		to: (number | string | BN),
+		__options: GasLimit,
+	): Promise< QueryReturnType< Result<Result<Array<ReturnTypes.Food>, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> > >{
+		return queryOkJSON( this.__apiPromise, this.__nativeContract, this.__callerAddress, "restaurantServiceImpl::readFoodAll", [from, to], __options, (result) => { return handleReturnType(result, getTypeDescription(37, DATA_TYPE_DESCRIPTIONS)); });
+	}
+
+	/**
+	* createFood
+	*
+	* @param { string } foodName,
+	* @param { string } foodDescription,
+	* @param { (string | number | BN) } foodPrice,
+	* @param { (number | string | BN) } foodEta,
+	* @returns { void }
+	*/
+	"createFood" (
+		foodName: string,
+		foodDescription: string,
+		foodPrice: (string | number | BN),
+		foodEta: (number | string | BN),
+		__options: GasLimit,
+	){
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "restaurantServiceImpl::createFood", (events: EventRecord) => {
+			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
+		}, [foodName, foodDescription, foodPrice, foodEta], __options);
+	}
+
+	/**
+	* readRestaurant
+	*
+	* @returns { Result<Result<ReturnTypes.Restaurant, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> }
+	*/
+	"readRestaurant" (
+		__options: GasLimit,
+	): Promise< QueryReturnType< Result<Result<ReturnTypes.Restaurant, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> > >{
+		return queryOkJSON( this.__apiPromise, this.__nativeContract, this.__callerAddress, "restaurantServiceImpl::readRestaurant", [], __options, (result) => { return handleReturnType(result, getTypeDescription(31, DATA_TYPE_DESCRIPTIONS)); });
 	}
 
 	/**
@@ -155,357 +466,174 @@ export default class Methods {
 	*
 	* @param { (number | string | BN) } foodId,
 	* @param { string } foodName,
-	* @param { string } description,
-	* @param { (string | number | BN) } price,
-	* @param { (number | string | BN) } eta,
+	* @param { string } foodDescription,
+	* @param { (string | number | BN) } foodPrice,
+	* @param { (number | string | BN) } foodEta,
 	* @returns { void }
 	*/
 	"updateFood" (
 		foodId: (number | string | BN),
 		foodName: string,
-		description: string,
-		price: (string | number | BN),
-		eta: (number | string | BN),
+		foodDescription: string,
+		foodPrice: (string | number | BN),
+		foodEta: (number | string | BN),
 		__options: GasLimit,
 	){
-		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "restaurantService::updateFood", (events: EventRecord) => {
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "restaurantServiceImpl::updateFood", (events: EventRecord) => {
 			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
-		}, [foodId, foodName, description, price, eta], __options);
+		}, [foodId, foodName, foodDescription, foodPrice, foodEta], __options);
 	}
 
 	/**
-	* addFood
+	* createRestaurant
 	*
-	* @param { string } foodName,
-	* @param { string } description,
-	* @param { (string | number | BN) } price,
-	* @param { (number | string | BN) } eta,
-	* @returns { void }
-	*/
-	"addFood" (
-		foodName: string,
-		description: string,
-		price: (string | number | BN),
-		eta: (number | string | BN),
-		__options: GasLimit,
-	){
-		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "restaurantService::addFood", (events: EventRecord) => {
-			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
-		}, [foodName, description, price, eta], __options);
-	}
-
-	/**
-	* addRestaurant
-	*
-	* @param { ArgumentTypes.AccountId } restaurantAccount,
 	* @param { string } restaurantName,
 	* @param { string } restaurantAddress,
 	* @param { string } phoneNumber,
 	* @returns { void }
 	*/
-	"addRestaurant" (
-		restaurantAccount: ArgumentTypes.AccountId,
+	"createRestaurant" (
 		restaurantName: string,
 		restaurantAddress: string,
 		phoneNumber: string,
 		__options: GasLimit,
 	){
-		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "managerService::addRestaurant", (events: EventRecord) => {
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "restaurantServiceImpl::createRestaurant", (events: EventRecord) => {
 			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
-		}, [restaurantAccount, restaurantName, restaurantAddress, phoneNumber], __options);
+		}, [restaurantName, restaurantAddress, phoneNumber], __options);
 	}
 
 	/**
-	* changeFeeRate
+	* transferOwnership
 	*
-	* @param { (number | string | BN) } rate,
+	* @param { ArgumentTypes.AccountId } newOwner,
 	* @returns { void }
 	*/
-	"changeFeeRate" (
-		rate: (number | string | BN),
+	"transferOwnership" (
+		newOwner: ArgumentTypes.AccountId,
 		__options: GasLimit,
 	){
-		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "managerService::changeFeeRate", (events: EventRecord) => {
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "ownable::transferOwnership", (events: EventRecord) => {
 			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
-		}, [rate], __options);
+		}, [newOwner], __options);
 	}
 
 	/**
-	* addCourier
+	* owner
 	*
-	* @param { ArgumentTypes.AccountId } courierAccount,
-	* @param { string } courierName,
-	* @param { string } courierAddress,
-	* @param { string } phoneNumber,
+	* @returns { Result<ReturnTypes.AccountId | null, ReturnTypes.LangError> }
+	*/
+	"owner" (
+		__options: GasLimit,
+	): Promise< QueryReturnType< Result<ReturnTypes.AccountId | null, ReturnTypes.LangError> > >{
+		return queryOkJSON( this.__apiPromise, this.__nativeContract, this.__callerAddress, "ownable::owner", [], __options, (result) => { return handleReturnType(result, getTypeDescription(42, DATA_TYPE_DESCRIPTIONS)); });
+	}
+
+	/**
+	* renounceOwnership
+	*
 	* @returns { void }
 	*/
-	"addCourier" (
-		courierAccount: ArgumentTypes.AccountId,
-		courierName: string,
-		courierAddress: string,
-		phoneNumber: string,
+	"renounceOwnership" (
 		__options: GasLimit,
 	){
-		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "managerService::addCourier", (events: EventRecord) => {
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "ownable::renounceOwnership", (events: EventRecord) => {
 			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
-		}, [courierAccount, courierName, courierAddress, phoneNumber], __options);
+		}, [], __options);
 	}
 
 	/**
-	* changeManager
+	* grantRole
 	*
-	* @param { ArgumentTypes.AccountId } newAccount,
+	* @param { (number | string | BN) } role,
+	* @param { ArgumentTypes.AccountId | null } account,
 	* @returns { void }
 	*/
-	"changeManager" (
-		newAccount: ArgumentTypes.AccountId,
+	"grantRole" (
+		role: (number | string | BN),
+		account: ArgumentTypes.AccountId | null,
 		__options: GasLimit,
 	){
-		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "managerService::changeManager", (events: EventRecord) => {
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "accessControl::grantRole", (events: EventRecord) => {
 			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
-		}, [newAccount], __options);
+		}, [role, account], __options);
 	}
 
 	/**
-	* getOrderFromCustomer
+	* revokeRole
 	*
-	* @param { (number | string | BN) } customerId,
-	* @returns { Result<Result<Array<ReturnTypes.Order>, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> }
+	* @param { (number | string | BN) } role,
+	* @param { ArgumentTypes.AccountId | null } account,
+	* @returns { void }
 	*/
-	"getOrderFromCustomer" (
-		customerId: (number | string | BN),
+	"revokeRole" (
+		role: (number | string | BN),
+		account: ArgumentTypes.AccountId | null,
 		__options: GasLimit,
-	): Promise< QueryReturnType< Result<Result<Array<ReturnTypes.Order>, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> > >{
-		return queryOkJSON( this.__apiPromise, this.__nativeContract, this.__callerAddress, "getService::getOrderFromCustomer", [customerId], __options, (result) => { return handleReturnType(result, getTypeDescription(17, DATA_TYPE_DESCRIPTIONS)); });
+	){
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "accessControl::revokeRole", (events: EventRecord) => {
+			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
+		}, [role, account], __options);
 	}
 
 	/**
-	* getCustomerAll
+	* renounceRole
 	*
-	* @param { (number | string | BN) } from,
-	* @param { (number | string | BN) } to,
-	* @returns { Result<Result<Array<ReturnTypes.Customer>, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> }
+	* @param { (number | string | BN) } role,
+	* @param { ArgumentTypes.AccountId | null } account,
+	* @returns { void }
 	*/
-	"getCustomerAll" (
-		from: (number | string | BN),
-		to: (number | string | BN),
+	"renounceRole" (
+		role: (number | string | BN),
+		account: ArgumentTypes.AccountId | null,
 		__options: GasLimit,
-	): Promise< QueryReturnType< Result<Result<Array<ReturnTypes.Customer>, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> > >{
-		return queryOkJSON( this.__apiPromise, this.__nativeContract, this.__callerAddress, "getService::getCustomerAll", [from, to], __options, (result) => { return handleReturnType(result, getTypeDescription(22, DATA_TYPE_DESCRIPTIONS)); });
+	){
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "accessControl::renounceRole", (events: EventRecord) => {
+			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
+		}, [role, account], __options);
 	}
 
 	/**
-	* getEta
+	* hasRole
 	*
-	* @param { (number | string | BN) } orderId,
-	* @returns { Result<Result<number, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> }
+	* @param { (number | string | BN) } role,
+	* @param { ArgumentTypes.AccountId | null } address,
+	* @returns { Result<boolean, ReturnTypes.LangError> }
 	*/
-	"getEta" (
-		orderId: (number | string | BN),
+	"hasRole" (
+		role: (number | string | BN),
+		address: ArgumentTypes.AccountId | null,
 		__options: GasLimit,
-	): Promise< QueryReturnType< Result<Result<number, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> > >{
-		return queryOkJSON( this.__apiPromise, this.__nativeContract, this.__callerAddress, "getService::getEta", [orderId], __options, (result) => { return handleReturnType(result, getTypeDescription(11, DATA_TYPE_DESCRIPTIONS)); });
+	): Promise< QueryReturnType< Result<boolean, ReturnTypes.LangError> > >{
+		return queryOkJSON( this.__apiPromise, this.__nativeContract, this.__callerAddress, "accessControl::hasRole", [role, address], __options, (result) => { return handleReturnType(result, getTypeDescription(47, DATA_TYPE_DESCRIPTIONS)); });
 	}
 
 	/**
-	* getOrderFromId
+	* getRoleAdmin
 	*
-	* @param { (number | string | BN) } orderId,
-	* @returns { Result<Result<ReturnTypes.Order, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> }
-	*/
-	"getOrderFromId" (
-		orderId: (number | string | BN),
-		__options: GasLimit,
-	): Promise< QueryReturnType< Result<Result<ReturnTypes.Order, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> > >{
-		return queryOkJSON( this.__apiPromise, this.__nativeContract, this.__callerAddress, "getService::getOrderFromId", [orderId], __options, (result) => { return handleReturnType(result, getTypeDescription(26, DATA_TYPE_DESCRIPTIONS)); });
-	}
-
-	/**
-	* getFoodFromRestaurant
-	*
-	* @param { (number | string | BN) } restaurantId,
-	* @returns { Result<Result<Array<ReturnTypes.Food>, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> }
-	*/
-	"getFoodFromRestaurant" (
-		restaurantId: (number | string | BN),
-		__options: GasLimit,
-	): Promise< QueryReturnType< Result<Result<Array<ReturnTypes.Food>, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> > >{
-		return queryOkJSON( this.__apiPromise, this.__nativeContract, this.__callerAddress, "getService::getFoodFromRestaurant", [restaurantId], __options, (result) => { return handleReturnType(result, getTypeDescription(28, DATA_TYPE_DESCRIPTIONS)); });
-	}
-
-	/**
-	* getDeliveryFromId
-	*
-	* @param { (number | string | BN) } deliveryId,
-	* @returns { Result<Result<ReturnTypes.Delivery, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> }
-	*/
-	"getDeliveryFromId" (
-		deliveryId: (number | string | BN),
-		__options: GasLimit,
-	): Promise< QueryReturnType< Result<Result<ReturnTypes.Delivery, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> > >{
-		return queryOkJSON( this.__apiPromise, this.__nativeContract, this.__callerAddress, "getService::getDeliveryFromId", [deliveryId], __options, (result) => { return handleReturnType(result, getTypeDescription(32, DATA_TYPE_DESCRIPTIONS)); });
-	}
-
-	/**
-	* getDeliveryFromRestaurant
-	*
-	* @param { (number | string | BN) } restaurantId,
-	* @returns { Result<Result<Array<ReturnTypes.Delivery>, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> }
-	*/
-	"getDeliveryFromRestaurant" (
-		restaurantId: (number | string | BN),
-		__options: GasLimit,
-	): Promise< QueryReturnType< Result<Result<Array<ReturnTypes.Delivery>, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> > >{
-		return queryOkJSON( this.__apiPromise, this.__nativeContract, this.__callerAddress, "getService::getDeliveryFromRestaurant", [restaurantId], __options, (result) => { return handleReturnType(result, getTypeDescription(36, DATA_TYPE_DESCRIPTIONS)); });
-	}
-
-	/**
-	* getOrderFromRestaurant
-	*
-	* @param { (number | string | BN) } restaurantId,
-	* @returns { Result<Result<Array<ReturnTypes.Order>, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> }
-	*/
-	"getOrderFromRestaurant" (
-		restaurantId: (number | string | BN),
-		__options: GasLimit,
-	): Promise< QueryReturnType< Result<Result<Array<ReturnTypes.Order>, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> > >{
-		return queryOkJSON( this.__apiPromise, this.__nativeContract, this.__callerAddress, "getService::getOrderFromRestaurant", [restaurantId], __options, (result) => { return handleReturnType(result, getTypeDescription(17, DATA_TYPE_DESCRIPTIONS)); });
-	}
-
-	/**
-	* getDeliveryFromCustomer
-	*
-	* @param { (number | string | BN) } customerId,
-	* @returns { Result<Result<Array<ReturnTypes.Delivery>, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> }
-	*/
-	"getDeliveryFromCustomer" (
-		customerId: (number | string | BN),
-		__options: GasLimit,
-	): Promise< QueryReturnType< Result<Result<Array<ReturnTypes.Delivery>, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> > >{
-		return queryOkJSON( this.__apiPromise, this.__nativeContract, this.__callerAddress, "getService::getDeliveryFromCustomer", [customerId], __options, (result) => { return handleReturnType(result, getTypeDescription(36, DATA_TYPE_DESCRIPTIONS)); });
-	}
-
-	/**
-	* getCourierAll
-	*
-	* @param { (number | string | BN) } from,
-	* @param { (number | string | BN) } to,
-	* @returns { Result<Result<Array<ReturnTypes.Courier>, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> }
-	*/
-	"getCourierAll" (
-		from: (number | string | BN),
-		to: (number | string | BN),
-		__options: GasLimit,
-	): Promise< QueryReturnType< Result<Result<Array<ReturnTypes.Courier>, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> > >{
-		return queryOkJSON( this.__apiPromise, this.__nativeContract, this.__callerAddress, "getService::getCourierAll", [from, to], __options, (result) => { return handleReturnType(result, getTypeDescription(39, DATA_TYPE_DESCRIPTIONS)); });
-	}
-
-	/**
-	* getRestaurantAll
-	*
-	* @param { (number | string | BN) } from,
-	* @param { (number | string | BN) } to,
-	* @returns { Result<Result<Array<ReturnTypes.Restaurant>, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> }
-	*/
-	"getRestaurantAll" (
-		from: (number | string | BN),
-		to: (number | string | BN),
-		__options: GasLimit,
-	): Promise< QueryReturnType< Result<Result<Array<ReturnTypes.Restaurant>, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> > >{
-		return queryOkJSON( this.__apiPromise, this.__nativeContract, this.__callerAddress, "getService::getRestaurantAll", [from, to], __options, (result) => { return handleReturnType(result, getTypeDescription(43, DATA_TYPE_DESCRIPTIONS)); });
-	}
-
-	/**
-	* getFeeRate
-	*
+	* @param { (number | string | BN) } role,
 	* @returns { Result<number, ReturnTypes.LangError> }
 	*/
-	"getFeeRate" (
+	"getRoleAdmin" (
+		role: (number | string | BN),
 		__options: GasLimit,
 	): Promise< QueryReturnType< Result<number, ReturnTypes.LangError> > >{
-		return queryOkJSON( this.__apiPromise, this.__nativeContract, this.__callerAddress, "getService::getFeeRate", [], __options, (result) => { return handleReturnType(result, getTypeDescription(47, DATA_TYPE_DESCRIPTIONS)); });
+		return queryOkJSON( this.__apiPromise, this.__nativeContract, this.__callerAddress, "accessControl::getRoleAdmin", [role], __options, (result) => { return handleReturnType(result, getTypeDescription(49, DATA_TYPE_DESCRIPTIONS)); });
 	}
 
 	/**
-	* getOwner
+	* setCodeHash
 	*
-	* @returns { Result<ReturnTypes.AccountId, ReturnTypes.LangError> }
+	* @param { ArgumentTypes.Hash } newCodeHash,
+	* @returns { void }
 	*/
-	"getOwner" (
+	"setCodeHash" (
+		newCodeHash: ArgumentTypes.Hash,
 		__options: GasLimit,
-	): Promise< QueryReturnType< Result<ReturnTypes.AccountId, ReturnTypes.LangError> > >{
-		return queryOkJSON( this.__apiPromise, this.__nativeContract, this.__callerAddress, "getService::getOwner", [], __options, (result) => { return handleReturnType(result, getTypeDescription(48, DATA_TYPE_DESCRIPTIONS)); });
-	}
-
-	/**
-	* getDeliveryFromCourier
-	*
-	* @param { (number | string | BN) } courierId,
-	* @returns { Result<Result<Array<ReturnTypes.Delivery>, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> }
-	*/
-	"getDeliveryFromCourier" (
-		courierId: (number | string | BN),
-		__options: GasLimit,
-	): Promise< QueryReturnType< Result<Result<Array<ReturnTypes.Delivery>, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> > >{
-		return queryOkJSON( this.__apiPromise, this.__nativeContract, this.__callerAddress, "getService::getDeliveryFromCourier", [courierId], __options, (result) => { return handleReturnType(result, getTypeDescription(36, DATA_TYPE_DESCRIPTIONS)); });
-	}
-
-	/**
-	* getFoodFromId
-	*
-	* @param { (number | string | BN) } foodId,
-	* @returns { Result<Result<ReturnTypes.Food, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> }
-	*/
-	"getFoodFromId" (
-		foodId: (number | string | BN),
-		__options: GasLimit,
-	): Promise< QueryReturnType< Result<Result<ReturnTypes.Food, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> > >{
-		return queryOkJSON( this.__apiPromise, this.__nativeContract, this.__callerAddress, "getService::getFoodFromId", [foodId], __options, (result) => { return handleReturnType(result, getTypeDescription(49, DATA_TYPE_DESCRIPTIONS)); });
-	}
-
-	/**
-	* getDeliveryAll
-	*
-	* @param { (number | string | BN) } from,
-	* @param { (number | string | BN) } to,
-	* @returns { Result<Result<Array<ReturnTypes.Delivery>, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> }
-	*/
-	"getDeliveryAll" (
-		from: (number | string | BN),
-		to: (number | string | BN),
-		__options: GasLimit,
-	): Promise< QueryReturnType< Result<Result<Array<ReturnTypes.Delivery>, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> > >{
-		return queryOkJSON( this.__apiPromise, this.__nativeContract, this.__callerAddress, "getService::getDeliveryAll", [from, to], __options, (result) => { return handleReturnType(result, getTypeDescription(36, DATA_TYPE_DESCRIPTIONS)); });
-	}
-
-	/**
-	* getOrderAll
-	*
-	* @param { (number | string | BN) } from,
-	* @param { (number | string | BN) } to,
-	* @returns { Result<Result<Array<ReturnTypes.Order>, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> }
-	*/
-	"getOrderAll" (
-		from: (number | string | BN),
-		to: (number | string | BN),
-		__options: GasLimit,
-	): Promise< QueryReturnType< Result<Result<Array<ReturnTypes.Order>, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> > >{
-		return queryOkJSON( this.__apiPromise, this.__nativeContract, this.__callerAddress, "getService::getOrderAll", [from, to], __options, (result) => { return handleReturnType(result, getTypeDescription(17, DATA_TYPE_DESCRIPTIONS)); });
-	}
-
-	/**
-	* getFoodAll
-	*
-	* @param { (number | string | BN) } from,
-	* @param { (number | string | BN) } to,
-	* @returns { Result<Result<Array<ReturnTypes.Food>, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> }
-	*/
-	"getFoodAll" (
-		from: (number | string | BN),
-		to: (number | string | BN),
-		__options: GasLimit,
-	): Promise< QueryReturnType< Result<Result<Array<ReturnTypes.Food>, ReturnTypes.FoodOrderError>, ReturnTypes.LangError> > >{
-		return queryOkJSON( this.__apiPromise, this.__nativeContract, this.__callerAddress, "getService::getFoodAll", [from, to], __options, (result) => { return handleReturnType(result, getTypeDescription(28, DATA_TYPE_DESCRIPTIONS)); });
+	){
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "upgradeable::setCodeHash", (events: EventRecord) => {
+			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
+		}, [newCodeHash], __options);
 	}
 
 }

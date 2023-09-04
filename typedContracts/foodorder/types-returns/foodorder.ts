@@ -216,27 +216,16 @@ export enum OwnableError {
 	newOwnerIsZero = 'NewOwnerIsZero'
 }
 
-export type Order = {
-	foodId: number,
-	restaurantId: number,
-	customerId: number,
+export type Courier = {
 	courierId: number,
-	deliveryAddress: string,
-	status: OrderStatus,
-	timestamp: number,
-	price: ReturnNumber,
-	eta: number
-}
-
-export enum OrderStatus {
-	orderSubmitted = 'OrderSubmitted',
-	orderConfirmed = 'OrderConfirmed',
-	foodPrepared = 'FoodPrepared',
-	foodDelivered = 'FoodDelivered',
-	deliveryAccepted = 'DeliveryAccepted'
+	courierAccount: AccountId,
+	courierName: string,
+	courierAddress: string,
+	phoneNumber: string
 }
 
 export type Customer = {
+	customerId: number,
 	customerAccount: AccountId,
 	customerName: string,
 	customerAddress: string,
@@ -244,41 +233,57 @@ export type Customer = {
 }
 
 export type Food = {
+	foodId: number,
 	foodName: string,
 	restaurantId: number,
-	description: string,
-	price: ReturnNumber,
-	eta: number,
-	timestamp: number
-}
-
-export type Delivery = {
-	orderId: number,
-	restaurantId: number,
-	customerId: number,
-	courierId: number,
-	deliveryAddress: string,
-	status: DeliveryStatus,
-	timestamp: number
-}
-
-export enum DeliveryStatus {
-	waiting = 'Waiting',
-	pickedUp = 'PickedUp',
-	accepted = 'Accepted'
-}
-
-export type Courier = {
-	courierAccount: AccountId,
-	courierName: string,
-	courierAddress: string,
-	phoneNumber: string
+	foodDescription: string,
+	foodPrice: ReturnNumber,
+	foodEta: number
 }
 
 export type Restaurant = {
+	restaurantId: number,
 	restaurantAccount: AccountId,
 	restaurantName: string,
 	restaurantAddress: string,
 	phoneNumber: string
+}
+
+export enum AccessControlError {
+	invalidCaller = 'InvalidCaller',
+	missingRole = 'MissingRole',
+	roleRedundant = 'RoleRedundant'
+}
+
+export type Hash = string | number[]
+
+export interface UpgradeableError {
+	custom ? : string,
+	setCodeHashFailed ? : null,
+	ownableError ? : OwnableError,
+	accessControlError ? : AccessControlError
+}
+
+export class UpgradeableErrorBuilder {
+	static Custom(value: string): UpgradeableError {
+		return {
+			custom: value,
+		};
+	}
+	static SetCodeHashFailed(): UpgradeableError {
+		return {
+			setCodeHashFailed: null,
+		};
+	}
+	static OwnableError(value: OwnableError): UpgradeableError {
+		return {
+			ownableError: value,
+		};
+	}
+	static AccessControlError(value: AccessControlError): UpgradeableError {
+		return {
+			accessControlError: value,
+		};
+	}
 }
 

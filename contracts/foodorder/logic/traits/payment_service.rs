@@ -1,9 +1,8 @@
-use crate::impls::types::{DeliveryResult, OrderId, OrderResult};
+use openbrush::traits::{AccountId, Balance};
+use crate::impls::data::FoodOrderError;
 
-/// Payment Service Definition
 #[openbrush::trait_definition]
 pub trait PaymentService {
-    fn transfer_restaurant(&self, order_id: OrderId) -> OrderResult;
-
-    fn transfer_courier(&self, delivery_id: OrderId) -> DeliveryResult;
+    /// Function that transfers native tokens to specific account
+    fn transfer_to(&self, account: AccountId, amount: Balance) -> Result<(), FoodOrderError>;
 }

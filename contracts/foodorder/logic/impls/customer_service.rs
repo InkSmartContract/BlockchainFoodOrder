@@ -1,267 +1,188 @@
-pub use crate::{
+use openbrush::traits::Storage;
+use ink::prelude::{vec::Vec, string::String};
+
+use crate::{
     ensure,
-    impls::types::{
-        Customer, CustomerId, Data, DeliveryId, DeliveryStatus, FoodId, FoodOrderError, Order,
-        OrderId, OrderStatus, RestaurantId,
+    impls::data::{
+        Data, CustomerId, Customer, FoodOrderError, FoodId, DeliveryId, OrderId, Order, OrderStatus, DeliveryStatus
     },
-    traits::customer_service::*,
-    traits::payment_service::*,
+    impls::payment_service::PaymentServiceImpl,
+    traits::events::FoodOrderEvents,
 };
-use ink::prelude::{string::String, vec::Vec};
-use openbrush::{contracts::ownable::*, modifier_definition, modifiers, traits::Storage};
 
-use super::types::{CustomerResult, DeliveryResult, OrderResult};
+use core::cmp::{max, min};
 
-/// Customer Events Definition
-pub trait CustomerServiceEvents {
-    fn emit_submit_order_event(
-        &self,
-        order_id: OrderId,
-        food_id: FoodId,
-        restaurant_id: RestaurantId,
-        customer_id: CustomerId,
-        delivery_address: String,
-        phone_number: String,
-    );
-
-    fn emit_accept_delivery_event(&self, delivery_id: DeliveryId, order_id: OrderId);
-}
-
-/// Implementation of Customer Service
-impl<T> CustomerService for T
-where
-    T: Storage<Data> + Storage<ownable::Data>,
+#[openbrush::trait_definition]
+pub trait CustomerServiceImpl: Storage<Data> + FoodOrderEvents + PaymentServiceImpl
 {
-    /// Customer's function.
-    /// Function that adds a new customer.
-    default fn add_customer(
-        &mut self,
-        customer_name: String,
-        customer_address: String,
-        phone_number: String,
-    ) -> CustomerResult {
-        let customer_account = T::env().caller();
+    /// Function to create a customer
+    #[ink(message)]
+    fn create_customer(&mut self, customer_name: String, customer_address: String, phone_number: String) -> Result<CustomerId, FoodOrderError> {
         ensure!(customer_name.len() > 0, FoodOrderError::InvalidNameLength);
-        ensure!(
-            customer_address.len() > 0,
-            FoodOrderError::InvalidAddressLength
-        );
-        ensure!(
-            phone_number.len() > 0,
-            FoodOrderError::InvalidPhoneNumberLength
-        );
+        ensure!(customer_address.len() > 0, FoodOrderError::InvalidAddressLength);
+        ensure!(phone_number.len() > 0, FoodOrderError::InvalidPhoneNumberLength);
 
-        // Make a new customer struct and insert it into storage
+        let customer_account = Self::env().caller();
+
+        ensure!(!self.data::<Data>().customer_data.contains(&customer_account), FoodOrderError::CustomerAlreadyExist);
+
+        let customer_id = self.data::<Data>().customer_id;
         let customer = Customer {
+            customer_id,
             customer_account,
             customer_name,
             customer_address,
             phone_number,
         };
-        let customer_id = self.data::<Data>().customer_id;
         self.data::<Data>().customer_id += 1;
-        self.data::<Data>()
-            .customers
-            .insert(&customer_id, &customer);
-        self.data::<Data>()
-            .customer_account_id
-            .insert(&customer_account, &customer_id);
-
-        // Return CustomerResult with a created customer_id
+        self.data::<Data>().customer_data.insert(&customer_account, &customer);
+        self.data::<Data>().customer_accounts.insert(&customer_id, &customer_account);
+        
         Ok(customer_id)
     }
 
-    /// Customer's function.
-    /// Function taht request an order.
-    #[modifiers(is_customer_user)]
-    default fn submit_order(&mut self, food_id: FoodId, delivery_address: String) -> OrderResult {
-        let customer_account = T::env().caller();
-        let price = T::env().transferred_value();
+    /// Function to read a customer
+    #[ink(message)]
+    fn read_customer(&self) -> Result<Customer, FoodOrderError> {
+        let customer_account = Self::env().caller();
 
-        ensure!(
-            self.data::<Data>().food_data.contains(&food_id),
-            FoodOrderError::FoodNotExist
-        );
-        ensure!(
-            delivery_address.len() > 0,
-            FoodOrderError::InvalidAddressLength
-        );
-        ensure!(
-            price
-                == self
-                    .data::<Data>()
-                    .food_data
-                    .get(&food_id)
-                    .unwrap()
-                    .price
-                    .into(),
-            FoodOrderError::NotSamePrice
-        );
+        ensure!(self.data::<Data>().customer_data.contains(&customer_account), FoodOrderError::CustomerNotExist);
 
-        // Create an Order and insert it into storage.
-        let customer_id = self
-            .data::<Data>()
-            .customer_account_id
-            .get(&customer_account)
-            .unwrap();
-        let restaurant_id = self
-            .data::<Data>()
-            .food_data
-            .get(&food_id)
-            .unwrap()
-            .restaurant_id;
-        let phone_number = self
-            .data::<Data>()
-            .customers
-            .get(&customer_id)
-            .unwrap()
-            .phone_number;
-        let order = Order {
-            food_id,
-            restaurant_id,
-            customer_id,
-            courier_id: 0,
-            delivery_address: delivery_address.clone(),
-            status: OrderStatus::OrderSubmitted,
-            timestamp: T::env().block_timestamp(),
-            price,
-            eta: 0,
-        };
+        Ok(self.data::<Data>().customer_data.get(&customer_account).unwrap())
+    }
+
+    /// Function to read a customer from id
+    #[ink(message)]
+    fn read_customer_from_id(&self, customer_id: CustomerId) -> Result<Customer, FoodOrderError> {
+        ensure!(self.data::<Data>().customer_accounts.contains(&customer_id), FoodOrderError::CustomerNotExist);
+        
+        let customer_account = self.data::<Data>().customer_accounts.get(&customer_id).unwrap();
+
+        Ok(self.data::<Data>().customer_data.get(&customer_account).unwrap())
+    }
+
+    /// Function to read customers from given scope
+    #[ink(message)]
+    fn read_customer_all(&self, from: CustomerId, to: CustomerId) -> Result<Vec<Customer>, FoodOrderError> {
+        ensure!(from < to, FoodOrderError::InvalidParameters);
+        ensure!(from < self.data::<Data>().customer_id, FoodOrderError::InvalidParameters);
+
+        let mut customer_list: Vec<Customer> = Vec::new();
+        let start = max(1, from);
+        let end = min(self.data::<Data>().customer_id, to);
+
+        for i in start..end {
+            if self.data::<Data>().customer_accounts.contains(&i) {
+                let customer_account = self.data::<Data>().customer_accounts.get(&i).unwrap();
+                customer_list.push(self.data::<Data>().customer_data.get(&customer_account).unwrap())
+            }
+        }
+
+        Ok(customer_list)
+    }
+
+    /// Function to update a customer
+    #[ink(message)]
+    fn update_customer(&mut self, customer_name: String, customer_address: String, phone_number: String) -> Result<(), FoodOrderError> {
+        ensure!(customer_name.len() > 0, FoodOrderError::InvalidNameLength);
+        ensure!(customer_address.len() > 0, FoodOrderError::InvalidAddressLength);
+        ensure!(phone_number.len() > 0, FoodOrderError::InvalidPhoneNumberLength);
+
+        let customer_account = Self::env().caller();
+
+        ensure!(self.data::<Data>().customer_data.contains(&customer_account), FoodOrderError::CustomerNotExist);
+        
+        let mut customer =  self.data::<Data>().customer_data.get(&customer_account).unwrap();
+        customer.customer_name = customer_name;
+        customer.customer_address = customer_address;
+        customer.phone_number = phone_number;
+
+        self.data::<Data>().customer_data.insert(&customer_account, &customer);
+
+        Ok(())
+    }
+
+    /// Function to delete a customer
+    #[ink(message)]
+    fn delete_customer(&mut self) -> Result<(), FoodOrderError> {
+        let customer_account = Self::env().caller();
+
+        ensure!(self.data::<Data>().customer_data.contains(&customer_account), FoodOrderError::CustomerNotExist);
+
+        let customer = self.data::<Data>().customer_data.get(&customer_account).unwrap();
+
+        self.data::<Data>().customer_data.remove(&customer_account);
+        self.data::<Data>().customer_accounts.remove(&customer.customer_id);
+
+        Ok(())
+    }
+
+    /// Function that a customer submits an order
+    #[ink(message, payable)]
+    fn submit_order(&mut self, food_id: FoodId, delivery_address: String) -> Result<OrderId, FoodOrderError> {
+        let customer_account = Self::env().caller();
+        let price = Self::env().transferred_value();
+
+        ensure!(self.data::<Data>().customer_data.contains(&customer_account), FoodOrderError::CustomerNotExist);
+        ensure!(self.data::<Data>().food_data.contains(&food_id), FoodOrderError::FoodNotExist);
+        ensure!(delivery_address.len() > 0, FoodOrderError::InvalidAddressLength);
+        ensure!(price == self.data::<Data>().food_data.get(&food_id).unwrap().food_price.into(), FoodOrderError::NotSamePrice);
+
+        let customer_id = self.data::<Data>().customer_data.get(&customer_account).unwrap().customer_id;
+        let restaurant_id = self.data::<Data>().food_data.get(&food_id).unwrap().restaurant_id;
+
         let order_id = self.data::<Data>().order_id;
-        self.data::<Data>().order_id += 1;
-        self.data::<Data>().order_data.insert(&order_id, &order);
-
-        // Emit an SubmitOrderEvent
-        self.emit_submit_order_event(
+        let order = Order {
             order_id,
             food_id,
             restaurant_id,
             customer_id,
+            courier_id: 0,
             delivery_address,
-            phone_number,
-        );
-
-        // Insert it into customer_order_data storage
-        let mut customer_vec = self
-            .data::<Data>()
-            .customer_order_data
-            .get(&customer_id)
-            .unwrap_or(Vec::new());
-        customer_vec.push(order_id);
-        self.data::<Data>()
-            .customer_order_data
-            .insert(&customer_id, &customer_vec);
-
-        // Insert it into restaurant_order_data storage
-        let mut restaurant_vec = self
-            .data::<Data>()
-            .restaurant_order_data
-            .get(&restaurant_id)
-            .unwrap_or(Vec::new());
-        restaurant_vec.push(order_id);
-        self.data::<Data>()
-            .restaurant_order_data
-            .insert(&restaurant_id, &restaurant_vec);
-
-        // Return a success OrderResult with a created order_id
-        Ok(order_id)
-    }
-
-    /// Customer's function.
-    /// Function that confirm a delivery.
-    #[modifiers(is_customer_user)]
-    default fn accept_delivery(&mut self, delivery_id: DeliveryId) -> DeliveryResult {
-        let customer_account = T::env().caller();
-        ensure!(
-            self.data::<Data>().delivery_data.contains(&delivery_id),
-            FoodOrderError::DeliveryNotExist
-        );
-
-        let customer_id = self
-            .data::<Data>()
-            .customer_account_id
-            .get(&customer_account)
-            .unwrap();
-        let order_id = self
-            .data::<Data>()
-            .delivery_data
-            .get(&delivery_id)
-            .unwrap()
-            .order_id;
-        ensure!(
-            self.data::<Data>()
-                .order_data
-                .get(&order_id)
-                .unwrap()
-                .status
-                == OrderStatus::FoodDelivered,
-            FoodOrderError::OrderStatusNotDelivered
-        );
-        ensure!(
-            self.data::<Data>()
-                .order_data
-                .get(&order_id)
-                .unwrap()
-                .customer_id
-                == customer_id,
-            FoodOrderError::CallerIsNotCustomerOrder
-        );
-
-        // Change order status from `FoodDelivered` to `DeliveryAccepted`
-        let mut order = self.data::<Data>().order_data.get(&order_id).unwrap();
-        let status = OrderStatus::DeliveryAccepted;
-        order.status = status;
+            status: OrderStatus::OrderSubmitted,
+            timestamp: Self::env().block_timestamp(),
+            price,
+            eta: 0,
+        };
+        self.data::<Data>().order_id += 1;
         self.data::<Data>().order_data.insert(&order_id, &order);
 
-        // Emit `AcceptDeliveryEvent`
-        self.emit_accept_delivery_event(order_id, delivery_id);
+        self.emit_submit_order_event(order_id, customer_account);
 
-        // Change delivery status from 'PickUp' to 'Accept'
+        Ok(order_id)
+
+    }
+
+    /// Function that a customer accepts its delivery
+    #[ink(message)]
+    fn accept_delivery(&mut self, delivery_id: DeliveryId) -> Result<DeliveryId, FoodOrderError> {
+        let customer_account = Self::env().caller();
+
+        ensure!(self.data::<Data>().customer_data.contains(&customer_account), FoodOrderError::CustomerNotExist);
+        ensure!(self.data::<Data>().delivery_data.contains(&delivery_id), FoodOrderError::DeliveryNotExist);
+
+        let customer_id = self.data::<Data>().customer_data.get(&customer_account).unwrap().customer_id;
+        let order_id = self.data::<Data>().delivery_data.get(&delivery_id).unwrap().order_id;
+
+        ensure!(self.data::<Data>().order_data.get(&order_id).unwrap().status == OrderStatus::FoodDelivered, FoodOrderError::OrderStatusNotDelivered);
+        ensure!(self.data::<Data>().order_data.get(&order_id).unwrap().customer_id == customer_id, FoodOrderError::CallerIsNotCustomerOrder);
+
+        let mut order = self.data::<Data>().order_data.get(&order_id).unwrap();
+        order.status = OrderStatus::DeliveryAccepted;
+        self.data::<Data>().order_data.insert(&order_id, &order);
+
         let mut delivery = self.data::<Data>().delivery_data.get(&delivery_id).unwrap();
-        let delivery_status = DeliveryStatus::Accepted;
-        delivery.status = delivery_status;
-        self.data::<Data>()
-            .delivery_data
-            .insert(&delivery_id, &delivery);
+        delivery.status = DeliveryStatus::Accepted;
+        self.data::<Data>().delivery_data.insert(&delivery_id, &delivery);
+
+        self.emit_accept_delivery_event(delivery_id, order_id);
 
         // Transfer money to courier.
-        PaymentService::transfer_courier(self, delivery_id)
+        let courier_account = self.data::<Data>().courier_accounts.get(&delivery.courier_id).unwrap();
+        let amount = order.price / (self.data::<Data>().fee_rate as u128);
+        
+        PaymentServiceImpl::transfer_to(self, courier_account, amount).expect("Err");
+
+        Ok(delivery_id)
     }
-}
-
-/// Courier Event Initation
-impl<T> CustomerServiceEvents for T
-where
-    T: Storage<Data>,
-{
-    default fn emit_submit_order_event(
-        &self,
-        _order_id: OrderId,
-        _food_id: FoodId,
-        _restaurant_id: RestaurantId,
-        _customer_id: CustomerId,
-        _delivery_address: String,
-        _phone_number: String,
-    ) {
-    }
-
-    default fn emit_accept_delivery_event(&self, _delivery_id: DeliveryId, _order_id: OrderId) {}
-}
-
-/// modifier to check customer user
-#[modifier_definition]
-pub fn is_customer_user<T, F, R, E>(instance: &mut T, body: F) -> Result<R, E>
-where
-    T: Storage<Data>,
-    F: FnOnce(&mut T) -> Result<R, E>,
-    E: From<FoodOrderError>,
-{
-    ensure!(
-        instance
-            .data()
-            .customer_account_id
-            .contains(&T::env().caller()),
-        FoodOrderError::CallerIsNotCustomer,
-    );
-    body(instance)
 }

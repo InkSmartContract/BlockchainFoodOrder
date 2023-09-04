@@ -215,27 +215,16 @@ export enum OwnableError {
 	newOwnerIsZero = 'NewOwnerIsZero'
 }
 
-export type Order = {
-	foodId: (number | string | BN),
-	restaurantId: (number | string | BN),
-	customerId: (number | string | BN),
+export type Courier = {
 	courierId: (number | string | BN),
-	deliveryAddress: string,
-	status: OrderStatus,
-	timestamp: (number | string | BN),
-	price: (string | number | BN),
-	eta: (number | string | BN)
-}
-
-export enum OrderStatus {
-	orderSubmitted = 'OrderSubmitted',
-	orderConfirmed = 'OrderConfirmed',
-	foodPrepared = 'FoodPrepared',
-	foodDelivered = 'FoodDelivered',
-	deliveryAccepted = 'DeliveryAccepted'
+	courierAccount: AccountId,
+	courierName: string,
+	courierAddress: string,
+	phoneNumber: string
 }
 
 export type Customer = {
+	customerId: (number | string | BN),
 	customerAccount: AccountId,
 	customerName: string,
 	customerAddress: string,
@@ -243,41 +232,57 @@ export type Customer = {
 }
 
 export type Food = {
+	foodId: (number | string | BN),
 	foodName: string,
 	restaurantId: (number | string | BN),
-	description: string,
-	price: (string | number | BN),
-	eta: (number | string | BN),
-	timestamp: (number | string | BN)
-}
-
-export type Delivery = {
-	orderId: (number | string | BN),
-	restaurantId: (number | string | BN),
-	customerId: (number | string | BN),
-	courierId: (number | string | BN),
-	deliveryAddress: string,
-	status: DeliveryStatus,
-	timestamp: (number | string | BN)
-}
-
-export enum DeliveryStatus {
-	waiting = 'Waiting',
-	pickedUp = 'PickedUp',
-	accepted = 'Accepted'
-}
-
-export type Courier = {
-	courierAccount: AccountId,
-	courierName: string,
-	courierAddress: string,
-	phoneNumber: string
+	foodDescription: string,
+	foodPrice: (string | number | BN),
+	foodEta: (number | string | BN)
 }
 
 export type Restaurant = {
+	restaurantId: (number | string | BN),
 	restaurantAccount: AccountId,
 	restaurantName: string,
 	restaurantAddress: string,
 	phoneNumber: string
+}
+
+export enum AccessControlError {
+	invalidCaller = 'InvalidCaller',
+	missingRole = 'MissingRole',
+	roleRedundant = 'RoleRedundant'
+}
+
+export type Hash = string | number[]
+
+export interface UpgradeableError {
+	custom ? : string,
+	setCodeHashFailed ? : null,
+	ownableError ? : OwnableError,
+	accessControlError ? : AccessControlError
+}
+
+export class UpgradeableErrorBuilder {
+	static Custom(value: string): UpgradeableError {
+		return {
+			custom: value,
+		};
+	}
+	static SetCodeHashFailed(): UpgradeableError {
+		return {
+			setCodeHashFailed: null,
+		};
+	}
+	static OwnableError(value: OwnableError): UpgradeableError {
+		return {
+			ownableError: value,
+		};
+	}
+	static AccessControlError(value: AccessControlError): UpgradeableError {
+		return {
+			accessControlError: value,
+		};
+	}
 }
 
