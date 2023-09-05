@@ -7,6 +7,14 @@ export enum LangError {
 	couldNotReadInput = 'CouldNotReadInput'
 }
 
+export type Courier = {
+	courierId: number,
+	courierAccount: AccountId,
+	courierName: string,
+	courierAddress: string,
+	phoneNumber: string
+}
+
 export interface FoodOrderError {
 	ownableError ? : OwnableError,
 	callerIsNotManager ? : null,
@@ -17,18 +25,14 @@ export interface FoodOrderError {
 	callerIsNotRestaurantOrder ? : null,
 	callerIsNotRestaurantFood ? : null,
 	notSamePrice ? : null,
-	customerAlreadyExist ? : null,
-	restaurantAlreadyExist ? : null,
-	courierAlreadyExist ? : null,
+	alreadyExist ? : null,
+	notExist ? : null,
 	orderIsNotDelivered ? : null,
 	orderIsNotConfirmed ? : null,
 	deliveryIsAlreadyPickUp ? : null,
 	foodNotExist ? : null,
 	orderNotExist ? : null,
 	deliveryNotExist ? : null,
-	customerNotExist ? : null,
-	restaurantNotExist ? : null,
-	courierNotExist ? : null,
 	invalidNameLength ? : null,
 	invalidAddressLength ? : null,
 	invalidPhoneNumberLength ? : null,
@@ -89,19 +93,14 @@ export class FoodOrderErrorBuilder {
 			notSamePrice: null,
 		};
 	}
-	static CustomerAlreadyExist(): FoodOrderError {
+	static AlreadyExist(): FoodOrderError {
 		return {
-			customerAlreadyExist: null,
+			alreadyExist: null,
 		};
 	}
-	static RestaurantAlreadyExist(): FoodOrderError {
+	static NotExist(): FoodOrderError {
 		return {
-			restaurantAlreadyExist: null,
-		};
-	}
-	static CourierAlreadyExist(): FoodOrderError {
-		return {
-			courierAlreadyExist: null,
+			notExist: null,
 		};
 	}
 	static OrderIsNotDelivered(): FoodOrderError {
@@ -132,21 +131,6 @@ export class FoodOrderErrorBuilder {
 	static DeliveryNotExist(): FoodOrderError {
 		return {
 			deliveryNotExist: null,
-		};
-	}
-	static CustomerNotExist(): FoodOrderError {
-		return {
-			customerNotExist: null,
-		};
-	}
-	static RestaurantNotExist(): FoodOrderError {
-		return {
-			restaurantNotExist: null,
-		};
-	}
-	static CourierNotExist(): FoodOrderError {
-		return {
-			courierNotExist: null,
 		};
 	}
 	static InvalidNameLength(): FoodOrderError {
@@ -214,14 +198,6 @@ export class FoodOrderErrorBuilder {
 export enum OwnableError {
 	callerIsNotOwner = 'CallerIsNotOwner',
 	newOwnerIsZero = 'NewOwnerIsZero'
-}
-
-export type Courier = {
-	courierId: number,
-	courierAccount: AccountId,
-	courierName: string,
-	courierAddress: string,
-	phoneNumber: string
 }
 
 export type Customer = {
