@@ -7,16 +7,10 @@ export enum LangError {
 	couldNotReadInput = 'CouldNotReadInput'
 }
 
-export type Courier = {
-	courierId: number,
-	courierAccount: AccountId,
-	courierName: string,
-	courierAddress: string,
-	phoneNumber: string
-}
-
 export interface FoodOrderError {
+	accessControlError ? : AccessControlError,
 	ownableError ? : OwnableError,
+	callerIsNotFoodOwner ? : null,
 	callerIsNotManager ? : null,
 	callerIsNotCustomer ? : null,
 	callerIsNotRestaurant ? : null,
@@ -48,9 +42,19 @@ export interface FoodOrderError {
 }
 
 export class FoodOrderErrorBuilder {
+	static AccessControlError(value: AccessControlError): FoodOrderError {
+		return {
+			accessControlError: value,
+		};
+	}
 	static OwnableError(value: OwnableError): FoodOrderError {
 		return {
 			ownableError: value,
+		};
+	}
+	static CallerIsNotFoodOwner(): FoodOrderError {
+		return {
+			callerIsNotFoodOwner: null,
 		};
 	}
 	static CallerIsNotManager(): FoodOrderError {
@@ -195,9 +199,23 @@ export class FoodOrderErrorBuilder {
 	}
 }
 
+export enum AccessControlError {
+	invalidCaller = 'InvalidCaller',
+	missingRole = 'MissingRole',
+	roleRedundant = 'RoleRedundant'
+}
+
 export enum OwnableError {
 	callerIsNotOwner = 'CallerIsNotOwner',
 	newOwnerIsZero = 'NewOwnerIsZero'
+}
+
+export type Courier = {
+	courierId: number,
+	courierAccount: AccountId,
+	courierName: string,
+	courierAddress: string,
+	phoneNumber: string
 }
 
 export type Customer = {
@@ -208,15 +226,6 @@ export type Customer = {
 	phoneNumber: string
 }
 
-export type Food = {
-	foodId: number,
-	foodName: string,
-	restaurantId: number,
-	foodDescription: string,
-	foodPrice: ReturnNumber,
-	foodEta: number
-}
-
 export type Restaurant = {
 	restaurantId: number,
 	restaurantAccount: AccountId,
@@ -225,10 +234,13 @@ export type Restaurant = {
 	phoneNumber: string
 }
 
-export enum AccessControlError {
-	invalidCaller = 'InvalidCaller',
-	missingRole = 'MissingRole',
-	roleRedundant = 'RoleRedundant'
+export type Food = {
+	foodId: number,
+	foodName: string,
+	restaurantId: number,
+	foodDescription: string,
+	foodPrice: ReturnNumber,
+	foodEta: number
 }
 
 export type Hash = string | number[]

@@ -9,19 +9,23 @@ use crate::{
     },
     impls::payment_service::PaymentServiceImpl,
     traits::events::FoodOrderEvents,
+    impls::shared::CUSTOMER,
 };
 
-use openbrush::{modifier_definition, modifiers};
+use openbrush::contracts::access_control::{AccessControlImpl, only_role};
+use openbrush::modifiers;
 
 use core::cmp::{max, min};
 
 #[openbrush::trait_definition]
-pub trait CustomerServiceImpl: Storage<Data> + FoodOrderEvents + PaymentServiceImpl
+pub trait CustomerServiceImpl: Storage<Data> + AccessControlImpl + FoodOrderEvents + PaymentServiceImpl
 {
     /// Function to create a customer
     #[ink(message)]
     #[create_item(Customer)]
     fn create_customer(&mut self, customer_name: String, customer_address: String, phone_number: String) -> Result<CustomerId, FoodOrderError> {
+        AccessControlImpl::grant_role(self, CUSTOMER, Some(Self::env().caller())).expect("Failed to grant Customer Role");
+
         // ensure!(customer_name.len() > 0, FoodOrderError::InvalidNameLength);
         // ensure!(customer_address.len() > 0, FoodOrderError::InvalidAddressLength);
         // ensure!(phone_number.len() > 0, FoodOrderError::InvalidPhoneNumberLength);
@@ -91,7 +95,7 @@ pub trait CustomerServiceImpl: Storage<Data> + FoodOrderEvents + PaymentServiceI
     /// Function to update a customer
     #[ink(message)]
     #[update_item(Customer)]
-    #[modifiers(is_customer)]
+    #[modifiers(only_role(CUSTOMER))]
     fn update_customer(&mut self, customer_name: String, customer_address: String, phone_number: String) -> Result<(), FoodOrderError> {
         // ensure!(customer_name.len() > 0, FoodOrderError::InvalidNameLength);
         // ensure!(customer_address.len() > 0, FoodOrderError::InvalidAddressLength);
@@ -114,7 +118,7 @@ pub trait CustomerServiceImpl: Storage<Data> + FoodOrderEvents + PaymentServiceI
     /// Function to delete a customer
     #[ink(message)]
     #[delete_item(Customer)]
-    #[modifiers(is_customer)]
+    #[modifiers(only_role(CUSTOMER))]
     fn delete_customer(&mut self) -> Result<(), FoodOrderError> {
         // let customer_account = Self::env().caller();
 
@@ -130,7 +134,7 @@ pub trait CustomerServiceImpl: Storage<Data> + FoodOrderEvents + PaymentServiceI
 
     /// Function that a customer submits an order
     #[ink(message, payable)]
-    #[modifiers(is_customer)]
+    #[modifiers(only_role(CUSTOMER))]
     fn submit_order(&mut self, food_id: FoodId, delivery_address: String) -> Result<OrderId, FoodOrderError> {
         let customer_account = Self::env().caller();
         let price = Self::env().transferred_value();
@@ -167,7 +171,7 @@ pub trait CustomerServiceImpl: Storage<Data> + FoodOrderEvents + PaymentServiceI
 
     /// Function that a customer accepts its delivery
     #[ink(message)]
-    #[modifiers(is_customer)]
+    #[modifiers(only_role(CUSTOMER))]
     fn accept_delivery(&mut self, delivery_id: DeliveryId) -> Result<DeliveryId, FoodOrderError> {
         let customer_account = Self::env().caller();
 
@@ -198,22 +202,4 @@ pub trait CustomerServiceImpl: Storage<Data> + FoodOrderEvents + PaymentServiceI
 
         Ok(delivery_id)
     }
-}
-
-
-#[modifier_definition]
-pub fn is_customer<T, F, R, E>(instance: &mut T, body: F) -> Result<R, E>
-where
-    T: Storage<Data>,
-    F: FnOnce(&mut T) -> Result<R, E>,
-    E: From<FoodOrderError>,
-{
-    ensure!(
-        instance
-            .data()
-            .customer_data
-            .contains(&T::env().caller()),
-        FoodOrderError::NotExist,
-    );
-    body(instance)
 }

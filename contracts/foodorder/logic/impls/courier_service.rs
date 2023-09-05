@@ -1,24 +1,28 @@
 use crud_macro::{create_item, read_item, read_item_from_id, read_item_all, update_item, delete_item};
 use openbrush::traits::Storage;
+
 use ink::prelude::{vec::Vec, string::String};
 
 use crate::{
     ensure,
     impls::data::{Data, CourierId, Courier, FoodOrderError, DeliveryId, DeliveryStatus},
     traits::events::FoodOrderEvents,
+    impls::shared::COURIER,
 };
 
-use openbrush::{modifier_definition, modifiers};
+use openbrush::contracts::access_control::{AccessControlImpl, only_role};
+use openbrush::modifiers;
 
 use core::cmp::{max, min};
 
 #[openbrush::trait_definition]
-pub trait CourierServiceImpl: Storage<Data> + FoodOrderEvents
+pub trait CourierServiceImpl: Storage<Data> + AccessControlImpl + FoodOrderEvents
 {
     /// Function to create a courier
     #[ink(message)]
     #[create_item(Courier)]
     fn create_courier(&mut self, courier_name: String, courier_address: String, phone_number: String) -> Result<CourierId, FoodOrderError> {
+        AccessControlImpl::grant_role(self, COURIER, Some(Self::env().caller())).expect("Failed to grant Courier Role");
         // ensure!(courier_name.len() > 0, FoodOrderError::InvalidNameLength);
         // ensure!(courier_address.len() > 0, FoodOrderError::InvalidAddressLength);
         // ensure!(phone_number.len() > 0, FoodOrderError::InvalidPhoneNumberLength);
@@ -89,7 +93,7 @@ pub trait CourierServiceImpl: Storage<Data> + FoodOrderEvents
     /// Function to update a courier
     #[ink(message)]
     #[update_item(Courier)]
-    #[modifiers(is_courier)]
+    #[modifiers(only_role(COURIER))]
     fn update_courier(&mut self, courier_name: String, courier_address: String, phone_number: String) -> Result<(), FoodOrderError> {
         // ensure!(courier_name.len() > 0, FoodOrderError::InvalidNameLength);
         // ensure!(courier_address.len() > 0, FoodOrderError::InvalidAddressLength);
@@ -112,7 +116,7 @@ pub trait CourierServiceImpl: Storage<Data> + FoodOrderEvents
     /// Function to delete a courier
     #[ink(message)]
     #[delete_item(Courier)]
-    #[modifiers(is_courier)]
+    #[modifiers(only_role(COURIER))]
     fn delete_courier(&mut self) -> Result<(), FoodOrderError> {
         // let courier_account = Self::env().caller();
 
@@ -128,7 +132,7 @@ pub trait CourierServiceImpl: Storage<Data> + FoodOrderEvents
 
     /// Function that a courier picks up food at a restaurant for delivery
     #[ink(message)]
-    #[modifiers(is_courier)]
+    #[modifiers(only_role(COURIER))]
     fn pickup_delivery(&mut self, delivery_id: DeliveryId) -> Result<DeliveryId, FoodOrderError> {
         let courier_account = Self::env().caller();
         // ensure!(self.data::<Data>().courier_data.contains(&courier_account), FoodOrderError::NotExist);
@@ -150,22 +154,4 @@ pub trait CourierServiceImpl: Storage<Data> + FoodOrderEvents
 
         Ok(delivery_id)
     }
-}
-
-
-#[modifier_definition]
-pub fn is_courier<T, F, R, E>(instance: &mut T, body: F) -> Result<R, E>
-where
-    T: Storage<Data>,
-    F: FnOnce(&mut T) -> Result<R, E>,
-    E: From<FoodOrderError>,
-{
-    ensure!(
-        instance
-            .data()
-            .courier_data
-            .contains(&T::env().caller()),
-        FoodOrderError::NotExist,
-    );
-    body(instance)
 }

@@ -1,6 +1,6 @@
 use ink::prelude::string::String;
 use openbrush::traits::Timestamp;
-use openbrush::{storage::Mapping, contracts::ownable::OwnableError, traits::{AccountId, Balance}};
+use openbrush::{storage::Mapping, contracts::ownable::OwnableError, contracts::access_control::AccessControlError, traits::{AccountId, Balance}};
 
 pub type FoodId = u64;
 pub type OrderId = u64;
@@ -258,7 +258,9 @@ impl Default for Data {
 #[cfg_attr(feature = "std", derive(scale_info::TypeInfo))]
 pub enum FoodOrderError {
     // Caller is not a marketplace owner.
+    AccessControlError(AccessControlError),
     OwnableError(OwnableError),
+    CallerIsNotFoodOwner,
     CallerIsNotManager,
     CallerIsNotCustomer,
     CallerIsNotRestaurant,
@@ -292,5 +294,11 @@ pub enum FoodOrderError {
 impl From<OwnableError> for FoodOrderError {
     fn from(error: OwnableError) -> Self {
         FoodOrderError::OwnableError(error)
+    }
+}
+
+impl From<AccessControlError> for FoodOrderError {
+    fn from(error: AccessControlError) -> Self {
+        FoodOrderError::AccessControlError(error)
     }
 }

@@ -7,18 +7,20 @@ use crate::{
     impls::data::{Data, RestaurantId, Restaurant, FoodOrderError, FoodId, Food, OrderId, OrderStatus, Delivery, DeliveryStatus},
     impls::payment_service::PaymentServiceImpl,
     traits::events::FoodOrderEvents,
+    impls::shared::RESTAURANT,
 };
 
-use openbrush::{modifier_definition, modifiers};
+use openbrush::contracts::access_control::{AccessControlImpl, only_role};
+use openbrush::modifiers;
 
 use core::cmp::{max, min};
 
 #[openbrush::trait_definition]
-pub trait RestaurantServiceImpl: Storage<Data> + FoodOrderEvents + PaymentServiceImpl 
+pub trait RestaurantServiceImpl: Storage<Data> + AccessControlImpl + FoodOrderEvents + PaymentServiceImpl 
 {
     /// Function to create a food
     #[ink(message)]
-    #[modifiers(is_restaurant)]
+    #[modifiers(only_role(RESTAURANT))]
     fn create_food(&mut self, food_name: String, food_description: String, food_price: Balance, food_eta: u64) -> Result<FoodId, FoodOrderError> {
         let restaurant_account = Self::env().caller();
 
@@ -74,13 +76,18 @@ pub trait RestaurantServiceImpl: Storage<Data> + FoodOrderEvents + PaymentServic
 
     /// Function to update a food
     #[ink(message)]
-    #[modifiers(is_restaurant)]
+    #[modifiers(only_role(RESTAURANT))]
     fn update_food(&mut self, food_id: FoodId, food_name: String, food_description: String, food_price: Balance, food_eta: u64) -> Result<(), FoodOrderError> {
         ensure!(self.data::<Data>().food_data.contains(&food_id), FoodOrderError::FoodNotExist);
         ensure!(food_name.len() > 0, FoodOrderError::InvalidNameLength);
         ensure!(food_description.len() > 0, FoodOrderError::InvalidDescriptionLength);
         ensure!(food_price > 0, FoodOrderError::InvalidParameters);
         ensure!(food_eta > 0, FoodOrderError::InvalidParameters);
+
+        let restaurant_account = Self::env().caller();
+        let restaurant_id = self.data::<Data>().restaurant_data.get(&restaurant_account).unwrap().restaurant_id;
+
+        ensure!(self.data::<Data>().food_data.get(&food_id).unwrap().restaurant_id == restaurant_id, FoodOrderError::CallerIsNotFoodOwner);
 
         let mut food = self.data::<Data>().food_data.get(&food_id).unwrap();
         food.food_name = food_name;
@@ -95,9 +102,14 @@ pub trait RestaurantServiceImpl: Storage<Data> + FoodOrderEvents + PaymentServic
 
     /// Function to delete a food
     #[ink(message)]
-    #[modifiers(is_restaurant)]
+    #[modifiers(only_role(RESTAURANT))]
     fn delete_food(&mut self, food_id: FoodId) -> Result<(), FoodOrderError> {
         ensure!(self.data::<Data>().food_data.contains(&food_id), FoodOrderError::FoodNotExist);
+
+        let restaurant_account = Self::env().caller();
+        let restaurant_id = self.data::<Data>().restaurant_data.get(&restaurant_account).unwrap().restaurant_id;
+
+        ensure!(self.data::<Data>().food_data.get(&food_id).unwrap().restaurant_id == restaurant_id, FoodOrderError::CallerIsNotFoodOwner);
 
         self.data::<Data>().food_data.remove(&food_id);
 
@@ -108,6 +120,7 @@ pub trait RestaurantServiceImpl: Storage<Data> + FoodOrderEvents + PaymentServic
     #[ink(message)]
     #[create_item(Restaurant)]
     fn create_restaurant(&mut self, restaurant_name: String, restaurant_address: String, phone_number: String) -> Result<RestaurantId, FoodOrderError> {
+        AccessControlImpl::grant_role(self, RESTAURANT, Some(Self::env().caller())).expect("Failed to grant Restaurant Role");
         // ensure!(restaurant_name.len() > 0, FoodOrderError::InvalidNameLength);
         // ensure!(restaurant_address.len() > 0, FoodOrderError::InvalidAddressLength);
         // ensure!(phone_number.len() > 0, FoodOrderError::InvalidPhoneNumberLength);
@@ -177,7 +190,7 @@ pub trait RestaurantServiceImpl: Storage<Data> + FoodOrderEvents + PaymentServic
     /// Function to update a restaurant
     #[ink(message)]
     #[update_item(Restaurant)]
-    #[modifiers(is_restaurant)]
+    #[modifiers(only_role(RESTAURANT))]
     fn update_restaurant(&mut self, restaurant_name: String, restaurant_address: String, phone_number: String) -> Result<(), FoodOrderError> {
         // ensure!(restaurant_name.len() > 0, FoodOrderError::InvalidNameLength);
         // ensure!(restaurant_address.len() > 0, FoodOrderError::InvalidAddressLength);
@@ -200,7 +213,7 @@ pub trait RestaurantServiceImpl: Storage<Data> + FoodOrderEvents + PaymentServic
     /// Function to delete a restaurant
     #[ink(message)]
     #[delete_item(Restaurant)]
-    #[modifiers(is_restaurant)]
+    #[modifiers(only_role(RESTAURANT))]
     fn delete_restaurant(&mut self) -> Result<(), FoodOrderError> {
         // let restaurant_account = Self::env().caller();
 
@@ -216,7 +229,7 @@ pub trait RestaurantServiceImpl: Storage<Data> + FoodOrderEvents + PaymentServic
 
     /// Function that a restaurant confirms an order
     #[ink(message)]
-    #[modifiers(is_restaurant)]
+    #[modifiers(only_role(RESTAURANT))]
     fn confirm_order(&mut self, order_id: OrderId, eta: u64) -> Result<OrderId, FoodOrderError> {
         ensure!(self.data::<Data>().order_data.contains(&order_id), FoodOrderError::OrderNotExist);
 
@@ -254,7 +267,7 @@ pub trait RestaurantServiceImpl: Storage<Data> + FoodOrderEvents + PaymentServic
 
     /// Function that a restaurant finishes cooking of an order
     #[ink(message)]
-    #[modifiers(is_restaurant)]
+    #[modifiers(only_role(RESTAURANT))]
     fn finish_cook(&mut self, order_id: OrderId) -> Result<OrderId, FoodOrderError> {
         ensure!(self.data::<Data>().order_data.contains(&order_id), FoodOrderError::OrderNotExist);
 
@@ -281,7 +294,7 @@ pub trait RestaurantServiceImpl: Storage<Data> + FoodOrderEvents + PaymentServic
 
     /// Function that a restaurant delivers an order
     #[ink(message)]
-    #[modifiers(is_restaurant)]
+    #[modifiers(only_role(RESTAURANT))]
     fn deliver_order(&mut self, order_id: OrderId) -> Result<OrderId, FoodOrderError> {
         ensure!(self.data::<Data>().order_data.contains(&order_id), FoodOrderError::OrderNotExist);
 
@@ -305,19 +318,19 @@ pub trait RestaurantServiceImpl: Storage<Data> + FoodOrderEvents + PaymentServic
 }
 
 
-#[modifier_definition]
-pub fn is_restaurant<T, F, R, E>(instance: &mut T, body: F) -> Result<R, E>
-where
-    T: Storage<Data>,
-    F: FnOnce(&mut T) -> Result<R, E>,
-    E: From<FoodOrderError>,
-{
-    ensure!(
-        instance
-            .data()
-            .restaurant_data
-            .contains(&T::env().caller()),
-        FoodOrderError::NotExist,
-    );
-    body(instance)
-}
+// #[modifier_definition]
+// pub fn is_restaurant<T, F, R, E>(instance: &mut T, body: F) -> Result<R, E>
+// where
+//     T: Storage<Data>,
+//     F: FnOnce(&mut T) -> Result<R, E>,
+//     E: From<FoodOrderError>,
+// {
+//     ensure!(
+//         instance
+//             .data()
+//             .restaurant_data
+//             .contains(&T::env().caller()),
+//         FoodOrderError::NotExist,
+//     );
+//     body(instance)
+// }

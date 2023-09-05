@@ -8,7 +8,7 @@ pub use crate::{
 use openbrush::modifiers;
 
 #[openbrush::trait_definition]
-pub trait ManagerServiceImpl: Storage<Data> + Storage<ownable::Data>
+pub trait ManagerServiceImpl: Storage<Data> + OwnableImpl
 {
     /// Function to change fee rate of contract
     #[ink(message)]

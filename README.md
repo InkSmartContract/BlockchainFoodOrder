@@ -8,26 +8,43 @@ Please refer to this [Medium article](https://medium.com/@opensmartcontract/lear
 
 The BlockchainFoodOrder smart contract is developed in ink! language and OpenBrush tools. The smart contract code has the following directory structure: 
 
-- logic
-    The main business logic implementing the BlockchainFoodOrder use case
-- src
-    The main `lib.rs` file 
-- crud-macro
-    The procedure macros implementation encapsulating logic to create, update and delete food items 
-- proxy
-    Used to handle smart contract upgrades: updating smart contract code to reflect business logic changes while still preserving smart contract data storage 
+```bash
+.
+├── crud-macro                      # define macros for create/read/update/delete item
+├── logic                           # define main logic for blockchain foodorder
+│ ├── helpers                       # define declaretive macros
+│ ├── traits                        # define traits
+│ │ └── events                      # define events
+│ ├── impls                         # define implementations of every service
+│ │ ├── courier_service
+│ │ ├── customer_service
+│ │ ├── manager_service
+│ │ ├── payment_service
+│ │ ├── restaurant_service
+│ │ ├── data
+│ │ └── shared
+├── src                             # define main smart contract file
+```
 
 ## Dev Dependencies
 
 ```
-rust: rustc 1.68.0-nightly (574b64a97 2022-12-31)
-cargo: cargo 1.68.0-nightly (2381cbdb4 2022-12-23)
-cargo contract: cargo-contract-contract 2.0.2-unknown-x86_64-unknown-linux-gnu
+rust: rustc 1.72.0 (5680fa18f 2023-08-23)
+cargo: cargo 1.72.0 (103a7ff2e 2023-08-15)
+cargo contract: cargo-contract-contract 3.2.0-unknown-x86_64-unknown-linux-gnu
+swanky cli: swanky-cli 3.0.4 linux-x64
+swanky node: swanky node version 1.6.0
 ```
 
-# Test the smart contract
+## Testing the smart contract
 
-To test e2e functionality
+### Run ink-E2E tests (works with swanky node version 1.6.0):
+
+```
+cargo test --features e2e-tests
+```
+
+### Run E2E, Security and Performance tests:
 
 ```
 swanky contract test foodorder
@@ -52,13 +69,13 @@ foodorder test
     10 passing (4s)
 ```
 
-To run a node
+### Running the node
 
 ```
-swanky node start
+swanky node start --tmp
 ```
 
-## Test using docker image
+## Testing with docker image
 
 If you want to test the smart contract using docker image, please run following command.
 

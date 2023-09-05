@@ -13,14 +13,12 @@ mod blockchainfoodorder {
             courier_service::*,
             customer_service::*,
             manager_service::*,
-            payment_service::PaymentServiceImpl,
-            restaurant_service::*,
+            payment_service::*,
+            restaurant_service::*, shared::MANAGER,
         },
         traits::events::FoodOrderEvents,
     };
     
-    // pub const ADMIN: RoleType = ink::selector_id!("ADMIN");
-
     #[ink(event)]
     pub struct SubmitOrderEvent {
         #[ink(topic)]
@@ -92,7 +90,7 @@ mod blockchainfoodorder {
             let caller = Self::env().caller();
             ownable::Internal::_init_with_owner(&mut instance, caller);
             access_control::Internal::_init_with_admin(&mut instance, Some(caller));
-            // access_control::AccessControl::grant_role(&mut instance, ADMIN, Some(caller)).expect("Failed to grant role");
+            AccessControl::grant_role(&mut instance, MANAGER, Some(caller)).expect("Failed to grant role");
 
             instance
         }
@@ -152,5 +150,18 @@ mod blockchainfoodorder {
                 delivery_id, order_id,
             });
         }
+    }
+    /// Test
+    #[cfg(all(test, feature = "e2e-tests"))]
+    mod tests {
+        #[rustfmt::skip]
+        use super::*;
+        #[rustfmt::skip]
+        use ink_e2e::{build_message, PolkadotConfig};
+
+        use openbrush::{
+            contracts::access_control::access_control_external::AccessControl,
+            traits::AccountId,
+        };
     }
 }
