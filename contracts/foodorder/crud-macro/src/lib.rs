@@ -5,6 +5,9 @@ use proc_macro2::{Ident, Span};
 use quote::quote;
 use syn::{parse_macro_input, ItemFn};
 
+/// create_item is a procedure macro to encapsulate reusable logic otherwise repeated in separate functions such as:
+/// create_customer, create_restaurant, create_courier, etc.  
+/// it is also be applicable or extendable to other dApp business items
 #[proc_macro_attribute]
 pub fn create_item(attr: TokenStream, item: TokenStream) -> TokenStream {
     let arg_str = attr.to_string();
@@ -61,6 +64,9 @@ pub fn create_item(attr: TokenStream, item: TokenStream) -> TokenStream {
     TokenStream::from(expanded)
 }
 
+/// read_item is a procedure macro to encapsulate reusable logic otherwise repeated in separate functions such as:
+/// read_customer, read_restaurant, read_courier, etc.  
+/// it is also be applicable or extendable to other dApp business items
 #[proc_macro_attribute]
 pub fn read_item(attr: TokenStream, item: TokenStream) -> TokenStream {
     let arg_str = attr.to_string();
@@ -93,7 +99,9 @@ pub fn read_item(attr: TokenStream, item: TokenStream) -> TokenStream {
     TokenStream::from(expanded)
 }
 
-
+/// read_item_from_id is a procedure macro to encapsulate reusable logic otherwise repeated in separate functions such as:
+/// read_customer_from_id, read_restaurant_from_id, read_courier_from_id, etc.  
+/// it is also be applicable or extendable to other dApp business items
 #[proc_macro_attribute]
 pub fn read_item_from_id(attr: TokenStream, item: TokenStream) -> TokenStream {
     let arg_str = attr.to_string();
@@ -130,6 +138,9 @@ pub fn read_item_from_id(attr: TokenStream, item: TokenStream) -> TokenStream {
     TokenStream::from(expanded)
 }
 
+/// read_item_all is a procedure macro to encapsulate reusable logic otherwise repeated in separate functions such as:
+/// read_customer_all, read_restaurant_all, read_courier_all, etc.  
+/// it is also be applicable or extendable to other dApp business items
 #[proc_macro_attribute]
 pub fn read_item_all(attr: TokenStream, item: TokenStream) -> TokenStream {
     let arg_str = attr.to_string();
@@ -177,6 +188,9 @@ pub fn read_item_all(attr: TokenStream, item: TokenStream) -> TokenStream {
     TokenStream::from(expanded)
 }
 
+/// update_item is a procedure macro to encapsulate reusable logic otherwise repeated in separate functions such as:
+/// update_customer, update_restaurant, update_courier, etc.  
+/// it is also be applicable or extendable to other dApp business items
 #[proc_macro_attribute]
 pub fn update_item(attr: TokenStream, item: TokenStream) -> TokenStream {
     let arg_str = attr.to_string();
@@ -224,7 +238,9 @@ pub fn update_item(attr: TokenStream, item: TokenStream) -> TokenStream {
     TokenStream::from(expanded)
 }
 
-
+/// delete_item is a procedure macro to encapsulate reusable logic otherwise repeated in separate functions such as:
+/// delete_customer, delete_restaurant, delete_courier, etc.  
+/// it is also be applicable or extendable to other dApp business items
 #[proc_macro_attribute]
 pub fn delete_item(attr: TokenStream, item: TokenStream) -> TokenStream {
     let arg_str = attr.to_string();
