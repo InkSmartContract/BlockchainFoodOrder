@@ -5,32 +5,31 @@ authors = ["Alan Boyd"]
 edition = "2021"
 
 [dependencies]
-ink = { version = "4.0.1", default-features = false }
+ink = { version = "4.3.0", default-features = false }
 
 scale = { package = "parity-scale-codec", version = "3", default-features = false, features = [
     "derive",
 ] }
 
-scale-info = { version = "2.3", default-features = false, features = [
+scale-info = { version = "2.6", default-features = false, features = [
     "derive",
 ], optional = true }
 
-openbrush = { tag = "3.0.0", git = "https://github.com/727-Ventures/openbrush-contracts", default-features = false, features = [
-    "ownable",
-    "psp34",
-] }
+openbrush = { git = "https://github.com/Brushfam/openbrush-contracts", tag = "4.0.0-beta.1", default-features = false, features = ["psp22", "ownable", "access_control", "upgradeable"] }
 
 crud-macro = { path = "../crud-macro", default-features = false }
 
-[dev-dependencies]
-ink_e2e = "4.0.1"
-
 [lib]
+name = "logic"
 path = "lib.rs"
+crate-type = [
+    "rlib",
+]
+
 
 [features]
 default = ["std"]
 std = ["ink/std", "scale/std", "scale-info/std", "openbrush/std"]
-# access_control = []
-ink-as-dependency = []
-e2e-tests = []
+
+[profile.dev]
+codegen-units = 16

@@ -31,48 +31,6 @@ export default class EventsClass {
 		return this.__subscribeOnEvent(callbackWrapper, (eventName : string) => eventName == 'SubmitOrderEvent');
 	}
 
-	public subscribeOnAcceptDeliveryEventEvent(callback : (event : EventTypes.AcceptDeliveryEvent) => void) {
-		const callbackWrapper = (args: any[], event: any) => {
-			const _event: Record < string, any > = {};
-
-			for (let i = 0; i < args.length; i++) {
-				_event[event.args[i]!.name] = args[i]!.toJSON();
-			}
-
-			callback(handleEventReturn(_event, getEventTypeDescription('AcceptDeliveryEvent', EVENT_DATA_TYPE_DESCRIPTIONS)) as EventTypes.AcceptDeliveryEvent);
-		};
-
-		return this.__subscribeOnEvent(callbackWrapper, (eventName : string) => eventName == 'AcceptDeliveryEvent');
-	}
-
-	public subscribeOnAddFoodEventEvent(callback : (event : EventTypes.AddFoodEvent) => void) {
-		const callbackWrapper = (args: any[], event: any) => {
-			const _event: Record < string, any > = {};
-
-			for (let i = 0; i < args.length; i++) {
-				_event[event.args[i]!.name] = args[i]!.toJSON();
-			}
-
-			callback(handleEventReturn(_event, getEventTypeDescription('AddFoodEvent', EVENT_DATA_TYPE_DESCRIPTIONS)) as EventTypes.AddFoodEvent);
-		};
-
-		return this.__subscribeOnEvent(callbackWrapper, (eventName : string) => eventName == 'AddFoodEvent');
-	}
-
-	public subscribeOnUpdateFoodEventEvent(callback : (event : EventTypes.UpdateFoodEvent) => void) {
-		const callbackWrapper = (args: any[], event: any) => {
-			const _event: Record < string, any > = {};
-
-			for (let i = 0; i < args.length; i++) {
-				_event[event.args[i]!.name] = args[i]!.toJSON();
-			}
-
-			callback(handleEventReturn(_event, getEventTypeDescription('UpdateFoodEvent', EVENT_DATA_TYPE_DESCRIPTIONS)) as EventTypes.UpdateFoodEvent);
-		};
-
-		return this.__subscribeOnEvent(callbackWrapper, (eventName : string) => eventName == 'UpdateFoodEvent');
-	}
-
 	public subscribeOnConfirmOrderEventEvent(callback : (event : EventTypes.ConfirmOrderEvent) => void) {
 		const callbackWrapper = (args: any[], event: any) => {
 			const _event: Record < string, any > = {};
@@ -87,7 +45,7 @@ export default class EventsClass {
 		return this.__subscribeOnEvent(callbackWrapper, (eventName : string) => eventName == 'ConfirmOrderEvent');
 	}
 
-	public subscribeOnRequestDeliveryEventEvent(callback : (event : EventTypes.RequestDeliveryEvent) => void) {
+	public subscribeOnReqeustDeliveryEventEvent(callback : (event : EventTypes.ReqeustDeliveryEvent) => void) {
 		const callbackWrapper = (args: any[], event: any) => {
 			const _event: Record < string, any > = {};
 
@@ -95,24 +53,10 @@ export default class EventsClass {
 				_event[event.args[i]!.name] = args[i]!.toJSON();
 			}
 
-			callback(handleEventReturn(_event, getEventTypeDescription('RequestDeliveryEvent', EVENT_DATA_TYPE_DESCRIPTIONS)) as EventTypes.RequestDeliveryEvent);
+			callback(handleEventReturn(_event, getEventTypeDescription('ReqeustDeliveryEvent', EVENT_DATA_TYPE_DESCRIPTIONS)) as EventTypes.ReqeustDeliveryEvent);
 		};
 
-		return this.__subscribeOnEvent(callbackWrapper, (eventName : string) => eventName == 'RequestDeliveryEvent');
-	}
-
-	public subscribeOnFinishCookEventEvent(callback : (event : EventTypes.FinishCookEvent) => void) {
-		const callbackWrapper = (args: any[], event: any) => {
-			const _event: Record < string, any > = {};
-
-			for (let i = 0; i < args.length; i++) {
-				_event[event.args[i]!.name] = args[i]!.toJSON();
-			}
-
-			callback(handleEventReturn(_event, getEventTypeDescription('FinishCookEvent', EVENT_DATA_TYPE_DESCRIPTIONS)) as EventTypes.FinishCookEvent);
-		};
-
-		return this.__subscribeOnEvent(callbackWrapper, (eventName : string) => eventName == 'FinishCookEvent');
+		return this.__subscribeOnEvent(callbackWrapper, (eventName : string) => eventName == 'ReqeustDeliveryEvent');
 	}
 
 	public subscribeOnDeliverFoodEventEvent(callback : (event : EventTypes.DeliverFoodEvent) => void) {
@@ -129,7 +73,7 @@ export default class EventsClass {
 		return this.__subscribeOnEvent(callbackWrapper, (eventName : string) => eventName == 'DeliverFoodEvent');
 	}
 
-	public subscribeOnPickUpDeliveryEventEvent(callback : (event : EventTypes.PickUpDeliveryEvent) => void) {
+	public subscribeOnFinishCookEventEvent(callback : (event : EventTypes.FinishCookEvent) => void) {
 		const callbackWrapper = (args: any[], event: any) => {
 			const _event: Record < string, any > = {};
 
@@ -137,13 +81,13 @@ export default class EventsClass {
 				_event[event.args[i]!.name] = args[i]!.toJSON();
 			}
 
-			callback(handleEventReturn(_event, getEventTypeDescription('PickUpDeliveryEvent', EVENT_DATA_TYPE_DESCRIPTIONS)) as EventTypes.PickUpDeliveryEvent);
+			callback(handleEventReturn(_event, getEventTypeDescription('FinishCookEvent', EVENT_DATA_TYPE_DESCRIPTIONS)) as EventTypes.FinishCookEvent);
 		};
 
-		return this.__subscribeOnEvent(callbackWrapper, (eventName : string) => eventName == 'PickUpDeliveryEvent');
+		return this.__subscribeOnEvent(callbackWrapper, (eventName : string) => eventName == 'FinishCookEvent');
 	}
 
-	public subscribeOnAddCourierEventEvent(callback : (event : EventTypes.AddCourierEvent) => void) {
+	public subscribeOnPickupDeliveryEventEvent(callback : (event : EventTypes.PickupDeliveryEvent) => void) {
 		const callbackWrapper = (args: any[], event: any) => {
 			const _event: Record < string, any > = {};
 
@@ -151,13 +95,13 @@ export default class EventsClass {
 				_event[event.args[i]!.name] = args[i]!.toJSON();
 			}
 
-			callback(handleEventReturn(_event, getEventTypeDescription('AddCourierEvent', EVENT_DATA_TYPE_DESCRIPTIONS)) as EventTypes.AddCourierEvent);
+			callback(handleEventReturn(_event, getEventTypeDescription('PickupDeliveryEvent', EVENT_DATA_TYPE_DESCRIPTIONS)) as EventTypes.PickupDeliveryEvent);
 		};
 
-		return this.__subscribeOnEvent(callbackWrapper, (eventName : string) => eventName == 'AddCourierEvent');
+		return this.__subscribeOnEvent(callbackWrapper, (eventName : string) => eventName == 'PickupDeliveryEvent');
 	}
 
-	public subscribeOnAddRestaurantEventEvent(callback : (event : EventTypes.AddRestaurantEvent) => void) {
+	public subscribeOnAcceptDeliveryEventEvent(callback : (event : EventTypes.AcceptDeliveryEvent) => void) {
 		const callbackWrapper = (args: any[], event: any) => {
 			const _event: Record < string, any > = {};
 
@@ -165,10 +109,10 @@ export default class EventsClass {
 				_event[event.args[i]!.name] = args[i]!.toJSON();
 			}
 
-			callback(handleEventReturn(_event, getEventTypeDescription('AddRestaurantEvent', EVENT_DATA_TYPE_DESCRIPTIONS)) as EventTypes.AddRestaurantEvent);
+			callback(handleEventReturn(_event, getEventTypeDescription('AcceptDeliveryEvent', EVENT_DATA_TYPE_DESCRIPTIONS)) as EventTypes.AcceptDeliveryEvent);
 		};
 
-		return this.__subscribeOnEvent(callbackWrapper, (eventName : string) => eventName == 'AddRestaurantEvent');
+		return this.__subscribeOnEvent(callbackWrapper, (eventName : string) => eventName == 'AcceptDeliveryEvent');
 	}
 
 

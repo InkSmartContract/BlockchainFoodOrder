@@ -1,60 +1,271 @@
 extern crate proc_macro;
 
 use proc_macro::TokenStream;
+use proc_macro2::{Ident, Span};
 use quote::quote;
 use syn::{parse_macro_input, ItemFn};
 
-// struct Args {
-//     vars: Set<Ident>,
-// }
+#[proc_macro_attribute]
+pub fn create_item(attr: TokenStream, item: TokenStream) -> TokenStream {
+    let arg_str = attr.to_string();
+    let input = parse_macro_input!(item as ItemFn);
 
-// impl Parse for Args {
-//     fn parse(input: ParseStream) -> Result<Self> {
-//         let vars = Punntuated::<Ident, Token![,]>::parse_terminated(input)?;
-//         Ok(Args {
-//             vars: vars.into_iter().collect(),
-//         })
-//     }
-// }
+    let ItemFn {
+        attrs,
+        vis,
+        sig,
+        block,
+    } = input;
+    let stmts = &block.stmts;
 
-// impl Fold for Args {
-//     fn fold_expr(&mut self, e: Expr) -> Expr {
-//         match e {
-//             Expr::Assign(e) => {
-//                 if self.should_print_expr(&e.left) {
-//                     self.assign_and_print(*e.left, &e.eq_token, *e.right)
-//                 } else {
-//                     Expr::Assign(fold::fold_expr_assign(self, e))
-//                 }
-//             }
-//             Expr::Binary(e) if is_assign_op(e.op) => {
-//                 if self.should_print_expr(&e.left) {
-//                     self.assign_and_print(*e.left, &e.op, *e.right)
-//                 } else {
-//                     Expr::Binary(fold::fold_expr_binary(self, e))
-//                 }
-//             }
-//             _ => fold::fold_expr(self, e),
-//         }
-//     }
+    if arg_str.contains(',') || arg_str.contains(' ') {
+        panic!("Only one arugmet is allowed")
+    };
+    
+    let prefix = Ident::new(&arg_str, Span::call_site());
+    let prefix_id = Ident::new(&(arg_str.to_lowercase() + "_id"), Span::call_site());
+    let prefix_account = Ident::new(&(arg_str.to_lowercase() + "_account"), Span::call_site());
+    let prefix_name = Ident::new(&(arg_str.to_lowercase() + "_name"), Span::call_site());
+    let prefix_address = Ident::new(&(arg_str.to_lowercase() + "_address"), Span::call_site());
+    let prefix_data = Ident::new(&(arg_str.to_lowercase() + "_data"), Span::call_site());
+    let prefix_accounts = Ident::new(&(arg_str.to_lowercase() + "_accounts"), Span::call_site());
 
-//     fn fold_stmt(&mut self, s: Stmt) -> Stmt {
-//         match s {
-//             Stmt::Local(s) => {
-//                 if s.init.is_some() && self.should_print_pat(&s.pat) {
-//                     self.let_and_print(s)
-//                 } else {
-//                     Stmt::Local(fold::fold_local(self, s))
-//                 }
-//             }
-//             _ => fold::fold_stmt(self, s),
-//         }
-//     }
-// }
+    let expanded = quote! {
+        #(#attrs)* #vis #sig {
+            ensure!(#prefix_name.len() > 0, FoodOrderError::InvalidNameLength);
+            ensure!(#prefix_address.len() > 0, FoodOrderError::InvalidAddressLength);
+            ensure!(phone_number.len() > 0, FoodOrderError::InvalidPhoneNumberLength);
+
+            let #prefix_account = Self::env().caller();
+
+            ensure!(!self.data::<Data>().#prefix_data.contains(&#prefix_account), FoodOrderError::AlreadyExist);
+
+            let #prefix_id = self.data::<Data>().#prefix_id;
+            let item = #prefix {
+                #prefix_id,
+                #prefix_account,
+                #prefix_name,
+                #prefix_address,
+                phone_number,
+            };
+            self.data::<Data>().#prefix_id += 1;
+            self.data::<Data>().#prefix_data.insert(&#prefix_account, &item);
+            self.data::<Data>().#prefix_accounts.insert(&#prefix_id, &#prefix_account);
+            
+            #(#stmts)*
+
+            Ok(#prefix_id)
+        }
+    };
+
+    TokenStream::from(expanded)
+}
 
 #[proc_macro_attribute]
-pub fn custom_attribute(_metadata: TokenStream, _input: TokenStream) -> TokenStream {
-    TokenStream::from(quote! {struct H{}})
+pub fn read_item(attr: TokenStream, item: TokenStream) -> TokenStream {
+    let arg_str = attr.to_string();
+    let input = parse_macro_input!(item as ItemFn);
+
+    let ItemFn {
+        attrs,
+        vis,
+        sig,
+        block,
+    } = input;
+    let stmts = &block.stmts;
+
+    if arg_str.contains(',') || arg_str.contains(' ') {
+        panic!("Only one arugmet is allowed")
+    };
+    
+    let prefix_data = Ident::new(&(arg_str.to_lowercase() + "_data"), Span::call_site());
+
+    let expanded = quote! {
+        #(#attrs)* #vis #sig {
+            let account = Self::env().caller();
+            ensure!(self.data::<Data>().#prefix_data.contains(&account), FoodOrderError::NotExist);
+
+            #(#stmts)*
+            Ok(self.data::<Data>().#prefix_data.get(&account).unwrap())
+        }
+    };
+
+    TokenStream::from(expanded)
+}
+
+
+#[proc_macro_attribute]
+pub fn read_item_from_id(attr: TokenStream, item: TokenStream) -> TokenStream {
+    let arg_str = attr.to_string();
+    let input = parse_macro_input!(item as ItemFn);
+
+    let ItemFn {
+        attrs,
+        vis,
+        sig,
+        block,
+    } = input;
+    let stmts = &block.stmts;
+
+    if arg_str.contains(',') || arg_str.contains(' ') {
+        panic!("Only one arugmet is allowed")
+    };
+    
+    let prefix_id = Ident::new(&(arg_str.to_lowercase() + "_id"), Span::call_site());
+    let prefix_data = Ident::new(&(arg_str.to_lowercase() + "_data"), Span::call_site());
+    let prefix_accounts = Ident::new(&(arg_str.to_lowercase() + "_accounts"), Span::call_site());
+
+    let expanded = quote! {
+        #(#attrs)* #vis #sig {
+            ensure!(self.data::<Data>().#prefix_accounts.contains(&#prefix_id), FoodOrderError::NotExist);
+        
+            let account = self.data::<Data>().#prefix_accounts.get(&#prefix_id).unwrap();
+            
+            #(#stmts)*
+
+            Ok(self.data::<Data>().#prefix_data.get(&account).unwrap())
+        }
+    };
+
+    TokenStream::from(expanded)
+}
+
+#[proc_macro_attribute]
+pub fn read_item_all(attr: TokenStream, item: TokenStream) -> TokenStream {
+    let arg_str = attr.to_string();
+    let input = parse_macro_input!(item as ItemFn);
+
+    let ItemFn {
+        attrs,
+        vis,
+        sig,
+        block,
+    } = input;
+    let stmts = &block.stmts;
+
+    if arg_str.contains(',') || arg_str.contains(' ') {
+        panic!("Only one arugmet is allowed")
+    };
+    
+    let prefix = Ident::new(&arg_str, Span::call_site());
+    let prefix_id = Ident::new(&(arg_str.to_lowercase() + "_id"), Span::call_site());
+    let prefix_data = Ident::new(&(arg_str.to_lowercase() + "_data"), Span::call_site());
+    let prefix_accounts = Ident::new(&(arg_str.to_lowercase() + "_accounts"), Span::call_site());
+
+    let expanded = quote! {
+        #(#attrs)* #vis #sig {
+            ensure!(from < to, FoodOrderError::InvalidParameters);
+            ensure!(from < self.data::<Data>().#prefix_id, FoodOrderError::InvalidParameters);
+
+            let mut list: Vec<#prefix> = Vec::new();
+            let start = max(1, from);
+            let end = min(self.data::<Data>().#prefix_id, to);
+
+            for i in start..end {
+                if self.data::<Data>().#prefix_accounts.contains(&i) {
+                    let account = self.data::<Data>().#prefix_accounts.get(&i).unwrap();
+                    list.push(self.data::<Data>().#prefix_data.get(&account).unwrap())
+                }
+            }
+
+            #(#stmts)*
+
+            Ok(list)
+        }
+    };
+
+    TokenStream::from(expanded)
+}
+
+#[proc_macro_attribute]
+pub fn update_item(attr: TokenStream, item: TokenStream) -> TokenStream {
+    let arg_str = attr.to_string();
+    let input = parse_macro_input!(item as ItemFn);
+
+    let ItemFn {
+        attrs,
+        vis,
+        sig,
+        block,
+    } = input;
+    let stmts = &block.stmts;
+
+    if arg_str.contains(',') || arg_str.contains(' ') {
+        panic!("Only one arugmet is allowed")
+    };
+    
+    let prefix_name = Ident::new(&(arg_str.to_lowercase() + "_name"), Span::call_site());
+    let prefix_address = Ident::new(&(arg_str.to_lowercase() + "_address"), Span::call_site());
+    let prefix_data = Ident::new(&(arg_str.to_lowercase() + "_data"), Span::call_site());
+
+    let expanded = quote! {
+        #(#attrs)* #vis #sig {
+            ensure!(#prefix_name.len() > 0, FoodOrderError::InvalidNameLength);
+            ensure!(#prefix_address.len() > 0, FoodOrderError::InvalidAddressLength);
+            ensure!(phone_number.len() > 0, FoodOrderError::InvalidPhoneNumberLength);
+
+            let account = Self::env().caller();
+
+            // ensure!(self.data::<Data>().#prefix_data.contains(&account), FoodOrderError::NotExist);
+            
+            let mut item =  self.data::<Data>().#prefix_data.get(&account).unwrap();
+            item.#prefix_name = #prefix_name;
+            item.#prefix_address = #prefix_address;
+            item.phone_number = phone_number;
+
+            self.data::<Data>().#prefix_data.insert(&account, &item);
+            
+            #(#stmts)*
+
+            Ok(())
+        }
+    };
+
+    TokenStream::from(expanded)
+}
+
+
+#[proc_macro_attribute]
+pub fn delete_item(attr: TokenStream, item: TokenStream) -> TokenStream {
+    let arg_str = attr.to_string();
+    let input = parse_macro_input!(item as ItemFn);
+
+    let ItemFn {
+        attrs,
+        vis,
+        sig,
+        block,
+    } = input;
+    let stmts = &block.stmts;
+
+    if arg_str.contains(',') || arg_str.contains(' ') {
+        panic!("Only one arugmet is allowed")
+    };
+    
+    let prefix_base = Ident::new(&arg_str.to_lowercase(), Span::call_site());
+    let prefix_id = Ident::new(&(arg_str.to_lowercase() + "_id"), Span::call_site());
+    let prefix_account = Ident::new(&(arg_str.to_lowercase() + "_account"), Span::call_site());
+    let prefix_data = Ident::new(&(arg_str.to_lowercase() + "_data"), Span::call_site());
+    let prefix_accounts = Ident::new(&(arg_str.to_lowercase() + "_accounts"), Span::call_site());
+
+    let expanded = quote! {
+        #(#attrs)* #vis #sig {
+            let #prefix_account = Self::env().caller();
+
+            // ensure!(self.data::<Data>().#prefix_data.contains(&#prefix_account), FoodOrderError::NotExist);
+
+            let #prefix_base = self.data::<Data>().#prefix_data.get(&#prefix_account).unwrap();
+
+            self.data::<Data>().#prefix_data.remove(&#prefix_account);
+            self.data::<Data>().#prefix_accounts.remove(&#prefix_base.#prefix_id);
+
+            #(#stmts)*
+
+            Ok(())
+        }
+    };
+
+    TokenStream::from(expanded)
 }
 
 #[proc_macro_attribute]
@@ -187,6 +398,8 @@ pub fn delete_food(_attr: TokenStream, item: TokenStream) -> TokenStream {
         sig,
         block,
     } = input;
+
+    let _stmts = &block.stmts;
 
     let expanded = quote! {
         #(#attrs)* #vis #sig {

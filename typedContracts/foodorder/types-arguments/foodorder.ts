@@ -7,7 +7,9 @@ export enum LangError {
 }
 
 export interface FoodOrderError {
+	accessControlError ? : AccessControlError,
 	ownableError ? : OwnableError,
+	callerIsNotFoodOwner ? : null,
 	callerIsNotManager ? : null,
 	callerIsNotCustomer ? : null,
 	callerIsNotRestaurant ? : null,
@@ -16,18 +18,14 @@ export interface FoodOrderError {
 	callerIsNotRestaurantOrder ? : null,
 	callerIsNotRestaurantFood ? : null,
 	notSamePrice ? : null,
-	customerAlreadyExist ? : null,
-	restaurantAlreadyExist ? : null,
-	courierAlreadyExist ? : null,
+	alreadyExist ? : null,
+	notExist ? : null,
 	orderIsNotDelivered ? : null,
 	orderIsNotConfirmed ? : null,
 	deliveryIsAlreadyPickUp ? : null,
 	foodNotExist ? : null,
 	orderNotExist ? : null,
 	deliveryNotExist ? : null,
-	customerNotExist ? : null,
-	restaurantNotExist ? : null,
-	courierNotExist ? : null,
 	invalidNameLength ? : null,
 	invalidAddressLength ? : null,
 	invalidPhoneNumberLength ? : null,
@@ -43,9 +41,19 @@ export interface FoodOrderError {
 }
 
 export class FoodOrderErrorBuilder {
+	static AccessControlError(value: AccessControlError): FoodOrderError {
+		return {
+			accessControlError: value,
+		};
+	}
 	static OwnableError(value: OwnableError): FoodOrderError {
 		return {
 			ownableError: value,
+		};
+	}
+	static CallerIsNotFoodOwner(): FoodOrderError {
+		return {
+			callerIsNotFoodOwner: null,
 		};
 	}
 	static CallerIsNotManager(): FoodOrderError {
@@ -88,19 +96,14 @@ export class FoodOrderErrorBuilder {
 			notSamePrice: null,
 		};
 	}
-	static CustomerAlreadyExist(): FoodOrderError {
+	static AlreadyExist(): FoodOrderError {
 		return {
-			customerAlreadyExist: null,
+			alreadyExist: null,
 		};
 	}
-	static RestaurantAlreadyExist(): FoodOrderError {
+	static NotExist(): FoodOrderError {
 		return {
-			restaurantAlreadyExist: null,
-		};
-	}
-	static CourierAlreadyExist(): FoodOrderError {
-		return {
-			courierAlreadyExist: null,
+			notExist: null,
 		};
 	}
 	static OrderIsNotDelivered(): FoodOrderError {
@@ -131,21 +134,6 @@ export class FoodOrderErrorBuilder {
 	static DeliveryNotExist(): FoodOrderError {
 		return {
 			deliveryNotExist: null,
-		};
-	}
-	static CustomerNotExist(): FoodOrderError {
-		return {
-			customerNotExist: null,
-		};
-	}
-	static RestaurantNotExist(): FoodOrderError {
-		return {
-			restaurantNotExist: null,
-		};
-	}
-	static CourierNotExist(): FoodOrderError {
-		return {
-			courierNotExist: null,
 		};
 	}
 	static InvalidNameLength(): FoodOrderError {
@@ -210,74 +198,79 @@ export class FoodOrderErrorBuilder {
 	}
 }
 
+export enum AccessControlError {
+	invalidCaller = 'InvalidCaller',
+	missingRole = 'MissingRole',
+	roleRedundant = 'RoleRedundant'
+}
+
 export enum OwnableError {
 	callerIsNotOwner = 'CallerIsNotOwner',
 	newOwnerIsZero = 'NewOwnerIsZero'
 }
 
-export type Order = {
-	foodId: (number | string | BN),
-	restaurantId: (number | string | BN),
-	customerId: (number | string | BN),
-	courierId: (number | string | BN),
-	deliveryAddress: string,
-	status: OrderStatus,
-	timestamp: (number | string | BN),
-	price: (string | number | BN),
-	eta: (number | string | BN)
-}
-
-export enum OrderStatus {
-	orderSubmitted = 'OrderSubmitted',
-	orderConfirmed = 'OrderConfirmed',
-	foodPrepared = 'FoodPrepared',
-	foodDelivered = 'FoodDelivered',
-	deliveryAccepted = 'DeliveryAccepted'
-}
-
-export type Customer = {
-	customerAccount: AccountId,
-	customerName: string,
-	customerAddress: string,
-	phoneNumber: string
-}
-
-export type Food = {
-	foodName: string,
-	restaurantId: (number | string | BN),
-	description: string,
-	price: (string | number | BN),
-	eta: (number | string | BN),
-	timestamp: (number | string | BN)
-}
-
-export type Delivery = {
-	orderId: (number | string | BN),
-	restaurantId: (number | string | BN),
-	customerId: (number | string | BN),
-	courierId: (number | string | BN),
-	deliveryAddress: string,
-	status: DeliveryStatus,
-	timestamp: (number | string | BN)
-}
-
-export enum DeliveryStatus {
-	waiting = 'Waiting',
-	pickedUp = 'PickedUp',
-	accepted = 'Accepted'
-}
-
 export type Courier = {
+	courierId: (number | string | BN),
 	courierAccount: AccountId,
 	courierName: string,
 	courierAddress: string,
 	phoneNumber: string
 }
 
+export type Customer = {
+	customerId: (number | string | BN),
+	customerAccount: AccountId,
+	customerName: string,
+	customerAddress: string,
+	phoneNumber: string
+}
+
 export type Restaurant = {
+	restaurantId: (number | string | BN),
 	restaurantAccount: AccountId,
 	restaurantName: string,
 	restaurantAddress: string,
 	phoneNumber: string
+}
+
+export type Food = {
+	foodId: (number | string | BN),
+	foodName: string,
+	restaurantId: (number | string | BN),
+	foodDescription: string,
+	foodPrice: (string | number | BN),
+	foodEta: (number | string | BN)
+}
+
+export type Hash = string | number[]
+
+export interface UpgradeableError {
+	custom ? : string,
+	setCodeHashFailed ? : null,
+	ownableError ? : OwnableError,
+	accessControlError ? : AccessControlError
+}
+
+export class UpgradeableErrorBuilder {
+	static Custom(value: string): UpgradeableError {
+		return {
+			custom: value,
+		};
+	}
+	static SetCodeHashFailed(): UpgradeableError {
+		return {
+			setCodeHashFailed: null,
+		};
+	}
+	static OwnableError(value: OwnableError): UpgradeableError {
+		return {
+			ownableError: value,
+		};
+	}
+	static AccessControlError(value: AccessControlError): UpgradeableError {
+		return {
+			accessControlError: value,
+		};
+	}
 }
 
