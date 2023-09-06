@@ -122,8 +122,12 @@ pub trait RestaurantServiceImpl: Storage<Data> + AccessControlImpl + FoodOrderEv
     #[create_item(Restaurant)]
     fn create_restaurant(&mut self, restaurant_name: String, restaurant_address: String, phone_number: String) -> Result<RestaurantId, FoodOrderError> {
         AccessControlImpl::grant_role(self, RESTAURANT, Some(Self::env().caller())).expect("Failed to grant Restaurant Role");
-        /// Comments below are current expanded code from the create_item macro 
-        /// included here for learning purpose. Output code changes as underlying macro changes.   
+        // **
+
+        // Comments below are current expanded code from the create_item macro 
+        // included here for learning purpose. Output code changes as underlying macro changes.   
+        
+        // **
 
         // ensure!(restaurant_name.len() > 0, FoodOrderError::InvalidNameLength);
         // ensure!(restaurant_address.len() > 0, FoodOrderError::InvalidAddressLength);
@@ -153,8 +157,12 @@ pub trait RestaurantServiceImpl: Storage<Data> + AccessControlImpl + FoodOrderEv
     #[ink(message)]
     #[read_item(Restaurant)]
     fn read_restaurant(&self) -> Result<Restaurant, FoodOrderError> {
-        /// Comments below are current expanded code from the read_item macro 
-        /// included here for learning purpose. Output code changes as underlying macro changes.   
+        // **
+        
+        // Comments below are current expanded code from the read_item macro 
+        // included here for learning purpose. Output code changes as underlying macro changes.   
+
+        // **
 
         // let restaurant_account = Self::env().caller();
 
@@ -168,8 +176,12 @@ pub trait RestaurantServiceImpl: Storage<Data> + AccessControlImpl + FoodOrderEv
     #[ink(message)]
     #[read_item_from_id(Restaurant)]
     fn read_restaurant_from_id(&self, restaurant_id: RestaurantId) -> Result<Restaurant, FoodOrderError> {
-        /// Comments below are current expanded code from the read_item_from_id macro 
-        /// included here for learning purpose. Output code changes as underlying macro changes.   
+        // **
+
+        // Comments below are current expanded code from the read_item_from_id macro 
+        // included here for learning purpose. Output code changes as underlying macro changes.   
+
+        // **
 
         // ensure!(self.data::<Data>().restaurant_accounts.contains(&restaurant_id), FoodOrderError::NotExist);
         
@@ -183,8 +195,12 @@ pub trait RestaurantServiceImpl: Storage<Data> + AccessControlImpl + FoodOrderEv
     #[ink(message)]
     #[read_item_all(Restaurant)]
     fn read_restaurant_all(&self, from: RestaurantId, to: RestaurantId) -> Result<Vec<Restaurant>, FoodOrderError> {
-        /// Comments below are current expanded code from the read_item_all macro 
-        /// included here for learning purpose. Output code changes as underlying macro changes.   
+        // **
+
+        // Comments below are current expanded code from the read_item_all macro 
+        // included here for learning purpose. Output code changes as underlying macro changes.   
+
+        // **
 
         // ensure!(from < to, FoodOrderError::InvalidParameters);
         // ensure!(from < self.data::<Data>().restaurant_id, FoodOrderError::InvalidParameters);
@@ -209,6 +225,13 @@ pub trait RestaurantServiceImpl: Storage<Data> + AccessControlImpl + FoodOrderEv
     #[update_item(Restaurant)]
     #[modifiers(only_role(RESTAURANT))]
     fn update_restaurant(&mut self, restaurant_name: String, restaurant_address: String, phone_number: String) -> Result<(), FoodOrderError> {
+        // **
+
+        // Comments below are current expanded code from the update_item macro 
+        // included here for learning purpose. Output code changes as underlying macro changes.   
+
+        // **
+
         // ensure!(restaurant_name.len() > 0, FoodOrderError::InvalidNameLength);
         // ensure!(restaurant_address.len() > 0, FoodOrderError::InvalidAddressLength);
         // ensure!(phone_number.len() > 0, FoodOrderError::InvalidPhoneNumberLength);
@@ -233,6 +256,13 @@ pub trait RestaurantServiceImpl: Storage<Data> + AccessControlImpl + FoodOrderEv
     #[delete_item(Restaurant)]
     #[modifiers(only_role(RESTAURANT))]
     fn delete_restaurant(&mut self) -> Result<(), FoodOrderError> {
+        // **
+
+        // Comments below are current expanded code from the delete_item macro 
+        // included here for learning purpose. Output code changes as underlying macro changes.   
+
+        // **
+
         // let restaurant_account = Self::env().caller();
 
         // ensure!(self.data::<Data>().restaurant_data.contains(&restaurant_account), FoodOrderError::NotExist);

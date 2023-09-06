@@ -19,10 +19,18 @@ use core::cmp::{max, min};
 pub trait CourierServiceImpl: Storage<Data> + AccessControlImpl + FoodOrderEvents
 {
     /// Function to create a courier
+    /// Use create_item procedure macro for Courier
     #[ink(message)]
     #[create_item(Courier)]
     fn create_courier(&mut self, courier_name: String, courier_address: String, phone_number: String) -> Result<CourierId, FoodOrderError> {
         AccessControlImpl::grant_role(self, COURIER, Some(Self::env().caller())).expect("Failed to grant Courier Role");
+        // **
+
+        // Comments below are current expanded code from the create_item macro 
+        // included here for learning purpose. Output code changes as underlying macro changes.   
+
+        // **
+
         // ensure!(courier_name.len() > 0, FoodOrderError::InvalidNameLength);
         // ensure!(courier_address.len() > 0, FoodOrderError::InvalidAddressLength);
         // ensure!(phone_number.len() > 0, FoodOrderError::InvalidPhoneNumberLength);
@@ -47,9 +55,17 @@ pub trait CourierServiceImpl: Storage<Data> + AccessControlImpl + FoodOrderEvent
     }
 
     /// Function to get a courier
+    /// Use read_item procedure macro for Courier
     #[ink(message)]
     #[read_item(Courier)]
     fn read_courier(&self) -> Result<Courier, FoodOrderError> {
+        // **
+
+        // Comments below are current expanded code from the read_item macro 
+        // included here for learning purpose. Output code changes as underlying macro changes.   
+
+        // **
+
         // let courier_account = Self::env().caller();
 
         // ensure!(self.data::<Data>().courier_data.contains(&courier_account), FoodOrderError::NotExist);
@@ -59,9 +75,17 @@ pub trait CourierServiceImpl: Storage<Data> + AccessControlImpl + FoodOrderEvent
     }
 
     /// Function to get a courier from given id
+    /// Use read_item_from_id procedure macro for Courier
     #[ink(message)]
     #[read_item_from_id(Courier)]
     fn read_courier_from_id(&self, courier_id: CourierId) -> Result<Courier, FoodOrderError> {
+        // **
+
+        // Comments below are current expanded code from the read_item_from_id macro 
+        // included here for learning purpose. Output code changes as underlying macro changes.   
+
+        // **
+
         // ensure!(self.data::<Data>().customer_accounts.contains(&courier_id), FoodOrderError::NotExist);
         
         // let courier_account = self.data::<Data>().courier_accounts.get(&courier_id).unwrap();
@@ -70,9 +94,17 @@ pub trait CourierServiceImpl: Storage<Data> + AccessControlImpl + FoodOrderEvent
     }
 
     /// Function to get couriers from given scope
+    /// Use read_item_all procedure macro for Courier
     #[ink(message)]
     #[read_item_all(Courier)]
     fn read_courier_all(&self, from: CourierId, to: CourierId) -> Result<Vec<Courier>, FoodOrderError> {
+        // **
+
+        // Comments below are current expanded code from the read_item_all macro 
+        // included here for learning purpose. Output code changes as underlying macro changes.   
+
+        // **
+
         // ensure!(from < to, FoodOrderError::InvalidParameters);
         // ensure!(from < self.data::<Data>().courier_id, FoodOrderError::InvalidParameters);
 
@@ -91,10 +123,18 @@ pub trait CourierServiceImpl: Storage<Data> + AccessControlImpl + FoodOrderEvent
     }
 
     /// Function to update a courier
+    /// Use update_item procedure macro for Courier
     #[ink(message)]
     #[update_item(Courier)]
     #[modifiers(only_role(COURIER))]
     fn update_courier(&mut self, courier_name: String, courier_address: String, phone_number: String) -> Result<(), FoodOrderError> {
+        // **
+
+        // Comments below are current expanded code from the update_item macro 
+        // included here for learning purpose. Output code changes as underlying macro changes.   
+
+        // **
+
         // ensure!(courier_name.len() > 0, FoodOrderError::InvalidNameLength);
         // ensure!(courier_address.len() > 0, FoodOrderError::InvalidAddressLength);
         // ensure!(phone_number.len() > 0, FoodOrderError::InvalidPhoneNumberLength);
@@ -114,10 +154,18 @@ pub trait CourierServiceImpl: Storage<Data> + AccessControlImpl + FoodOrderEvent
     }
 
     /// Function to delete a courier
+    /// Use delete_item procedure macro for Courier
     #[ink(message)]
     #[delete_item(Courier)]
     #[modifiers(only_role(COURIER))]
     fn delete_courier(&mut self) -> Result<(), FoodOrderError> {
+        // **
+
+        // Comments below are current expanded code from the delete_item macro 
+        // included here for learning purpose. Output code changes as underlying macro changes.   
+
+        // **
+
         // let courier_account = Self::env().caller();
 
         // ensure!(self.data::<Data>().courier_data.contains(&courier_account), FoodOrderError::NotExist);

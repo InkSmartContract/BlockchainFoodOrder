@@ -21,10 +21,17 @@ use core::cmp::{max, min};
 pub trait CustomerServiceImpl: Storage<Data> + AccessControlImpl + FoodOrderEvents + PaymentServiceImpl
 {
     /// Function to create a customer
+    /// Use create_item procedure macro for Customer
     #[ink(message)]
     #[create_item(Customer)]
     fn create_customer(&mut self, customer_name: String, customer_address: String, phone_number: String) -> Result<CustomerId, FoodOrderError> {
         AccessControlImpl::grant_role(self, CUSTOMER, Some(Self::env().caller())).expect("Failed to grant Customer Role");
+        // **
+
+        // Comments below are current expanded code from the create_item macro 
+        // included here for learning purpose. Output code changes as underlying macro changes.   
+
+        // **
 
         // ensure!(customer_name.len() > 0, FoodOrderError::InvalidNameLength);
         // ensure!(customer_address.len() > 0, FoodOrderError::InvalidAddressLength);
@@ -50,9 +57,17 @@ pub trait CustomerServiceImpl: Storage<Data> + AccessControlImpl + FoodOrderEven
     }
 
     /// Function to read a customer
+    /// Use read_item procedure macro for Customer
     #[ink(message)]
     #[read_item(Customer)]
     fn read_customer(&self) -> Result<Customer, FoodOrderError> {
+        // **
+
+        // Comments below are current expanded code from the read_item macro 
+        // included here for learning purpose. Output code changes as underlying macro changes.   
+
+        // **
+
         // let customer_account = Self::env().caller();
 
         // ensure!(self.data::<Data>().customer_data.contains(&customer_account), FoodOrderError::NotExist);
@@ -61,9 +76,17 @@ pub trait CustomerServiceImpl: Storage<Data> + AccessControlImpl + FoodOrderEven
     }
 
     /// Function to read a customer from id
+    /// Use read_item_from_id procedure macro for Customer
     #[ink(message)]
     #[read_item_from_id(Customer)]
     fn read_customer_from_id(&self, customer_id: CustomerId) -> Result<Customer, FoodOrderError> {
+        // **
+
+        // Comments below are current expanded code from the read_item_from_id macro 
+        // included here for learning purpose. Output code changes as underlying macro changes.   
+
+        // **
+
         // ensure!(self.data::<Data>().customer_accounts.contains(&customer_id), FoodOrderError::NotExist);
         
         // let customer_account = self.data::<Data>().customer_accounts.get(&customer_id).unwrap();
@@ -72,9 +95,17 @@ pub trait CustomerServiceImpl: Storage<Data> + AccessControlImpl + FoodOrderEven
     }
 
     /// Function to read customers from given scope
+    /// Use read_item_all procedure macro for Customer
     #[ink(message)]
     #[read_item_all(Customer)]
     fn read_customer_all(&self, from: CustomerId, to: CustomerId) -> Result<Vec<Customer>, FoodOrderError> {
+        // **
+
+        // Comments below are current expanded code from the read_item_all macro 
+        // included here for learning purpose. Output code changes as underlying macro changes.   
+
+        // **
+
         // ensure!(from < to, FoodOrderError::InvalidParameters);
         // ensure!(from < self.data::<Data>().customer_id, FoodOrderError::InvalidParameters);
 
@@ -93,10 +124,18 @@ pub trait CustomerServiceImpl: Storage<Data> + AccessControlImpl + FoodOrderEven
     }
 
     /// Function to update a customer
+    /// Use update_item procedure macro for Customer
     #[ink(message)]
     #[update_item(Customer)]
     #[modifiers(only_role(CUSTOMER))]
     fn update_customer(&mut self, customer_name: String, customer_address: String, phone_number: String) -> Result<(), FoodOrderError> {
+        // **
+
+        // Comments below are current expanded code from the update_item macro 
+        // included here for learning purpose. Output code changes as underlying macro changes.   
+
+        // **
+
         // ensure!(customer_name.len() > 0, FoodOrderError::InvalidNameLength);
         // ensure!(customer_address.len() > 0, FoodOrderError::InvalidAddressLength);
         // ensure!(phone_number.len() > 0, FoodOrderError::InvalidPhoneNumberLength);
@@ -116,10 +155,18 @@ pub trait CustomerServiceImpl: Storage<Data> + AccessControlImpl + FoodOrderEven
     }
 
     /// Function to delete a customer
+    /// Use delete_item procedure macro for Customer
     #[ink(message)]
     #[delete_item(Customer)]
     #[modifiers(only_role(CUSTOMER))]
     fn delete_customer(&mut self) -> Result<(), FoodOrderError> {
+        // **
+
+        // Comments below are current expanded code from the delete_item macro 
+        // included here for learning purpose. Output code changes as underlying macro changes.   
+
+        // **
+
         // let customer_account = Self::env().caller();
 
         // ensure!(self.data::<Data>().customer_data.contains(&customer_account), FoodOrderError::NotExist);
