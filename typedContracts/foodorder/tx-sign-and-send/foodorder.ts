@@ -43,6 +43,20 @@ export default class Methods {
 	}
 
 	/**
+	* readCourierFromId
+	*
+	* @param { (number | string | BN) } courierId,
+	*/
+	"readCourierFromId" (
+		courierId: (number | string | BN),
+		__options ? : GasLimit,
+	){
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "courierServiceImpl::readCourierFromId", (events: EventRecord) => {
+			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
+		}, [courierId], __options);
+	}
+
+	/**
 	* readCourier
 	*
 	*/
@@ -55,17 +69,21 @@ export default class Methods {
 	}
 
 	/**
-	* readCourierFromId
+	* createCourier
 	*
-	* @param { (number | string | BN) } courierId,
+	* @param { string } courierName,
+	* @param { string } courierAddress,
+	* @param { string } phoneNumber,
 	*/
-	"readCourierFromId" (
-		courierId: (number | string | BN),
+	"createCourier" (
+		courierName: string,
+		courierAddress: string,
+		phoneNumber: string,
 		__options ? : GasLimit,
 	){
-		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "courierServiceImpl::readCourierFromId", (events: EventRecord) => {
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "courierServiceImpl::createCourier", (events: EventRecord) => {
 			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
-		}, [courierId], __options);
+		}, [courierName, courierAddress, phoneNumber], __options);
 	}
 
 	/**
@@ -97,24 +115,6 @@ export default class Methods {
 	}
 
 	/**
-	* createCourier
-	*
-	* @param { string } courierName,
-	* @param { string } courierAddress,
-	* @param { string } phoneNumber,
-	*/
-	"createCourier" (
-		courierName: string,
-		courierAddress: string,
-		phoneNumber: string,
-		__options ? : GasLimit,
-	){
-		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "courierServiceImpl::createCourier", (events: EventRecord) => {
-			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
-		}, [courierName, courierAddress, phoneNumber], __options);
-	}
-
-	/**
 	* updateCourier
 	*
 	* @param { string } courierName,
@@ -130,62 +130,6 @@ export default class Methods {
 		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "courierServiceImpl::updateCourier", (events: EventRecord) => {
 			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
 		}, [courierName, courierAddress, phoneNumber], __options);
-	}
-
-	/**
-	* deleteCustomer
-	*
-	*/
-	"deleteCustomer" (
-		__options ? : GasLimit,
-	){
-		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "customerServiceImpl::deleteCustomer", (events: EventRecord) => {
-			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
-		}, [], __options);
-	}
-
-	/**
-	* readCustomerFromId
-	*
-	* @param { (number | string | BN) } customerId,
-	*/
-	"readCustomerFromId" (
-		customerId: (number | string | BN),
-		__options ? : GasLimit,
-	){
-		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "customerServiceImpl::readCustomerFromId", (events: EventRecord) => {
-			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
-		}, [customerId], __options);
-	}
-
-	/**
-	* acceptDelivery
-	*
-	* @param { (number | string | BN) } deliveryId,
-	*/
-	"acceptDelivery" (
-		deliveryId: (number | string | BN),
-		__options ? : GasLimit,
-	){
-		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "customerServiceImpl::acceptDelivery", (events: EventRecord) => {
-			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
-		}, [deliveryId], __options);
-	}
-
-	/**
-	* submitOrder
-	*
-	* @param { (number | string | BN) } foodId,
-	* @param { string } deliveryAddress,
-	*/
-	"submitOrder" (
-		foodId: (number | string | BN),
-		deliveryAddress: string,
-		__options ? : GasLimitAndRequiredValue,
-	){
-		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "customerServiceImpl::submitOrder", (events: EventRecord) => {
-			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
-		}, [foodId, deliveryAddress], __options);
 	}
 
 	/**
@@ -207,6 +151,34 @@ export default class Methods {
 	}
 
 	/**
+	* readCustomer
+	*
+	*/
+	"readCustomer" (
+		__options ? : GasLimit,
+	){
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "customerServiceImpl::readCustomer", (events: EventRecord) => {
+			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
+		}, [], __options);
+	}
+
+	/**
+	* submitOrder
+	*
+	* @param { (number | string | BN) } foodId,
+	* @param { string } deliveryAddress,
+	*/
+	"submitOrder" (
+		foodId: (number | string | BN),
+		deliveryAddress: string,
+		__options ? : GasLimitAndRequiredValue,
+	){
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "customerServiceImpl::submitOrder", (events: EventRecord) => {
+			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
+		}, [foodId, deliveryAddress], __options);
+	}
+
+	/**
 	* readCustomerAll
 	*
 	* @param { (number | string | BN) } from,
@@ -220,6 +192,46 @@ export default class Methods {
 		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "customerServiceImpl::readCustomerAll", (events: EventRecord) => {
 			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
 		}, [from, to], __options);
+	}
+
+	/**
+	* acceptDelivery
+	*
+	* @param { (number | string | BN) } deliveryId,
+	*/
+	"acceptDelivery" (
+		deliveryId: (number | string | BN),
+		__options ? : GasLimit,
+	){
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "customerServiceImpl::acceptDelivery", (events: EventRecord) => {
+			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
+		}, [deliveryId], __options);
+	}
+
+	/**
+	* readCustomerFromId
+	*
+	* @param { (number | string | BN) } customerId,
+	*/
+	"readCustomerFromId" (
+		customerId: (number | string | BN),
+		__options ? : GasLimit,
+	){
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "customerServiceImpl::readCustomerFromId", (events: EventRecord) => {
+			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
+		}, [customerId], __options);
+	}
+
+	/**
+	* deleteCustomer
+	*
+	*/
+	"deleteCustomer" (
+		__options ? : GasLimit,
+	){
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "customerServiceImpl::deleteCustomer", (events: EventRecord) => {
+			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
+		}, [], __options);
 	}
 
 	/**
@@ -241,18 +253,6 @@ export default class Methods {
 	}
 
 	/**
-	* readCustomer
-	*
-	*/
-	"readCustomer" (
-		__options ? : GasLimit,
-	){
-		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "customerServiceImpl::readCustomer", (events: EventRecord) => {
-			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
-		}, [], __options);
-	}
-
-	/**
 	* changeFeeRate
 	*
 	* @param { (number | string | BN) } rate,
@@ -264,6 +264,226 @@ export default class Methods {
 		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "managerServiceImpl::changeFeeRate", (events: EventRecord) => {
 			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
 		}, [rate], __options);
+	}
+
+	/**
+	* getFeeRate
+	*
+	*/
+	"getFeeRate" (
+		__options ? : GasLimit,
+	){
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "managerServiceImpl::getFeeRate", (events: EventRecord) => {
+			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
+		}, [], __options);
+	}
+
+	/**
+	* getDeliveryAll
+	*
+	* @param { (number | string | BN) } from,
+	* @param { (number | string | BN) } to,
+	*/
+	"getDeliveryAll" (
+		from: (number | string | BN),
+		to: (number | string | BN),
+		__options ? : GasLimit,
+	){
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "managerServiceImpl::getDeliveryAll", (events: EventRecord) => {
+			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
+		}, [from, to], __options);
+	}
+
+	/**
+	* getOrderAll
+	*
+	* @param { (number | string | BN) } from,
+	* @param { (number | string | BN) } to,
+	*/
+	"getOrderAll" (
+		from: (number | string | BN),
+		to: (number | string | BN),
+		__options ? : GasLimit,
+	){
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "managerServiceImpl::getOrderAll", (events: EventRecord) => {
+			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
+		}, [from, to], __options);
+	}
+
+	/**
+	* getDelivery
+	*
+	* @param { (number | string | BN) } deliveryId,
+	*/
+	"getDelivery" (
+		deliveryId: (number | string | BN),
+		__options ? : GasLimit,
+	){
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "managerServiceImpl::getDelivery", (events: EventRecord) => {
+			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
+		}, [deliveryId], __options);
+	}
+
+	/**
+	* getOrder
+	*
+	* @param { (number | string | BN) } orderId,
+	*/
+	"getOrder" (
+		orderId: (number | string | BN),
+		__options ? : GasLimit,
+	){
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "managerServiceImpl::getOrder", (events: EventRecord) => {
+			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
+		}, [orderId], __options);
+	}
+
+	/**
+	* readRestaurantFromId
+	*
+	* @param { (number | string | BN) } restaurantId,
+	*/
+	"readRestaurantFromId" (
+		restaurantId: (number | string | BN),
+		__options ? : GasLimit,
+	){
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "restaurantServiceImpl::readRestaurantFromId", (events: EventRecord) => {
+			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
+		}, [restaurantId], __options);
+	}
+
+	/**
+	* deliverOrder
+	*
+	* @param { (number | string | BN) } orderId,
+	*/
+	"deliverOrder" (
+		orderId: (number | string | BN),
+		__options ? : GasLimit,
+	){
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "restaurantServiceImpl::deliverOrder", (events: EventRecord) => {
+			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
+		}, [orderId], __options);
+	}
+
+	/**
+	* finishCook
+	*
+	* @param { (number | string | BN) } orderId,
+	*/
+	"finishCook" (
+		orderId: (number | string | BN),
+		__options ? : GasLimit,
+	){
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "restaurantServiceImpl::finishCook", (events: EventRecord) => {
+			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
+		}, [orderId], __options);
+	}
+
+	/**
+	* updateRestaurant
+	*
+	* @param { string } restaurantName,
+	* @param { string } restaurantAddress,
+	* @param { string } phoneNumber,
+	*/
+	"updateRestaurant" (
+		restaurantName: string,
+		restaurantAddress: string,
+		phoneNumber: string,
+		__options ? : GasLimit,
+	){
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "restaurantServiceImpl::updateRestaurant", (events: EventRecord) => {
+			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
+		}, [restaurantName, restaurantAddress, phoneNumber], __options);
+	}
+
+	/**
+	* readRestaurant
+	*
+	*/
+	"readRestaurant" (
+		__options ? : GasLimit,
+	){
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "restaurantServiceImpl::readRestaurant", (events: EventRecord) => {
+			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
+		}, [], __options);
+	}
+
+	/**
+	* deleteRestaurant
+	*
+	*/
+	"deleteRestaurant" (
+		__options ? : GasLimit,
+	){
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "restaurantServiceImpl::deleteRestaurant", (events: EventRecord) => {
+			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
+		}, [], __options);
+	}
+
+	/**
+	* readFood
+	*
+	* @param { (number | string | BN) } foodId,
+	*/
+	"readFood" (
+		foodId: (number | string | BN),
+		__options ? : GasLimit,
+	){
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "restaurantServiceImpl::readFood", (events: EventRecord) => {
+			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
+		}, [foodId], __options);
+	}
+
+	/**
+	* createRestaurant
+	*
+	* @param { string } restaurantName,
+	* @param { string } restaurantAddress,
+	* @param { string } phoneNumber,
+	*/
+	"createRestaurant" (
+		restaurantName: string,
+		restaurantAddress: string,
+		phoneNumber: string,
+		__options ? : GasLimit,
+	){
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "restaurantServiceImpl::createRestaurant", (events: EventRecord) => {
+			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
+		}, [restaurantName, restaurantAddress, phoneNumber], __options);
+	}
+
+	/**
+	* readRestaurantAll
+	*
+	* @param { (number | string | BN) } from,
+	* @param { (number | string | BN) } to,
+	*/
+	"readRestaurantAll" (
+		from: (number | string | BN),
+		to: (number | string | BN),
+		__options ? : GasLimit,
+	){
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "restaurantServiceImpl::readRestaurantAll", (events: EventRecord) => {
+			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
+		}, [from, to], __options);
+	}
+
+	/**
+	* readFoodAll
+	*
+	* @param { (number | string | BN) } from,
+	* @param { (number | string | BN) } to,
+	*/
+	"readFoodAll" (
+		from: (number | string | BN),
+		to: (number | string | BN),
+		__options ? : GasLimit,
+	){
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "restaurantServiceImpl::readFoodAll", (events: EventRecord) => {
+			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
+		}, [from, to], __options);
 	}
 
 	/**
@@ -289,165 +509,15 @@ export default class Methods {
 	}
 
 	/**
-	* readRestaurant
-	*
-	*/
-	"readRestaurant" (
-		__options ? : GasLimit,
-	){
-		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "restaurantServiceImpl::readRestaurant", (events: EventRecord) => {
-			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
-		}, [], __options);
-	}
-
-	/**
-	* readRestaurantAll
-	*
-	* @param { (number | string | BN) } from,
-	* @param { (number | string | BN) } to,
-	*/
-	"readRestaurantAll" (
-		from: (number | string | BN),
-		to: (number | string | BN),
-		__options ? : GasLimit,
-	){
-		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "restaurantServiceImpl::readRestaurantAll", (events: EventRecord) => {
-			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
-		}, [from, to], __options);
-	}
-
-	/**
-	* updateRestaurant
-	*
-	* @param { string } restaurantName,
-	* @param { string } restaurantAddress,
-	* @param { string } phoneNumber,
-	*/
-	"updateRestaurant" (
-		restaurantName: string,
-		restaurantAddress: string,
-		phoneNumber: string,
-		__options ? : GasLimit,
-	){
-		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "restaurantServiceImpl::updateRestaurant", (events: EventRecord) => {
-			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
-		}, [restaurantName, restaurantAddress, phoneNumber], __options);
-	}
-
-	/**
-	* confirmOrder
-	*
-	* @param { (number | string | BN) } orderId,
-	* @param { (number | string | BN) } eta,
-	*/
-	"confirmOrder" (
-		orderId: (number | string | BN),
-		eta: (number | string | BN),
-		__options ? : GasLimit,
-	){
-		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "restaurantServiceImpl::confirmOrder", (events: EventRecord) => {
-			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
-		}, [orderId, eta], __options);
-	}
-
-	/**
-	* finishCook
-	*
-	* @param { (number | string | BN) } orderId,
-	*/
-	"finishCook" (
-		orderId: (number | string | BN),
-		__options ? : GasLimit,
-	){
-		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "restaurantServiceImpl::finishCook", (events: EventRecord) => {
-			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
-		}, [orderId], __options);
-	}
-
-	/**
-	* readFoodAll
-	*
-	* @param { (number | string | BN) } from,
-	* @param { (number | string | BN) } to,
-	*/
-	"readFoodAll" (
-		from: (number | string | BN),
-		to: (number | string | BN),
-		__options ? : GasLimit,
-	){
-		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "restaurantServiceImpl::readFoodAll", (events: EventRecord) => {
-			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
-		}, [from, to], __options);
-	}
-
-	/**
-	* deleteRestaurant
-	*
-	*/
-	"deleteRestaurant" (
-		__options ? : GasLimit,
-	){
-		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "restaurantServiceImpl::deleteRestaurant", (events: EventRecord) => {
-			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
-		}, [], __options);
-	}
-
-	/**
-	* deliverOrder
-	*
-	* @param { (number | string | BN) } orderId,
-	*/
-	"deliverOrder" (
-		orderId: (number | string | BN),
-		__options ? : GasLimit,
-	){
-		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "restaurantServiceImpl::deliverOrder", (events: EventRecord) => {
-			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
-		}, [orderId], __options);
-	}
-
-	/**
-	* createRestaurant
-	*
-	* @param { string } restaurantName,
-	* @param { string } restaurantAddress,
-	* @param { string } phoneNumber,
-	*/
-	"createRestaurant" (
-		restaurantName: string,
-		restaurantAddress: string,
-		phoneNumber: string,
-		__options ? : GasLimit,
-	){
-		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "restaurantServiceImpl::createRestaurant", (events: EventRecord) => {
-			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
-		}, [restaurantName, restaurantAddress, phoneNumber], __options);
-	}
-
-	/**
-	* readRestaurantFromId
-	*
-	* @param { (number | string | BN) } restaurantId,
-	*/
-	"readRestaurantFromId" (
-		restaurantId: (number | string | BN),
-		__options ? : GasLimit,
-	){
-		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "restaurantServiceImpl::readRestaurantFromId", (events: EventRecord) => {
-			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
-		}, [restaurantId], __options);
-	}
-
-	/**
-	* readFood
+	* deleteFood
 	*
 	* @param { (number | string | BN) } foodId,
 	*/
-	"readFood" (
+	"deleteFood" (
 		foodId: (number | string | BN),
 		__options ? : GasLimit,
 	){
-		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "restaurantServiceImpl::readFood", (events: EventRecord) => {
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "restaurantServiceImpl::deleteFood", (events: EventRecord) => {
 			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
 		}, [foodId], __options);
 	}
@@ -473,29 +543,19 @@ export default class Methods {
 	}
 
 	/**
-	* deleteFood
+	* confirmOrder
 	*
-	* @param { (number | string | BN) } foodId,
+	* @param { (number | string | BN) } orderId,
+	* @param { (number | string | BN) } eta,
 	*/
-	"deleteFood" (
-		foodId: (number | string | BN),
+	"confirmOrder" (
+		orderId: (number | string | BN),
+		eta: (number | string | BN),
 		__options ? : GasLimit,
 	){
-		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "restaurantServiceImpl::deleteFood", (events: EventRecord) => {
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "restaurantServiceImpl::confirmOrder", (events: EventRecord) => {
 			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
-		}, [foodId], __options);
-	}
-
-	/**
-	* owner
-	*
-	*/
-	"owner" (
-		__options ? : GasLimit,
-	){
-		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "ownable::owner", (events: EventRecord) => {
-			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
-		}, [], __options);
+		}, [orderId, eta], __options);
 	}
 
 	/**
@@ -513,6 +573,18 @@ export default class Methods {
 	}
 
 	/**
+	* owner
+	*
+	*/
+	"owner" (
+		__options ? : GasLimit,
+	){
+		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "ownable::owner", (events: EventRecord) => {
+			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
+		}, [], __options);
+	}
+
+	/**
 	* renounceOwnership
 	*
 	*/
@@ -522,84 +594,6 @@ export default class Methods {
 		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "ownable::renounceOwnership", (events: EventRecord) => {
 			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
 		}, [], __options);
-	}
-
-	/**
-	* grantRole
-	*
-	* @param { (number | string | BN) } role,
-	* @param { ArgumentTypes.AccountId | null } account,
-	*/
-	"grantRole" (
-		role: (number | string | BN),
-		account: ArgumentTypes.AccountId | null,
-		__options ? : GasLimit,
-	){
-		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "accessControl::grantRole", (events: EventRecord) => {
-			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
-		}, [role, account], __options);
-	}
-
-	/**
-	* hasRole
-	*
-	* @param { (number | string | BN) } role,
-	* @param { ArgumentTypes.AccountId | null } address,
-	*/
-	"hasRole" (
-		role: (number | string | BN),
-		address: ArgumentTypes.AccountId | null,
-		__options ? : GasLimit,
-	){
-		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "accessControl::hasRole", (events: EventRecord) => {
-			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
-		}, [role, address], __options);
-	}
-
-	/**
-	* getRoleAdmin
-	*
-	* @param { (number | string | BN) } role,
-	*/
-	"getRoleAdmin" (
-		role: (number | string | BN),
-		__options ? : GasLimit,
-	){
-		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "accessControl::getRoleAdmin", (events: EventRecord) => {
-			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
-		}, [role], __options);
-	}
-
-	/**
-	* revokeRole
-	*
-	* @param { (number | string | BN) } role,
-	* @param { ArgumentTypes.AccountId | null } account,
-	*/
-	"revokeRole" (
-		role: (number | string | BN),
-		account: ArgumentTypes.AccountId | null,
-		__options ? : GasLimit,
-	){
-		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "accessControl::revokeRole", (events: EventRecord) => {
-			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
-		}, [role, account], __options);
-	}
-
-	/**
-	* renounceRole
-	*
-	* @param { (number | string | BN) } role,
-	* @param { ArgumentTypes.AccountId | null } account,
-	*/
-	"renounceRole" (
-		role: (number | string | BN),
-		account: ArgumentTypes.AccountId | null,
-		__options ? : GasLimit,
-	){
-		return txSignAndSend( this.__apiPromise, this.__nativeContract, this.__keyringPair, "accessControl::renounceRole", (events: EventRecord) => {
-			return decodeEvents(events, this.__nativeContract, EVENT_DATA_TYPE_DESCRIPTIONS);
-		}, [role, account], __options);
 	}
 
 	/**

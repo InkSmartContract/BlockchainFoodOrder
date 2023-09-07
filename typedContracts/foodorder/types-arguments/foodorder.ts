@@ -7,7 +7,6 @@ export enum LangError {
 }
 
 export interface FoodOrderError {
-	accessControlError ? : AccessControlError,
 	ownableError ? : OwnableError,
 	callerIsNotFoodOwner ? : null,
 	callerIsNotManager ? : null,
@@ -41,11 +40,6 @@ export interface FoodOrderError {
 }
 
 export class FoodOrderErrorBuilder {
-	static AccessControlError(value: AccessControlError): FoodOrderError {
-		return {
-			accessControlError: value,
-		};
-	}
 	static OwnableError(value: OwnableError): FoodOrderError {
 		return {
 			ownableError: value,
@@ -198,12 +192,6 @@ export class FoodOrderErrorBuilder {
 	}
 }
 
-export enum AccessControlError {
-	invalidCaller = 'InvalidCaller',
-	missingRole = 'MissingRole',
-	roleRedundant = 'RoleRedundant'
-}
-
 export enum OwnableError {
 	callerIsNotOwner = 'CallerIsNotOwner',
 	newOwnerIsZero = 'NewOwnerIsZero'
@@ -223,6 +211,43 @@ export type Customer = {
 	customerName: string,
 	customerAddress: string,
 	phoneNumber: string
+}
+
+export type Delivery = {
+	deliveryId: (number | string | BN),
+	orderId: (number | string | BN),
+	restaurantId: (number | string | BN),
+	customerId: (number | string | BN),
+	courierId: (number | string | BN),
+	status: DeliveryStatus
+}
+
+export enum DeliveryStatus {
+	waiting = 'Waiting',
+	pickedUp = 'PickedUp',
+	accepted = 'Accepted'
+}
+
+export type Order = {
+	orderId: (number | string | BN),
+	foodId: (number | string | BN),
+	restaurantId: (number | string | BN),
+	customerId: (number | string | BN),
+	courierId: (number | string | BN),
+	deliveryId: (number | string | BN),
+	deliveryAddress: string,
+	status: OrderStatus,
+	timestamp: (number | string | BN),
+	price: (string | number | BN),
+	eta: (number | string | BN)
+}
+
+export enum OrderStatus {
+	orderSubmitted = 'OrderSubmitted',
+	orderConfirmed = 'OrderConfirmed',
+	foodPrepared = 'FoodPrepared',
+	foodDelivered = 'FoodDelivered',
+	deliveryAccepted = 'DeliveryAccepted'
 }
 
 export type Restaurant = {
@@ -272,5 +297,11 @@ export class UpgradeableErrorBuilder {
 			accessControlError: value,
 		};
 	}
+}
+
+export enum AccessControlError {
+	invalidCaller = 'InvalidCaller',
+	missingRole = 'MissingRole',
+	roleRedundant = 'RoleRedundant'
 }
 

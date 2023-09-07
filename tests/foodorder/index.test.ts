@@ -47,36 +47,36 @@ describe("foodorder test", () => {
 
   describe("Main Functionality", () => {
     it("Platform is ready", async() => {
-      expect((await contract.query.getFeeRate()).value.ok).to.equal(feeRate);
+      expect((await contract.query.getFeeRate()).value.ok?.ok).to.equal(feeRate)
     });
     it("Restaurant A is added", async() => {
-      await contract.withSigner(deployer).tx.addRestaurant(restaurantAccount.address, "Restaurant A", "Restaurant A Address", "123456789");
+      await contract.withSigner(restaurantAccount).tx.createRestaurant("Restaurant A", "Restaurant A Address", "123456789")
 
-      let allRestaurants = (await contract.query.getRestaurantAll(0, 10)).value.ok
-      let restaurantAccountAddress = allRestaurants?.ok?.at(0)?.restaurantAccount;
+      let allRestaurants = (await contract.query.readRestaurantAll(0, 10)).value.ok
+      let restaurantName = allRestaurants?.ok?.at(0)?.restaurantName
 
-      expect(restaurantAccountAddress).to.be.equal(restaurantAccount.address);
+      expect(restaurantName).to.be.equal("Restaurant A")
     });
     it("Courier A is added", async() => {
-      await contract.withSigner(deployer).tx.addCourier(courierAccount.address, "Courier A", "Curier A Address", "456123789")
+      await contract.withSigner(courierAccount).tx.createCourier("Courier A", "Curier A Address", "456123789")
 
-      let allCouriers = (await contract.query.getCourierAll(0, 10)).value.ok
-      let courierAccountAddress = allCouriers?.ok?.at(0)?.courierAccount
+      let allCouriers = (await contract.query.readCourierAll(0, 10)).value.ok
+      let courierName = allCouriers?.ok?.at(0)?.courierName
 
-      expect(courierAccountAddress).to.be.equal(courierAccount.address)
+      expect(courierName).to.be.equal("Courier A")
     })
     it("Customer A is added", async() => {
-      await contract.withSigner(customerAccount).tx.addCustomer("Customer A", "Customer A Address", "789456123")
+      await contract.withSigner(customerAccount).tx.createCustomer("Customer A", "Customer A Address", "789456123")
 
-      let allCustomers = (await contract.query.getCustomerAll(0, 10)).value.ok
-      let customerAccountAddress = allCustomers?.ok?.at(0)?.customerAccount
+      let allCustomers = (await contract.query.readCustomerAll(0, 10)).value.ok
+      let customerName = allCustomers?.ok?.at(0)?.customerName
 
-      expect(customerAccountAddress).to.be.equal(customerAccount.address)
+      expect(customerName).to.be.equal("Customer A")
     })
     it("Food A is added", async() => {
-      await contract.withSigner(restaurantAccount).tx.addFood("Food A", "Delicious Food", 1000000, 100)
+      await contract.withSigner(restaurantAccount).tx.createFood("Food A", "Delicious Food", 1000000, 100)
 
-      let allFoods = (await contract.query.getFoodAll(0, 10)).value.ok
+      let allFoods = (await contract.query.readFoodAll(0, 10)).value.ok
       let foodName = allFoods?.ok?.at(0)?.foodName
 
       expect(foodName).to.be.equal("Food A")

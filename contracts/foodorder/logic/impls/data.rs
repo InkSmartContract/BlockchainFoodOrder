@@ -1,6 +1,6 @@
 use ink::prelude::string::String;
 use openbrush::traits::Timestamp;
-use openbrush::{storage::Mapping, contracts::ownable::OwnableError, contracts::access_control::AccessControlError, traits::{AccountId, Balance}};
+use openbrush::{storage::Mapping, contracts::ownable::OwnableError, traits::{AccountId, Balance}};
 
 pub type FoodId = u64;
 pub type OrderId = u64;
@@ -147,6 +147,7 @@ pub struct Order {
     pub restaurant_id: RestaurantId,
     pub customer_id: CustomerId,
     pub courier_id: CourierId,
+    pub delivery_id: DeliveryId,
     pub delivery_address: String,
     pub status: OrderStatus,
     pub timestamp: Timestamp,
@@ -162,6 +163,7 @@ impl Default for Order {
             restaurant_id: 0,
             customer_id: 0,
             courier_id: 0,
+            delivery_id: 0,
             delivery_address: Default::default(),
             status: OrderStatus::OrderSubmitted,
             timestamp: Default::default(),
@@ -278,7 +280,7 @@ impl Default for Data {
 #[cfg_attr(feature = "std", derive(scale_info::TypeInfo))]
 pub enum FoodOrderError {
     // Caller is not a marketplace owner.
-    AccessControlError(AccessControlError),
+    // AccessControlError(AccessControlError),
     OwnableError(OwnableError),
     CallerIsNotFoodOwner,
     CallerIsNotManager,
@@ -317,8 +319,8 @@ impl From<OwnableError> for FoodOrderError {
     }
 }
 
-impl From<AccessControlError> for FoodOrderError {
-    fn from(error: AccessControlError) -> Self {
-        FoodOrderError::AccessControlError(error)
-    }
-}
+// impl From<AccessControlError> for FoodOrderError {
+//     fn from(error: AccessControlError) -> Self {
+//         FoodOrderError::AccessControlError(error)
+//     }
+// }

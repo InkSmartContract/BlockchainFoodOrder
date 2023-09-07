@@ -8,7 +8,6 @@ export enum LangError {
 }
 
 export interface FoodOrderError {
-	accessControlError ? : AccessControlError,
 	ownableError ? : OwnableError,
 	callerIsNotFoodOwner ? : null,
 	callerIsNotManager ? : null,
@@ -42,11 +41,6 @@ export interface FoodOrderError {
 }
 
 export class FoodOrderErrorBuilder {
-	static AccessControlError(value: AccessControlError): FoodOrderError {
-		return {
-			accessControlError: value,
-		};
-	}
 	static OwnableError(value: OwnableError): FoodOrderError {
 		return {
 			ownableError: value,
@@ -199,12 +193,6 @@ export class FoodOrderErrorBuilder {
 	}
 }
 
-export enum AccessControlError {
-	invalidCaller = 'InvalidCaller',
-	missingRole = 'MissingRole',
-	roleRedundant = 'RoleRedundant'
-}
-
 export enum OwnableError {
 	callerIsNotOwner = 'CallerIsNotOwner',
 	newOwnerIsZero = 'NewOwnerIsZero'
@@ -224,6 +212,43 @@ export type Customer = {
 	customerName: string,
 	customerAddress: string,
 	phoneNumber: string
+}
+
+export type Delivery = {
+	deliveryId: number,
+	orderId: number,
+	restaurantId: number,
+	customerId: number,
+	courierId: number,
+	status: DeliveryStatus
+}
+
+export enum DeliveryStatus {
+	waiting = 'Waiting',
+	pickedUp = 'PickedUp',
+	accepted = 'Accepted'
+}
+
+export type Order = {
+	orderId: number,
+	foodId: number,
+	restaurantId: number,
+	customerId: number,
+	courierId: number,
+	deliveryId: number,
+	deliveryAddress: string,
+	status: OrderStatus,
+	timestamp: number,
+	price: ReturnNumber,
+	eta: number
+}
+
+export enum OrderStatus {
+	orderSubmitted = 'OrderSubmitted',
+	orderConfirmed = 'OrderConfirmed',
+	foodPrepared = 'FoodPrepared',
+	foodDelivered = 'FoodDelivered',
+	deliveryAccepted = 'DeliveryAccepted'
 }
 
 export type Restaurant = {
@@ -273,5 +298,11 @@ export class UpgradeableErrorBuilder {
 			accessControlError: value,
 		};
 	}
+}
+
+export enum AccessControlError {
+	invalidCaller = 'InvalidCaller',
+	missingRole = 'MissingRole',
+	roleRedundant = 'RoleRedundant'
 }
 

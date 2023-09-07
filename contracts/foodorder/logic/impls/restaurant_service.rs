@@ -7,20 +7,18 @@ use crate::{
     impls::data::{Data, RestaurantId, Restaurant, FoodOrderError, FoodId, Food, OrderId, OrderStatus, Delivery, DeliveryStatus},
     impls::payment_service::PaymentServiceImpl,
     traits::events::FoodOrderEvents,
-    impls::shared::RESTAURANT,
 };
 
-use openbrush::contracts::access_control::{AccessControlImpl, only_role};
-use openbrush::modifiers;
+use openbrush::{modifiers, modifier_definition};
 
 use core::cmp::{max, min};
 
 #[openbrush::trait_definition]
-pub trait RestaurantServiceImpl: Storage<Data> + AccessControlImpl + FoodOrderEvents + PaymentServiceImpl 
+pub trait RestaurantServiceImpl: Storage<Data> + FoodOrderEvents + PaymentServiceImpl 
 {
     /// Function to create a food
     #[ink(message)]
-    #[modifiers(only_role(RESTAURANT))]
+    #[modifiers(is_restaurant)]
     fn create_food(&mut self, food_name: String, food_description: String, food_price: Balance, food_eta: u64) -> Result<FoodId, FoodOrderError> {
         let restaurant_account = Self::env().caller();
 
@@ -76,7 +74,7 @@ pub trait RestaurantServiceImpl: Storage<Data> + AccessControlImpl + FoodOrderEv
 
     /// Function to update a food
     #[ink(message)]
-    #[modifiers(only_role(RESTAURANT))]
+    #[modifiers(is_restaurant)]
     fn update_food(&mut self, food_id: FoodId, food_name: String, food_description: String, food_price: Balance, food_eta: u64) -> Result<(), FoodOrderError> {
         ensure!(self.data::<Data>().food_data.contains(&food_id), FoodOrderError::FoodNotExist);
         ensure!(food_name.len() > 0, FoodOrderError::InvalidNameLength);
@@ -102,7 +100,7 @@ pub trait RestaurantServiceImpl: Storage<Data> + AccessControlImpl + FoodOrderEv
 
     /// Function to delete a food
     #[ink(message)]
-    #[modifiers(only_role(RESTAURANT))]
+    #[modifiers(is_restaurant)]
     fn delete_food(&mut self, food_id: FoodId) -> Result<(), FoodOrderError> {
         ensure!(self.data::<Data>().food_data.contains(&food_id), FoodOrderError::FoodNotExist);
 
@@ -121,7 +119,6 @@ pub trait RestaurantServiceImpl: Storage<Data> + AccessControlImpl + FoodOrderEv
     #[ink(message)]
     #[create_item(Restaurant)]
     fn create_restaurant(&mut self, restaurant_name: String, restaurant_address: String, phone_number: String) -> Result<RestaurantId, FoodOrderError> {
-        AccessControlImpl::grant_role(self, RESTAURANT, Some(Self::env().caller())).expect("Failed to grant Restaurant Role");
         // **
 
         // Comments below are current expanded code from the create_item macro 
@@ -223,7 +220,7 @@ pub trait RestaurantServiceImpl: Storage<Data> + AccessControlImpl + FoodOrderEv
     /// Use update_item procedure macro for Restaurant
     #[ink(message)]
     #[update_item(Restaurant)]
-    #[modifiers(only_role(RESTAURANT))]
+    #[modifiers(is_restaurant)]
     fn update_restaurant(&mut self, restaurant_name: String, restaurant_address: String, phone_number: String) -> Result<(), FoodOrderError> {
         // **
 
@@ -254,7 +251,7 @@ pub trait RestaurantServiceImpl: Storage<Data> + AccessControlImpl + FoodOrderEv
     /// Use delete_item procedure macro for Restaurant
     #[ink(message)]
     #[delete_item(Restaurant)]
-    #[modifiers(only_role(RESTAURANT))]
+    #[modifiers(is_restaurant)]
     fn delete_restaurant(&mut self) -> Result<(), FoodOrderError> {
         // **
 
@@ -277,7 +274,7 @@ pub trait RestaurantServiceImpl: Storage<Data> + AccessControlImpl + FoodOrderEv
 
     /// Function that a restaurant confirms an order
     #[ink(message)]
-    #[modifiers(only_role(RESTAURANT))]
+    #[modifiers(is_restaurant)]
     fn confirm_order(&mut self, order_id: OrderId, eta: u64) -> Result<OrderId, FoodOrderError> {
         ensure!(self.data::<Data>().order_data.contains(&order_id), FoodOrderError::OrderNotExist);
 
@@ -292,6 +289,7 @@ pub trait RestaurantServiceImpl: Storage<Data> + AccessControlImpl + FoodOrderEv
         let mut order = self.data::<Data>().order_data.get(&order_id).unwrap();
         order.status = OrderStatus::OrderConfirmed;
         order.eta = eta;
+        order.delivery_id = self.data::<Data>().delivery_id;
         self.data::<Data>().order_data.insert(&order_id, &order);
 
         self.emit_confirm_order_event(order_id, eta);
@@ -315,7 +313,7 @@ pub trait RestaurantServiceImpl: Storage<Data> + AccessControlImpl + FoodOrderEv
 
     /// Function that a restaurant finishes cooking of an order
     #[ink(message)]
-    #[modifiers(only_role(RESTAURANT))]
+    #[modifiers(is_restaurant)]
     fn finish_cook(&mut self, order_id: OrderId) -> Result<OrderId, FoodOrderError> {
         ensure!(self.data::<Data>().order_data.contains(&order_id), FoodOrderError::OrderNotExist);
 
@@ -328,6 +326,8 @@ pub trait RestaurantServiceImpl: Storage<Data> + AccessControlImpl + FoodOrderEv
         ensure!(self.data::<Data>().order_data.get(&order_id).unwrap().restaurant_id == restaurant_id, FoodOrderError::CallerIsNotRestaurantOrder);
 
         let mut order = self.data::<Data>().order_data.get(&order_id).unwrap();
+        ensure!(order.status == OrderStatus::OrderConfirmed, FoodOrderError::OrderStatusNotConfirmed);
+
         order.status = OrderStatus::FoodPrepared;
         self.data::<Data>().order_data.insert(&order_id, &order);
 
@@ -342,7 +342,7 @@ pub trait RestaurantServiceImpl: Storage<Data> + AccessControlImpl + FoodOrderEv
 
     /// Function that a restaurant delivers an order
     #[ink(message)]
-    #[modifiers(only_role(RESTAURANT))]
+    #[modifiers(is_restaurant)]
     fn deliver_order(&mut self, order_id: OrderId) -> Result<OrderId, FoodOrderError> {
         ensure!(self.data::<Data>().order_data.contains(&order_id), FoodOrderError::OrderNotExist);
 
@@ -351,10 +351,14 @@ pub trait RestaurantServiceImpl: Storage<Data> + AccessControlImpl + FoodOrderEv
         // ensure!(self.data::<Data>().restaurant_data.contains(&restaurant_account), FoodOrderError::NotExist);
 
         let restaurant_id = self.data::<Data>().restaurant_data.get(&restaurant_account).unwrap().restaurant_id;
-
         ensure!(self.data::<Data>().order_data.get(&order_id).unwrap().restaurant_id == restaurant_id, FoodOrderError::CallerIsNotRestaurantOrder);
 
         let mut order = self.data::<Data>().order_data.get(&order_id).unwrap();
+        ensure!(order.status == OrderStatus::FoodPrepared, FoodOrderError::OrderStatusNotPrepared);
+
+        let delivery_status = self.data::<Data>().delivery_data.get(&order.delivery_id).unwrap().status;
+        ensure!(delivery_status == DeliveryStatus::PickedUp, FoodOrderError::DeliveryStatusNotPickUp);
+
         order.status = OrderStatus::FoodDelivered;
         self.data::<Data>().order_data.insert(&order_id, &order);
 
@@ -366,19 +370,19 @@ pub trait RestaurantServiceImpl: Storage<Data> + AccessControlImpl + FoodOrderEv
 }
 
 
-// #[modifier_definition]
-// pub fn is_restaurant<T, F, R, E>(instance: &mut T, body: F) -> Result<R, E>
-// where
-//     T: Storage<Data>,
-//     F: FnOnce(&mut T) -> Result<R, E>,
-//     E: From<FoodOrderError>,
-// {
-//     ensure!(
-//         instance
-//             .data()
-//             .restaurant_data
-//             .contains(&T::env().caller()),
-//         FoodOrderError::NotExist,
-//     );
-//     body(instance)
-// }
+#[modifier_definition]
+pub fn is_restaurant<T, F, R, E>(instance: &mut T, body: F) -> Result<R, E>
+where
+    T: Storage<Data>,
+    F: FnOnce(&mut T) -> Result<R, E>,
+    E: From<FoodOrderError>,
+{
+    ensure!(
+        instance
+            .data()
+            .restaurant_data
+            .contains(&T::env().caller()),
+        FoodOrderError::NotExist,
+    );
+    body(instance)
+}

@@ -18,6 +18,9 @@ openbrush = { git = "https://github.com/Brushfam/openbrush-contracts", tag = "4.
 
 logic = { path = "logic", default-features = false, features = []}
 
+[dev-dependencies]
+ink_e2e = "4.3.0"
+
 [lib]
 name = "foodorder"
 path = "src/lib.rs"
