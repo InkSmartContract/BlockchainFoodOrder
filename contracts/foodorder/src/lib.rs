@@ -195,8 +195,8 @@ mod blockchainfoodorder {
             let number = z as u128 % (2000 + 1);
             number
         }
-
     }
+    
     /// Test
     #[cfg(all(test, feature = "e2e-tests"))]
     pub mod tests {
