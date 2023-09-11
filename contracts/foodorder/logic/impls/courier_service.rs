@@ -34,7 +34,7 @@ pub trait CourierServiceImpl: Storage<Data> + FoodOrderEvents
 
         // let courier_account = Self::env().caller();
 
-        // ensure!(!self.data::<Data>().courier_data.contains(&courier_account), FoodOrderError::AlreadyExist);
+        // ensure!(!self.data::<Data>().courier_data.contains(&courier_account), FoodOrderError::CallerAlreadyExist);
 
         // let courier_id = self.data::<Data>().courier_id;
         // let courier = Courier {
@@ -65,7 +65,7 @@ pub trait CourierServiceImpl: Storage<Data> + FoodOrderEvents
 
         // let courier_account = Self::env().caller();
 
-        // ensure!(self.data::<Data>().courier_data.contains(&courier_account), FoodOrderError::NotExist);
+        // ensure!(self.data::<Data>().courier_data.contains(&courier_account), FoodOrderError::CallerIsNotAppropriate);
 
         // Ok(self.data::<Data>().courier_data.get(&courier_account).unwrap())
 
@@ -138,7 +138,7 @@ pub trait CourierServiceImpl: Storage<Data> + FoodOrderEvents
 
         // let courier_account = Self::env().caller();
 
-        // ensure!(self.data::<Data>().courier_data.contains(&courier_account), FoodOrderError::NotExist);
+        // ensure!(self.data::<Data>().courier_data.contains(&courier_account), FoodOrderError::CallerIsNotAppropriate);
         
         // let mut courier =  self.data::<Data>().courier_data.get(&courier_account).unwrap();
         // courier.courier_name = courier_name;
@@ -165,7 +165,7 @@ pub trait CourierServiceImpl: Storage<Data> + FoodOrderEvents
 
         // let courier_account = Self::env().caller();
 
-        // ensure!(self.data::<Data>().courier_data.contains(&courier_account), FoodOrderError::NotExist);
+        // ensure!(self.data::<Data>().courier_data.contains(&courier_account), FoodOrderError::CallerIsNotAppropriate);
 
         // let courier = self.data::<Data>().courier_data.get(&courier_account).unwrap();
 
@@ -180,8 +180,7 @@ pub trait CourierServiceImpl: Storage<Data> + FoodOrderEvents
     #[modifiers(is_courier)]
     fn pickup_delivery(&mut self, delivery_id: DeliveryId) -> Result<DeliveryId, FoodOrderError> {
         let courier_account = Self::env().caller();
-        // ensure!(self.data::<Data>().courier_data.contains(&courier_account), FoodOrderError::NotExist);
-        ensure!(self.data::<Data>().delivery_data.contains(&delivery_id), FoodOrderError::DeliveryNotExist);
+        ensure!(self.data::<Data>().delivery_data.contains(&delivery_id), FoodOrderError::NotExist);
 
         let mut delivery = self.data::<Data>().delivery_data.get(&delivery_id).unwrap();
         ensure!(delivery.status == DeliveryStatus::Waiting, FoodOrderError::DeliveryStatusNotWaiting);
@@ -214,7 +213,7 @@ where
             .data()
             .courier_data
             .contains(&T::env().caller()),
-        FoodOrderError::NotExist,
+        FoodOrderError::CallerIsNotAppropriate,
     );
     body(instance)
 }

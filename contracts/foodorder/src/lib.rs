@@ -7,6 +7,8 @@ mod blockchainfoodorder {
     use openbrush::traits::Storage;
 
     use ink::codegen::{EmitEvent, Env};
+    use ink::env::hash;
+    use ink::prelude::vec::Vec;
 
     use logic::{
         impls::{
@@ -18,6 +20,7 @@ mod blockchainfoodorder {
             restaurant_service::*,
         },
         traits::events::FoodOrderEvents,
+        traits::random::RandService,
     };
     
     #[ink(event)]
@@ -67,6 +70,18 @@ mod blockchainfoodorder {
     pub struct AcceptDeliveryEvent {
         #[ink(topic)]
         delivery_id: DeliveryId,
+        #[ink(topic)]
+        order_id: OrderId,
+    }
+
+    #[ink(event)]
+    pub struct RandomCreatedEvent {
+        #[ink(topic)]
+        rand: u128,
+    }
+
+    #[ink(event)]
+    pub struct DeclineOrderEvent {
         #[ink(topic)]
         order_id: OrderId,
     }
@@ -149,6 +164,38 @@ mod blockchainfoodorder {
                 delivery_id, order_id,
             });
         }
+
+        /// Function that emits RandomCreatedEvent
+        fn emit_random_creacted(&self, rand: u128) {
+            self.env().emit_event(RandomCreatedEvent {
+                rand,
+            });
+        }
+
+        /// Function that emits DeclienOrderEvent
+        fn emit_decline_order(&self, order_id: OrderId) {
+            self.env().emit_event(DeclineOrderEvent {
+                order_id,
+            });
+        }
+    }
+
+    impl RandService for FoodOrder {
+        /// Function that emits SubmitOrderEvent
+        fn create_randnumber(&self, subject: u128) -> u128 {
+            // self.env().extension().fetch_random(subject)
+            let seed = self.env().block_timestamp();
+            let mut input: Vec<u8> = Vec::new();
+            input.extend_from_slice(&seed.to_be_bytes());
+            input.extend_from_slice(&subject.to_be_bytes());
+            let mut output = <hash::Keccak256 as hash::HashOutput>::Type::default();
+            ink::env::hash_bytes::<hash::Keccak256>(&input, &mut output);
+            let number_bytes = [output[0], output[1]];
+            let z = u16::from_be_bytes(number_bytes);
+            let number = z as u128 % (2000 + 1);
+            number
+        }
+
     }
     /// Test
     #[cfg(all(test, feature = "e2e-tests"))]

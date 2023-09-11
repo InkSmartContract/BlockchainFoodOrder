@@ -7,25 +7,23 @@ export enum LangError {
 	couldNotReadInput = 'CouldNotReadInput'
 }
 
+export type Courier = {
+	courierId: number,
+	courierAccount: AccountId,
+	courierName: string,
+	courierAddress: string,
+	phoneNumber: string
+}
+
 export interface FoodOrderError {
 	ownableError ? : OwnableError,
-	callerIsNotFoodOwner ? : null,
-	callerIsNotManager ? : null,
 	callerIsNotCustomer ? : null,
-	callerIsNotRestaurant ? : null,
-	callerIsNotCourier ? : null,
-	callerIsNotCustomerOrder ? : null,
-	callerIsNotRestaurantOrder ? : null,
-	callerIsNotRestaurantFood ? : null,
+	callerIsNotOrderOwner ? : null,
+	callerIsNotFoodOwner ? : null,
 	notSamePrice ? : null,
-	alreadyExist ? : null,
+	callerAlreadyExist ? : null,
+	callerIsNotAppropriate ? : null,
 	notExist ? : null,
-	orderIsNotDelivered ? : null,
-	orderIsNotConfirmed ? : null,
-	deliveryIsAlreadyPickUp ? : null,
-	foodNotExist ? : null,
-	orderNotExist ? : null,
-	deliveryNotExist ? : null,
 	invalidNameLength ? : null,
 	invalidAddressLength ? : null,
 	invalidPhoneNumberLength ? : null,
@@ -46,44 +44,19 @@ export class FoodOrderErrorBuilder {
 			ownableError: value,
 		};
 	}
-	static CallerIsNotFoodOwner(): FoodOrderError {
-		return {
-			callerIsNotFoodOwner: null,
-		};
-	}
-	static CallerIsNotManager(): FoodOrderError {
-		return {
-			callerIsNotManager: null,
-		};
-	}
 	static CallerIsNotCustomer(): FoodOrderError {
 		return {
 			callerIsNotCustomer: null,
 		};
 	}
-	static CallerIsNotRestaurant(): FoodOrderError {
+	static CallerIsNotOrderOwner(): FoodOrderError {
 		return {
-			callerIsNotRestaurant: null,
+			callerIsNotOrderOwner: null,
 		};
 	}
-	static CallerIsNotCourier(): FoodOrderError {
+	static CallerIsNotFoodOwner(): FoodOrderError {
 		return {
-			callerIsNotCourier: null,
-		};
-	}
-	static CallerIsNotCustomerOrder(): FoodOrderError {
-		return {
-			callerIsNotCustomerOrder: null,
-		};
-	}
-	static CallerIsNotRestaurantOrder(): FoodOrderError {
-		return {
-			callerIsNotRestaurantOrder: null,
-		};
-	}
-	static CallerIsNotRestaurantFood(): FoodOrderError {
-		return {
-			callerIsNotRestaurantFood: null,
+			callerIsNotFoodOwner: null,
 		};
 	}
 	static NotSamePrice(): FoodOrderError {
@@ -91,44 +64,19 @@ export class FoodOrderErrorBuilder {
 			notSamePrice: null,
 		};
 	}
-	static AlreadyExist(): FoodOrderError {
+	static CallerAlreadyExist(): FoodOrderError {
 		return {
-			alreadyExist: null,
+			callerAlreadyExist: null,
+		};
+	}
+	static CallerIsNotAppropriate(): FoodOrderError {
+		return {
+			callerIsNotAppropriate: null,
 		};
 	}
 	static NotExist(): FoodOrderError {
 		return {
 			notExist: null,
-		};
-	}
-	static OrderIsNotDelivered(): FoodOrderError {
-		return {
-			orderIsNotDelivered: null,
-		};
-	}
-	static OrderIsNotConfirmed(): FoodOrderError {
-		return {
-			orderIsNotConfirmed: null,
-		};
-	}
-	static DeliveryIsAlreadyPickUp(): FoodOrderError {
-		return {
-			deliveryIsAlreadyPickUp: null,
-		};
-	}
-	static FoodNotExist(): FoodOrderError {
-		return {
-			foodNotExist: null,
-		};
-	}
-	static OrderNotExist(): FoodOrderError {
-		return {
-			orderNotExist: null,
-		};
-	}
-	static DeliveryNotExist(): FoodOrderError {
-		return {
-			deliveryNotExist: null,
 		};
 	}
 	static InvalidNameLength(): FoodOrderError {
@@ -198,14 +146,6 @@ export enum OwnableError {
 	newOwnerIsZero = 'NewOwnerIsZero'
 }
 
-export type Courier = {
-	courierId: number,
-	courierAccount: AccountId,
-	courierName: string,
-	courierAddress: string,
-	phoneNumber: string
-}
-
 export type Customer = {
 	customerId: number,
 	customerAccount: AccountId,
@@ -245,18 +185,11 @@ export type Order = {
 
 export enum OrderStatus {
 	orderSubmitted = 'OrderSubmitted',
+	orderDeclined = 'OrderDeclined',
 	orderConfirmed = 'OrderConfirmed',
 	foodPrepared = 'FoodPrepared',
 	foodDelivered = 'FoodDelivered',
 	deliveryAccepted = 'DeliveryAccepted'
-}
-
-export type Restaurant = {
-	restaurantId: number,
-	restaurantAccount: AccountId,
-	restaurantName: string,
-	restaurantAddress: string,
-	phoneNumber: string
 }
 
 export type Food = {
@@ -266,6 +199,14 @@ export type Food = {
 	foodDescription: string,
 	foodPrice: ReturnNumber,
 	foodEta: number
+}
+
+export type Restaurant = {
+	restaurantId: number,
+	restaurantAccount: AccountId,
+	restaurantName: string,
+	restaurantAddress: string,
+	phoneNumber: string
 }
 
 export type Hash = string | number[]

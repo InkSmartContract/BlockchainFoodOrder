@@ -7,6 +7,7 @@ use crate::{
     impls::data::{Data, RestaurantId, Restaurant, FoodOrderError, FoodId, Food, OrderId, OrderStatus, Delivery, DeliveryStatus},
     impls::payment_service::PaymentServiceImpl,
     traits::events::FoodOrderEvents,
+    traits::random::RandService,
 };
 
 use openbrush::{modifiers, modifier_definition};
@@ -14,7 +15,7 @@ use openbrush::{modifiers, modifier_definition};
 use core::cmp::{max, min};
 
 #[openbrush::trait_definition]
-pub trait RestaurantServiceImpl: Storage<Data> + FoodOrderEvents + PaymentServiceImpl 
+pub trait RestaurantServiceImpl: Storage<Data> + FoodOrderEvents + PaymentServiceImpl + RandService
 {
     /// Function to create a food
     #[ink(message)]
@@ -48,7 +49,7 @@ pub trait RestaurantServiceImpl: Storage<Data> + FoodOrderEvents + PaymentServic
     /// Function to read a food from given id
     #[ink(message)]
     fn read_food(&self, food_id: FoodId) -> Result<Food, FoodOrderError> {
-        ensure!(self.data::<Data>().food_data.contains(&food_id), FoodOrderError::FoodNotExist);
+        ensure!(self.data::<Data>().food_data.contains(&food_id), FoodOrderError::NotExist);
         
         Ok(self.data::<Data>().food_data.get(&food_id).unwrap())
     }
@@ -76,7 +77,7 @@ pub trait RestaurantServiceImpl: Storage<Data> + FoodOrderEvents + PaymentServic
     #[ink(message)]
     #[modifiers(is_restaurant)]
     fn update_food(&mut self, food_id: FoodId, food_name: String, food_description: String, food_price: Balance, food_eta: u64) -> Result<(), FoodOrderError> {
-        ensure!(self.data::<Data>().food_data.contains(&food_id), FoodOrderError::FoodNotExist);
+        ensure!(self.data::<Data>().food_data.contains(&food_id), FoodOrderError::NotExist);
         ensure!(food_name.len() > 0, FoodOrderError::InvalidNameLength);
         ensure!(food_description.len() > 0, FoodOrderError::InvalidDescriptionLength);
         ensure!(food_price > 0, FoodOrderError::InvalidParameters);
@@ -102,7 +103,7 @@ pub trait RestaurantServiceImpl: Storage<Data> + FoodOrderEvents + PaymentServic
     #[ink(message)]
     #[modifiers(is_restaurant)]
     fn delete_food(&mut self, food_id: FoodId) -> Result<(), FoodOrderError> {
-        ensure!(self.data::<Data>().food_data.contains(&food_id), FoodOrderError::FoodNotExist);
+        ensure!(self.data::<Data>().food_data.contains(&food_id), FoodOrderError::NotExist);
 
         let restaurant_account = Self::env().caller();
         let restaurant_id = self.data::<Data>().restaurant_data.get(&restaurant_account).unwrap().restaurant_id;
@@ -132,7 +133,7 @@ pub trait RestaurantServiceImpl: Storage<Data> + FoodOrderEvents + PaymentServic
 
         // let restaurant_account = Self::env().caller();
 
-        // ensure!(!self.data::<Data>().restaurant_data.contains(&restaurant_account), FoodOrderError::RestaurantAlreadyExist);
+        // ensure!(!self.data::<Data>().restaurant_data.contains(&restaurant_account), FoodOrderError::CallerAlreadyExist);
 
         // let restaurant_id = self.data::<Data>().restaurant_id;
         // let restaurant = Restaurant {
@@ -276,15 +277,24 @@ pub trait RestaurantServiceImpl: Storage<Data> + FoodOrderEvents + PaymentServic
     #[ink(message)]
     #[modifiers(is_restaurant)]
     fn confirm_order(&mut self, order_id: OrderId, eta: u64) -> Result<OrderId, FoodOrderError> {
-        ensure!(self.data::<Data>().order_data.contains(&order_id), FoodOrderError::OrderNotExist);
+        ensure!(self.data::<Data>().order_data.contains(&order_id), FoodOrderError::NotExist);
 
         let restaurant_account = Self::env().caller();
-        
-        // ensure!(self.data::<Data>().restaurant_data.contains(&restaurant_account), FoodOrderError::NotExist);
-
         let restaurant_id = self.data::<Data>().restaurant_data.get(&restaurant_account).unwrap().restaurant_id;
 
-        ensure!(self.data::<Data>().order_data.get(&order_id).unwrap().restaurant_id == restaurant_id, FoodOrderError::CallerIsNotRestaurantOrder);
+        ensure!(self.data::<Data>().order_data.get(&order_id).unwrap().restaurant_id == restaurant_id, FoodOrderError::CallerIsNotOrderOwner);
+
+        let random_distance = RandService::create_randnumber(self, order_id as u128);
+        self.emit_random_creacted(random_distance);
+
+        if random_distance > 1500 {
+            let mut order = self.data::<Data>().order_data.get(&order_id).unwrap();
+            order.status = OrderStatus::OrderDeclined;
+            self.data::<Data>().order_data.insert(&order_id, &order);
+
+            self.emit_decline_order(order_id);
+            return Ok(order_id);
+        }
 
         let mut order = self.data::<Data>().order_data.get(&order_id).unwrap();
         order.status = OrderStatus::OrderConfirmed;
@@ -315,15 +325,12 @@ pub trait RestaurantServiceImpl: Storage<Data> + FoodOrderEvents + PaymentServic
     #[ink(message)]
     #[modifiers(is_restaurant)]
     fn finish_cook(&mut self, order_id: OrderId) -> Result<OrderId, FoodOrderError> {
-        ensure!(self.data::<Data>().order_data.contains(&order_id), FoodOrderError::OrderNotExist);
+        ensure!(self.data::<Data>().order_data.contains(&order_id), FoodOrderError::NotExist);
 
         let restaurant_account = Self::env().caller();
-
-        // ensure!(self.data::<Data>().restaurant_data.contains(&restaurant_account), FoodOrderError::NotExist);
-
         let restaurant_id = self.data::<Data>().restaurant_data.get(&restaurant_account).unwrap().restaurant_id;
 
-        ensure!(self.data::<Data>().order_data.get(&order_id).unwrap().restaurant_id == restaurant_id, FoodOrderError::CallerIsNotRestaurantOrder);
+        ensure!(self.data::<Data>().order_data.get(&order_id).unwrap().restaurant_id == restaurant_id, FoodOrderError::CallerIsNotOrderOwner);
 
         let mut order = self.data::<Data>().order_data.get(&order_id).unwrap();
         ensure!(order.status == OrderStatus::OrderConfirmed, FoodOrderError::OrderStatusNotConfirmed);
@@ -344,14 +351,11 @@ pub trait RestaurantServiceImpl: Storage<Data> + FoodOrderEvents + PaymentServic
     #[ink(message)]
     #[modifiers(is_restaurant)]
     fn deliver_order(&mut self, order_id: OrderId) -> Result<OrderId, FoodOrderError> {
-        ensure!(self.data::<Data>().order_data.contains(&order_id), FoodOrderError::OrderNotExist);
+        ensure!(self.data::<Data>().order_data.contains(&order_id), FoodOrderError::NotExist);
 
         let restaurant_account = Self::env().caller();
-
-        // ensure!(self.data::<Data>().restaurant_data.contains(&restaurant_account), FoodOrderError::NotExist);
-
         let restaurant_id = self.data::<Data>().restaurant_data.get(&restaurant_account).unwrap().restaurant_id;
-        ensure!(self.data::<Data>().order_data.get(&order_id).unwrap().restaurant_id == restaurant_id, FoodOrderError::CallerIsNotRestaurantOrder);
+        ensure!(self.data::<Data>().order_data.get(&order_id).unwrap().restaurant_id == restaurant_id, FoodOrderError::CallerIsNotOrderOwner);
 
         let mut order = self.data::<Data>().order_data.get(&order_id).unwrap();
         ensure!(order.status == OrderStatus::FoodPrepared, FoodOrderError::OrderStatusNotPrepared);
@@ -382,7 +386,7 @@ where
             .data()
             .restaurant_data
             .contains(&T::env().caller()),
-        FoodOrderError::NotExist,
+        FoodOrderError::CallerIsNotAppropriate,
     );
     body(instance)
 }

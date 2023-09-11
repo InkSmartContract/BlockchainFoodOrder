@@ -36,7 +36,7 @@ pub trait CustomerServiceImpl: Storage<Data> + FoodOrderEvents + PaymentServiceI
 
         // let customer_account = Self::env().caller();
 
-        // ensure!(!self.data::<Data>().customer_data.contains(&customer_account), FoodOrderError::AlreadyExist);
+        // ensure!(!self.data::<Data>().customer_data.contains(&customer_account), FoodOrderError::CallerAlreadyExist);
 
         // let customer_id = self.data::<Data>().customer_id;
         // let customer = Customer {
@@ -67,7 +67,7 @@ pub trait CustomerServiceImpl: Storage<Data> + FoodOrderEvents + PaymentServiceI
 
         // let customer_account = Self::env().caller();
 
-        // ensure!(self.data::<Data>().customer_data.contains(&customer_account), FoodOrderError::NotExist);
+        // ensure!(self.data::<Data>().customer_data.contains(&customer_account), FoodOrderError::CallerIsNotAppropriate);
 
         // Ok(self.data::<Data>().customer_data.get(&customer_account).unwrap())
     }
@@ -139,7 +139,7 @@ pub trait CustomerServiceImpl: Storage<Data> + FoodOrderEvents + PaymentServiceI
 
         // let customer_account = Self::env().caller();
 
-        // ensure!(self.data::<Data>().customer_data.contains(&customer_account), FoodOrderError::NotExist);
+        // ensure!(self.data::<Data>().customer_data.contains(&customer_account), FoodOrderError::CallerIsNotAppropriate);
         
         // let mut customer =  self.data::<Data>().customer_data.get(&customer_account).unwrap();
         // customer.customer_name = customer_name;
@@ -166,7 +166,7 @@ pub trait CustomerServiceImpl: Storage<Data> + FoodOrderEvents + PaymentServiceI
 
         // let customer_account = Self::env().caller();
 
-        // ensure!(self.data::<Data>().customer_data.contains(&customer_account), FoodOrderError::NotExist);
+        // ensure!(self.data::<Data>().customer_data.contains(&customer_account), FoodOrderError::CallerIsNotAppropriate);
 
         // let customer = self.data::<Data>().customer_data.get(&customer_account).unwrap();
 
@@ -183,8 +183,8 @@ pub trait CustomerServiceImpl: Storage<Data> + FoodOrderEvents + PaymentServiceI
         let customer_account = Self::env().caller();
         let price = Self::env().transferred_value();
 
-        // ensure!(self.data::<Data>().customer_data.contains(&customer_account), FoodOrderError::NotExist);
-        ensure!(self.data::<Data>().food_data.contains(&food_id), FoodOrderError::FoodNotExist);
+        // ensure!(self.data::<Data>().customer_data.contains(&customer_account), FoodOrderError::CallerIsNotAppropriate);
+        ensure!(self.data::<Data>().food_data.contains(&food_id), FoodOrderError::NotExist);
         ensure!(delivery_address.len() > 0, FoodOrderError::InvalidAddressLength);
         ensure!(price == self.data::<Data>().food_data.get(&food_id).unwrap().food_price.into(), FoodOrderError::NotSamePrice);
 
@@ -220,15 +220,15 @@ pub trait CustomerServiceImpl: Storage<Data> + FoodOrderEvents + PaymentServiceI
     fn accept_delivery(&mut self, delivery_id: DeliveryId) -> Result<DeliveryId, FoodOrderError> {
         let customer_account = Self::env().caller();
 
-        // ensure!(self.data::<Data>().customer_data.contains(&customer_account), FoodOrderError::NotExist);
-        ensure!(self.data::<Data>().delivery_data.contains(&delivery_id), FoodOrderError::DeliveryNotExist);
+        // ensure!(self.data::<Data>().customer_data.contains(&customer_account), FoodOrderError::CallerIsNotAppropriate);
+        ensure!(self.data::<Data>().delivery_data.contains(&delivery_id), FoodOrderError::NotExist);
 
         let customer_id = self.data::<Data>().customer_data.get(&customer_account).unwrap().customer_id;
         let order_id = self.data::<Data>().delivery_data.get(&delivery_id).unwrap().order_id;
 
         ensure!(self.data::<Data>().order_data.get(&delivery_id).unwrap().status == OrderStatus::FoodDelivered, FoodOrderError::OrderStatusNotDelivered);
         ensure!(self.data::<Data>().delivery_data.get(&order_id).unwrap().status == DeliveryStatus::PickedUp, FoodOrderError::DeliveryStatusNotPickUp);
-        ensure!(self.data::<Data>().order_data.get(&order_id).unwrap().customer_id == customer_id, FoodOrderError::CallerIsNotCustomerOrder);
+        ensure!(self.data::<Data>().order_data.get(&order_id).unwrap().customer_id == customer_id, FoodOrderError::CallerIsNotOrderOwner);
 
         let mut order = self.data::<Data>().order_data.get(&order_id).unwrap();
         order.status = OrderStatus::DeliveryAccepted;
@@ -263,7 +263,7 @@ where
             .data()
             .customer_data
             .contains(&T::env().caller()),
-        FoodOrderError::NotExist,
+        FoodOrderError::CallerIsNotAppropriate,
     );
     body(instance)
 }

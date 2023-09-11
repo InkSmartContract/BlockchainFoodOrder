@@ -34,3 +34,11 @@ export interface AcceptDeliveryEvent {
 	orderId: number;
 }
 
+export interface RandomCreatedEvent {
+	rand: ReturnNumber;
+}
+
+export interface DeclineOrderEvent {
+	orderId: number;
+}
+

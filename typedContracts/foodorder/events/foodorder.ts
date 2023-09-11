@@ -115,6 +115,34 @@ export default class EventsClass {
 		return this.__subscribeOnEvent(callbackWrapper, (eventName : string) => eventName == 'AcceptDeliveryEvent');
 	}
 
+	public subscribeOnRandomCreatedEventEvent(callback : (event : EventTypes.RandomCreatedEvent) => void) {
+		const callbackWrapper = (args: any[], event: any) => {
+			const _event: Record < string, any > = {};
+
+			for (let i = 0; i < args.length; i++) {
+				_event[event.args[i]!.name] = args[i]!.toJSON();
+			}
+
+			callback(handleEventReturn(_event, getEventTypeDescription('RandomCreatedEvent', EVENT_DATA_TYPE_DESCRIPTIONS)) as EventTypes.RandomCreatedEvent);
+		};
+
+		return this.__subscribeOnEvent(callbackWrapper, (eventName : string) => eventName == 'RandomCreatedEvent');
+	}
+
+	public subscribeOnDeclineOrderEventEvent(callback : (event : EventTypes.DeclineOrderEvent) => void) {
+		const callbackWrapper = (args: any[], event: any) => {
+			const _event: Record < string, any > = {};
+
+			for (let i = 0; i < args.length; i++) {
+				_event[event.args[i]!.name] = args[i]!.toJSON();
+			}
+
+			callback(handleEventReturn(_event, getEventTypeDescription('DeclineOrderEvent', EVENT_DATA_TYPE_DESCRIPTIONS)) as EventTypes.DeclineOrderEvent);
+		};
+
+		return this.__subscribeOnEvent(callbackWrapper, (eventName : string) => eventName == 'DeclineOrderEvent');
+	}
+
 
 	private __subscribeOnEvent(
 		callback : (args: any[], event: any) => void,

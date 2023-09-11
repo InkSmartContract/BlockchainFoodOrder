@@ -22,4 +22,10 @@ pub trait FoodOrderEvents {
 
     /// Function that emits AcceptDeliveryEvent
     fn emit_accept_delivery_event(&self, delivery_id: DeliveryId, order_id: OrderId);
+
+    /// Function that emits RandomCreatedEvent
+    fn emit_random_creacted(&self, rand: u128);
+
+    /// Function that emits DeclineOrderEvent
+    fn emit_decline_order(&self, order_id: OrderId);
 }

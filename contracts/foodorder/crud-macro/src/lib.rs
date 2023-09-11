@@ -41,7 +41,7 @@ pub fn create_item(attr: TokenStream, item: TokenStream) -> TokenStream {
 
             let #prefix_account = Self::env().caller();
 
-            ensure!(!self.data::<Data>().#prefix_data.contains(&#prefix_account), FoodOrderError::AlreadyExist);
+            ensure!(!self.data::<Data>().#prefix_data.contains(&#prefix_account), FoodOrderError::CallerAlreadyExist);
 
             let #prefix_id = self.data::<Data>().#prefix_id;
             let item = #prefix {
@@ -89,7 +89,7 @@ pub fn read_item(attr: TokenStream, item: TokenStream) -> TokenStream {
     let expanded = quote! {
         #(#attrs)* #vis #sig {
             let account = Self::env().caller();
-            ensure!(self.data::<Data>().#prefix_data.contains(&account), FoodOrderError::NotExist);
+            ensure!(self.data::<Data>().#prefix_data.contains(&account), FoodOrderError::CallerIsNotAppropriate);
 
             #(#stmts)*
             Ok(self.data::<Data>().#prefix_data.get(&account).unwrap())
@@ -220,7 +220,7 @@ pub fn update_item(attr: TokenStream, item: TokenStream) -> TokenStream {
 
             let account = Self::env().caller();
 
-            // ensure!(self.data::<Data>().#prefix_data.contains(&account), FoodOrderError::NotExist);
+            // ensure!(self.data::<Data>().#prefix_data.contains(&account), FoodOrderError::CallerIsNotAppropriate);
             
             let mut item =  self.data::<Data>().#prefix_data.get(&account).unwrap();
             item.#prefix_name = #prefix_name;
@@ -268,7 +268,7 @@ pub fn delete_item(attr: TokenStream, item: TokenStream) -> TokenStream {
         #(#attrs)* #vis #sig {
             let #prefix_account = Self::env().caller();
 
-            // ensure!(self.data::<Data>().#prefix_data.contains(&#prefix_account), FoodOrderError::NotExist);
+            // ensure!(self.data::<Data>().#prefix_data.contains(&#prefix_account), FoodOrderError::CallerIsNotAppropriate);
 
             let #prefix_base = self.data::<Data>().#prefix_data.get(&#prefix_account).unwrap();
 
