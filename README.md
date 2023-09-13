@@ -53,7 +53,7 @@ swanky contract test foodorder
 You can see this following results if you had happy pass.
 
 ```
-foodorder test
+  foodorder test
     Main Functionality
       ✔ Platform is ready
       ✔ Restaurant A is added (...ms)
@@ -64,9 +64,13 @@ foodorder test
       ✔ Order is Confirmed (...ms)
       ✔ Food is cooked and Payment is transferred to restaurant (...ms)
       ✔ Order is Delivered (...ms)
-      ✔ Delivery is accepted and Payment is sent to courier (...ms) 
+      ✔ Delivery is accepted and Payment is sent to courier (...ms)
 
-    10 passing (4s)
+  Upgradeable
+    ✔ Upgrade with set_code_hash (...ms)
+
+
+  11 passing (2s)
 ```
 
 ### Running the node

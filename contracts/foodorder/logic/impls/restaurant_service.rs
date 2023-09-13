@@ -284,10 +284,12 @@ pub trait RestaurantServiceImpl: Storage<Data> + FoodOrderEvents + PaymentServic
 
         ensure!(self.data::<Data>().order_data.get(&order_id).unwrap().restaurant_id == restaurant_id, FoodOrderError::CallerIsNotOrderOwner);
 
+        // Generate random number and emit RandomCreatedEvent
         let random_distance = RandService::create_randnumber(self, order_id as u128);
         self.emit_random_creacted(random_distance);
 
-        if random_distance > 1500 {
+        // If generated random number is over than threshold (50) then decline the order and emit DeclineOrderEvent
+        if random_distance > 50 {
             let mut order = self.data::<Data>().order_data.get(&order_id).unwrap();
             order.status = OrderStatus::OrderDeclined;
             self.data::<Data>().order_data.insert(&order_id, &order);
@@ -296,6 +298,7 @@ pub trait RestaurantServiceImpl: Storage<Data> + FoodOrderEvents + PaymentServic
             return Ok(order_id);
         }
 
+        // Otherwise confirm the order for given order id and emit ConfirmOrderEvent
         let mut order = self.data::<Data>().order_data.get(&order_id).unwrap();
         order.status = OrderStatus::OrderConfirmed;
         order.eta = eta;
@@ -304,6 +307,7 @@ pub trait RestaurantServiceImpl: Storage<Data> + FoodOrderEvents + PaymentServic
 
         self.emit_confirm_order_event(order_id, eta);
 
+        // After confirming the order, request delivery to couriers and emit RequestDeliveryEvent
         let delivery_id = self.data::<Data>().delivery_id;
         let delivery = Delivery {
             delivery_id,

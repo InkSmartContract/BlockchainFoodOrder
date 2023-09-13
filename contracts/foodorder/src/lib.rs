@@ -192,7 +192,7 @@ mod blockchainfoodorder {
             ink::env::hash_bytes::<hash::Keccak256>(&input, &mut output);
             let number_bytes = [output[0], output[1]];
             let z = u16::from_be_bytes(number_bytes);
-            let number = z as u128 % (2000 + 1);
+            let number = z as u128 % (100 + 1);
             number
         }
     }

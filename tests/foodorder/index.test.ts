@@ -99,11 +99,25 @@ describe("foodorder test", () => {
       expect(orderDeliveryAddress).to.be.equal("Delivery Address A")
     })
     it("Order is Confirmed", async() => {
-      await contract.withSigner(restaurantAccount).tx.confirmOrder(1, 200)
+      let result = await contract.withSigner(restaurantAccount).tx.confirmOrder(1, 200)
+      
+      const isOrderConfirmed = (events) => {
+        let flag = true
+        events.forEach(event => {
+          if (event.name === 'DeclineOrderEvent') {
+            flag = false
+          }
+        });
+        return flag
+      }
+
+      while (isOrderConfirmed(result.events) == false) {
+        result = await contract.withSigner(restaurantAccount).tx.confirmOrder(1, 200)
+      }
 
       let allOrders = (await contract.query.getOrderAll(0, 10)).value.ok
       let orderStatus = allOrders?.ok?.at(0)?.status
-      let orderEta = allOrders?.ok?.at(0)?.eta
+      let orderEta = allOrders?.ok?.at(0)?.eta         
 
       expect(orderStatus).to.be.equal("OrderConfirmed")
       expect(orderEta).to.be.equal(200)
