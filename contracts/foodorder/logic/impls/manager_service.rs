@@ -22,19 +22,19 @@ pub trait ManagerServiceImpl: Storage<Data> + OwnableImpl
     }
 
     #[ink(message)]
-    fn get_fee_rate(&mut self) -> Result<u8, FoodOrderError> {
+    fn get_fee_rate(&self) -> Result<u8, FoodOrderError> {
         Ok(self.data::<Data>().fee_rate)
     }
 
     #[ink(message)]
-    fn get_order(&mut self, order_id: OrderId) -> Result<Order, FoodOrderError> {
+    fn get_order(&self, order_id: OrderId) -> Result<Order, FoodOrderError> {
         ensure!(self.data::<Data>().order_data.contains(&order_id), FoodOrderError::NotExist);
 
         Ok(self.data::<Data>().order_data.get(&order_id).unwrap())
     }
 
     #[ink(message)]
-    fn get_order_all(&mut self, from: OrderId, to: OrderId) -> Result<Vec<Order>, FoodOrderError> {
+    fn get_order_all(&self, from: OrderId, to: OrderId) -> Result<Vec<Order>, FoodOrderError> {
         ensure!(from < to, FoodOrderError::InvalidParameters);
         ensure!(from < self.data::<Data>().order_id, FoodOrderError::InvalidParameters);
 
@@ -52,14 +52,14 @@ pub trait ManagerServiceImpl: Storage<Data> + OwnableImpl
     }
 
     #[ink(message)]
-    fn get_delivery(&mut self, delivery_id: DeliveryId) -> Result<Delivery, FoodOrderError> {
+    fn get_delivery(&self, delivery_id: DeliveryId) -> Result<Delivery, FoodOrderError> {
         ensure!(self.data::<Data>().delivery_data.contains(&delivery_id), FoodOrderError::NotExist);
 
         Ok(self.data::<Data>().delivery_data.get(&delivery_id).unwrap())
     }
 
     #[ink(message)]
-    fn get_delivery_all(&mut self, from: DeliveryId, to: DeliveryId) -> Result<Vec<Delivery>, FoodOrderError> {
+    fn get_delivery_all(&self, from: DeliveryId, to: DeliveryId) -> Result<Vec<Delivery>, FoodOrderError> {
         ensure!(from < to, FoodOrderError::InvalidParameters);
         ensure!(from < self.data::<Data>().delivery_id, FoodOrderError::InvalidParameters);
 
