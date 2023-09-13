@@ -154,21 +154,6 @@ export type Customer = {
 	phoneNumber: string
 }
 
-export type Delivery = {
-	deliveryId: number,
-	orderId: number,
-	restaurantId: number,
-	customerId: number,
-	courierId: number,
-	status: DeliveryStatus
-}
-
-export enum DeliveryStatus {
-	waiting = 'Waiting',
-	pickedUp = 'PickedUp',
-	accepted = 'Accepted'
-}
-
 export type Order = {
 	orderId: number,
 	foodId: number,
@@ -192,12 +177,19 @@ export enum OrderStatus {
 	deliveryAccepted = 'DeliveryAccepted'
 }
 
-export type Restaurant = {
+export type Delivery = {
+	deliveryId: number,
+	orderId: number,
 	restaurantId: number,
-	restaurantAccount: AccountId,
-	restaurantName: string,
-	restaurantAddress: string,
-	phoneNumber: string
+	customerId: number,
+	courierId: number,
+	status: DeliveryStatus
+}
+
+export enum DeliveryStatus {
+	waiting = 'Waiting',
+	pickedUp = 'PickedUp',
+	accepted = 'Accepted'
 }
 
 export type Food = {
@@ -207,6 +199,14 @@ export type Food = {
 	foodDescription: string,
 	foodPrice: ReturnNumber,
 	foodEta: number
+}
+
+export type Restaurant = {
+	restaurantId: number,
+	restaurantAccount: AccountId,
+	restaurantName: string,
+	restaurantAddress: string,
+	phoneNumber: string
 }
 
 export type Hash = string | number[]
