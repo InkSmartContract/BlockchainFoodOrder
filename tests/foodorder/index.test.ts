@@ -12,7 +12,7 @@ const wsProvider = new WsProvider("ws://127.0.0.1:9944");
 // Create a keyring instance
 const keyring = new Keyring({ type: "sr25519" });
 
-describe("foodorder test", () => {
+describe("FoodOrder test", () => {
   let foodorderfactory: FoodorderFactory;
   let api: ApiPromise;
   let deployer: KeyringPair;

@@ -53,24 +53,29 @@ swanky contract test foodorder
 You can see this following results if you had happy pass.
 
 ```
-  foodorder test
+  FoodOrder test
     Main Functionality
-      ✔ Platform is ready
-      ✔ Restaurant A is added (...ms)
-      ✔ Courier A is added (...ms)
-      ✔ Customer A is added (...ms)
-      ✔ Food A is added (...ms)
-      ✔ Order is submitted (...ms)
-      ✔ Order is Confirmed (...ms)
-      ✔ Food is cooked and Payment is transferred to restaurant (...ms)
-      ✔ Order is Delivered (...ms)
-      ✔ Delivery is accepted and Payment is sent to courier (...ms)
+      ✔ Platform is ready (42ms)
+      ✔ Restaurant A is added (124ms)
+      ✔ Courier A is added (281ms)
+      ✔ Customer A is added (149ms)
+      ✔ Food A is added (187ms)
+      ✔ Order is submitted (159ms)
+      ✔ Order is Confirmed (206ms)
+      ✔ Food is cooked and Payment is transferred to restaurant (125ms)
+      ✔ Order is Delivered (170ms)
+      ✔ Delivery is accepted and Payment is sent to courier (290ms)
 
   Upgradeable
-    ✔ Upgrade with set_code_hash (...ms)
+    ✔ Upgrade with set_code_hash (353ms)
+    ✔ Check whether the old data remains
+    ✔ Create new food (144ms)
+    ✔ Submit new orders (139ms)
+    ✔ Confirm an order (343ms)
+    ✔ Decline an order (183ms)
 
 
-  11 passing (2s)
+  16 passing (5s)
 ```
 
 ### Running the node
