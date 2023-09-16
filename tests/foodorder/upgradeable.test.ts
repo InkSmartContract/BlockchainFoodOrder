@@ -63,7 +63,7 @@ describe('Upgradeable', () => {
         let food = (await contract_V2.query.readFood(1)).value;
         expect(food.ok?.ok?.foodName).to.be.equal("Food A")
     })
-    it('Check whether the old data remains', async() => {
+    describe('Check whether the old data remains', async() => {
         it('Check the restaurant', async() => {
             let restaurantData = (await contract_V2.withSigner(restaurant).query.readRestaurant()).value;
             expect(restaurantData.ok?.ok?.restaurantName).to.be.eq("Charlie");
@@ -71,7 +71,7 @@ describe('Upgradeable', () => {
 
         it('Check the customer', async() => {
             let customerData = (await contract_V2.withSigner(customer).query.readCustomer()).value;
-            expect(customerData.ok?.ok?.customerName).to.be.eq("Charlie");
+            expect(customerData.ok?.ok?.customerName).to.be.eq("Bob");
         });
 
         it('Check the order', async() => {

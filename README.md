@@ -55,27 +55,30 @@ You can see this following results if you had happy pass.
 ```
   FoodOrder test
     Main Functionality
-      ✔ Platform is ready (42ms)
-      ✔ Restaurant A is added (124ms)
-      ✔ Courier A is added (281ms)
-      ✔ Customer A is added (149ms)
-      ✔ Food A is added (187ms)
-      ✔ Order is submitted (159ms)
-      ✔ Order is Confirmed (206ms)
-      ✔ Food is cooked and Payment is transferred to restaurant (125ms)
-      ✔ Order is Delivered (170ms)
-      ✔ Delivery is accepted and Payment is sent to courier (290ms)
+      ✔ Platform is ready
+      ✔ Restaurant A is added (106ms)
+      ✔ Courier A is added (140ms)
+      ✔ Customer A is added (132ms)
+      ✔ Food A is added (96ms)
+      ✔ Order is submitted (120ms)
+      ✔ Order is Confirmed (118ms)
+      ✔ Food is cooked and Payment is transferred to restaurant (128ms)
+      ✔ Order is Delivered (99ms)
+      ✔ Delivery is accepted and Payment is sent to courier (189ms)
 
   Upgradeable
-    ✔ Upgrade with set_code_hash (353ms)
-    ✔ Check whether the old data remains
-    ✔ Create new food (144ms)
-    ✔ Submit new orders (139ms)
-    ✔ Confirm an order (343ms)
-    ✔ Decline an order (183ms)
+    ✔ Upgrade with set_code_hash (374ms)
+    ✔ Create new food (51ms)
+    ✔ Submit new orders (161ms)
+    ✔ Confirm an order (231ms)
+    ✔ Decline an order (325ms)
+    Check whether the old data remains
+      ✔ Check the restaurant (66ms)
+      ✔ Check the customer
+      ✔ Check the order
 
 
-  16 passing (5s)
+  18 passing (3s)
 ```
 
 ### Running the node
