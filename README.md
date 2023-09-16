@@ -105,7 +105,7 @@ docker image is pushed to fpleader/opensmartcontract:latest
 Build the image by following command.
 
 ```
-docker image pull fpleader/opensmartcontract:latest
+docker image pull fpleader/opensmartcontract:V2
 ```
 
 # Deploy BlockchainFoodOrder smart contract to the Shibuya network 
